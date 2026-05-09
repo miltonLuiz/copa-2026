@@ -1,0 +1,23 @@
+# Documentação interna do projeto (somente local)
+.claude/doc/
+
+# macOS
+.DS_Store
+
+# IDEs / editores
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+*.log
+
+# Node (Fase 2 — GitHub Actions)
+node_modules/
+.env
+.env.local
+
+# Build / cache
+dist/
+.cache/
