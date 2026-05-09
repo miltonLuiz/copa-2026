@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Copa 2026 — Tabela de Jogos</title>
+    <meta name="description" content="Tabela completa dos 104 jogos da Copa do Mundo de 2026 com filtros por horário, fase e seleção.">
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+      /* ===== variáveis ===== */
+      :root {
+        --bg:        #0a0e1a;
+        --bg-2:      #111827;
+        --surface:   #161b2c;
+        --border:    #232a40;
+        --text:      #e8ecf5;
+        --muted:     #7a849c;
+        --accent:    #ffd230;
+        --accent-2:  #00c2a8;
+        --br:        #009b3a;
+        --br-yellow: #ffdf00;
+        --danger:    #ff5470;
+      }
+
+      /* ===== reset mínimo ===== */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(ellipse at top left, rgba(255, 210, 48, 0.08) 0%, transparent 50%),
+          radial-gradient(ellipse at bottom right, rgba(0, 194, 168, 0.08) 0%, transparent 50%);
+        color: var(--text);
+        font-family: 'Manrope', sans-serif;
+        min-height: 100vh;
+      }
+
+      /* ===== container ===== */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+
+      @media (min-width: 720px) {
+        .container {
+          padding: 24px;
+        }
+      }
+
+      /* ===== header ===== */
+      header {
+        margin-block-end: 32px;
+      }
+
+      header h1 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 36px;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        line-height: 1.1;
+      }
+
+      header p {
+        font-family: 'Manrope', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      @media (min-width: 720px) {
+        header h1 {
+          font-size: 48px;
+        }
+
+        header p {
+          font-size: 16px;
+        }
+      }
+
+      /* ===== countdown ===== */
+      #countdown {
+        margin-block-end: 32px;
+      }
+
+      /* ===== stats ===== */
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-block-end: 40px;
+      }
+
+      .stats__item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stats__value {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 40px;
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .stats__label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ===== matches placeholder ===== */
+      #matches {
+        /* vazio nesta etapa — sem estilo adicional necessário */
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Copa 2026 — Tabela de Jogos</h1>
+        <p>11 de junho — 19 de julho de 2026</p>
+      </header>
+
+      <div id="countdown" aria-live="polite"></div>
+
+      <section class="stats" aria-label="Estatísticas gerais">
+        <div class="stats__item">
+          <span class="stats__value">104</span>
+          <span class="stats__label">Jogos</span>
+        </div>
+        <div class="stats__item">
+          <span class="stats__value">48</span>
+          <span class="stats__label">Seleções</span>
+        </div>
+        <div class="stats__item">
+          <span class="stats__value">39</span>
+          <span class="stats__label">Dias</span>
+        </div>
+        <div class="stats__item">
+          <span class="stats__value">16</span>
+          <span class="stats__label">Cidades-sede</span>
+        </div>
+      </section>
+
+      <section id="matches" aria-label="Lista de jogos"></section>
+    </main>
+  </body>
+</html>
