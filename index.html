@@ -269,6 +269,103 @@
       .header__count-label {
         color: var(--muted);
       }
+
+      /* ===== filters ===== */
+      .filters {
+        margin-block: 24px;
+      }
+
+      .filters__group {
+        margin-bottom: 16px;
+      }
+
+      .filters__group-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 12px;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .filters__title {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .filters__actions {
+        display: flex;
+        gap: 4px;
+      }
+
+      .filters__action {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 4px 8px;
+        cursor: pointer;
+      }
+
+      .filters__action:hover,
+      .filters__action:focus-visible {
+        color: var(--accent);
+      }
+
+      .filters__action:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      .filters__chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        min-height: 36px;
+        line-height: 1;
+      }
+
+      .chip:hover {
+        border-color: var(--accent-2);
+      }
+
+      .chip:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .chip--active {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 48px 16px;
+        color: var(--muted);
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -302,6 +399,19 @@
         <div class="stats__item">
           <span class="stats__value">16</span>
           <span class="stats__label">Cidades-sede</span>
+        </div>
+      </section>
+
+      <section class="filters" aria-label="Filtros">
+        <div class="filters__group">
+          <div class="filters__group-header">
+            <h2 class="filters__title">Horário</h2>
+            <div class="filters__actions">
+              <button type="button" class="filters__action" data-action="time-all">Todos</button>
+              <button type="button" class="filters__action" data-action="time-clear">Limpar</button>
+            </div>
+          </div>
+          <div class="filters__chips" id="time-chips" role="group" aria-label="Filtrar por horário"></div>
         </div>
       </section>
 
@@ -571,6 +681,45 @@
 
       // ===== render =====
 
+      function renderTimeChips() {
+        const times = getUniqueTimes();
+        const html = times.map(function(t) {
+          const count = matches.filter(function(m) { return m.time === t; }).length;
+          const isActive = state.selectedTimes.has(t);
+          const activeClass = isActive ? ' chip--active' : '';
+          const pressed = isActive ? 'true' : 'false';
+          return '<button type="button" class="chip' + activeClass + '" data-time="' + t + '" aria-pressed="' + pressed + '">' +
+            timeLabel(t) + ' · ' + count +
+            '</button>';
+        }).join('');
+        document.getElementById('time-chips').innerHTML = html;
+      }
+
+      function attachFilterHandlers() {
+        // Event delegation nos chips de horário
+        document.getElementById('time-chips').addEventListener('click', function(e) {
+          const chip = e.target.closest('.chip');
+          if (!chip) return;
+          const t = chip.dataset.time;
+          if (state.selectedTimes.has(t)) {
+            state.selectedTimes.delete(t);
+          } else {
+            state.selectedTimes.add(t);
+          }
+          renderTimeChips();
+          render();
+        });
+
+        // Botões "Todos" e "Limpar" — ambos limpam o Set
+        document.querySelectorAll('.filters__action[data-action="time-all"], .filters__action[data-action="time-clear"]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            state.selectedTimes.clear();
+            renderTimeChips();
+            render();
+          });
+        });
+      }
+
       function renderCard(match) {
         const phaseLabel = match.phase === 'Fase de grupos'
           ? 'Grupo ' + match.group
@@ -645,9 +794,15 @@
         // ordenar dias em ordem cronológica (ISO YYYY-MM-DD ordena alfabeticamente)
         const days = Object.keys(byDate).sort();
 
-        const html = days.map(function(date) {
-          return renderDayGroup(date, byDate[date], date === hojeISO);
-        }).join('');
+        // estado vazio
+        let html;
+        if (visible.length === 0) {
+          html = '<p class="empty-state">Nenhum jogo encontrado com os filtros atuais.</p>';
+        } else {
+          html = days.map(function(date) {
+            return renderDayGroup(date, byDate[date], date === hojeISO);
+          }).join('');
+        }
 
         document.getElementById('matches').innerHTML = html;
 
@@ -657,6 +812,8 @@
         console.log(`[Copa 2026] ${visible.length} de ${matches.length} jogos exibidos em ${days.length} dias.`);
       }
 
+      renderTimeChips();
+      attachFilterHandlers();
       render();
     </script>
   </body>
