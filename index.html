@@ -360,6 +360,10 @@
         border-color: var(--accent);
       }
 
+      .chip--shortcut {
+        font-weight: 500;
+      }
+
       .empty-state {
         text-align: center;
         padding: 48px 16px;
@@ -405,6 +409,12 @@
       <section class="filters" aria-label="Filtros">
         <div class="filters__group">
           <div class="filters__group-header">
+            <h2 class="filters__title">Atalhos</h2>
+          </div>
+          <div class="filters__chips" id="shortcut-chips" role="group" aria-label="Atalhos rápidos"></div>
+        </div>
+        <div class="filters__group">
+          <div class="filters__group-header">
             <h2 class="filters__title">Horário</h2>
             <div class="filters__actions">
               <button type="button" class="filters__action" data-action="time-all">Todos</button>
@@ -430,6 +440,15 @@
     <script>
       const DATA_INICIO_COPA = '2026-06-11';
       const DATA_FIM_COPA = '2026-07-19';
+
+      const SHORTCUTS = [
+        { slug: 'hoje',       label: '📅 Jogos hoje' },
+        { slug: 'brasil',     label: '🇧🇷 Só jogos do Brasil' },
+        { slug: 'fimsemana',  label: 'Fins de semana' },
+        { slug: 'tarde',      label: 'Tarde (13h–18h)' },
+        { slug: 'noite',      label: 'Noite (19h–23h)' },
+        { slug: 'madrugada',  label: 'Madrugada (0h–4h)' },
+      ];
 
       const state = {
         selectedTimes:  new Set(),
@@ -666,9 +685,38 @@
         return ORDEM.filter(function(p) { return presentes.has(p); });
       }
 
+      function isWeekend(match) {
+        return match.weekday === 'sáb' || match.weekday === 'dom';
+      }
+
+      function isAfternoon(match) {
+        if (match.time === 'TBD') return false;
+        const h = parseInt(match.time.split(':')[0], 10);
+        return h >= 13 && h <= 18;
+      }
+
+      function isEvening(match) {
+        if (match.time === 'TBD') return false;
+        const h = parseInt(match.time.split(':')[0], 10);
+        return h >= 19 && h <= 23;
+      }
+
+      function isLateNight(match) {
+        if (match.time === 'TBD') return false;
+        const h = parseInt(match.time.split(':')[0], 10);
+        return h >= 0 && h <= 4;
+      }
+
       function matchAtalho(match, shortcut) {
-        // Stub. Implementação real virá na Etapa 8 com a UI dos atalhos.
-        return false;
+        switch (shortcut) {
+          case 'hoje':       return match.date === hojeBrasiliaISO();
+          case 'brasil':     return match.brasil === true;
+          case 'fimsemana':  return isWeekend(match);
+          case 'tarde':      return isAfternoon(match);
+          case 'noite':      return isEvening(match);
+          case 'madrugada':  return isLateNight(match);
+          default:           return false;
+        }
       }
 
       function filterMatches() {
@@ -719,17 +767,33 @@
         document.getElementById('phase-chips').innerHTML = html;
       }
 
+      function renderShortcutChips() {
+        const html = SHORTCUTS.map(function(sc) {
+          const count = matches.filter(function(m) { return matchAtalho(m, sc.slug); }).length;
+          const isActive = state.shortcut === sc.slug;
+          const activeClass = isActive ? ' chip--active' : '';
+          const pressed = isActive ? 'true' : 'false';
+          return '<button type="button" class="chip chip--shortcut' + activeClass + '" data-shortcut="' + sc.slug + '" aria-pressed="' + pressed + '">' +
+            sc.label + ' · ' + count +
+            '</button>';
+        }).join('');
+        document.getElementById('shortcut-chips').innerHTML = html;
+      }
+
       function attachFilterHandlers() {
         // Event delegation nos chips de horário
         document.getElementById('time-chips').addEventListener('click', function(e) {
           const chip = e.target.closest('.chip');
           if (!chip) return;
           const t = chip.dataset.time;
+          const tinhaAtalho = state.shortcut !== null;
+          state.shortcut = null;
           if (state.selectedTimes.has(t)) {
             state.selectedTimes.delete(t);
           } else {
             state.selectedTimes.add(t);
           }
+          if (tinhaAtalho) renderShortcutChips();
           renderTimeChips();
           render();
         });
@@ -737,7 +801,10 @@
         // Botões "Todos" e "Limpar" — ambos limpam o Set
         document.querySelectorAll('.filters__action[data-action="time-all"], .filters__action[data-action="time-clear"]').forEach(function(btn) {
           btn.addEventListener('click', function() {
+            const tinhaAtalho = state.shortcut !== null;
+            state.shortcut = null;
             state.selectedTimes.clear();
+            if (tinhaAtalho) renderShortcutChips();
             renderTimeChips();
             render();
           });
@@ -748,11 +815,14 @@
           const chip = e.target.closest('.chip');
           if (!chip) return;
           const p = chip.dataset.phase;
+          const tinhaAtalho = state.shortcut !== null;
+          state.shortcut = null;
           if (state.selectedPhases.has(p)) {
             state.selectedPhases.delete(p);
           } else {
             state.selectedPhases.add(p);
           }
+          if (tinhaAtalho) renderShortcutChips();
           renderPhaseChips();
           render();
         });
@@ -760,10 +830,34 @@
         // Botões "Todas" e "Limpar" — ambos limpam o Set
         document.querySelectorAll('.filters__action[data-action="phase-all"], .filters__action[data-action="phase-clear"]').forEach(function(btn) {
           btn.addEventListener('click', function() {
+            const tinhaAtalho = state.shortcut !== null;
+            state.shortcut = null;
             state.selectedPhases.clear();
+            if (tinhaAtalho) renderShortcutChips();
             renderPhaseChips();
             render();
           });
+        });
+
+        // Event delegation nos atalhos
+        document.getElementById('shortcut-chips').addEventListener('click', function(e) {
+          const chip = e.target.closest('.chip');
+          if (!chip) return;
+          const s = chip.dataset.shortcut;
+          if (state.shortcut === s) {
+            // Clicou no mesmo: desativa
+            state.shortcut = null;
+          } else {
+            // Ativa: limpa outros filtros (precedência da spec § 2.3)
+            state.shortcut = s;
+            state.selectedTimes.clear();
+            state.selectedPhases.clear();
+            state.searchQuery = '';
+          }
+          renderShortcutChips();
+          renderTimeChips();
+          renderPhaseChips();
+          render();
         });
       }
 
@@ -844,7 +938,31 @@
         // estado vazio
         let html;
         if (visible.length === 0) {
-          html = '<p class="empty-state">Nenhum jogo encontrado com os filtros atuais.</p>';
+          if (state.shortcut === 'hoje') {
+            // Mensagem especial: encontrar próximo jogo
+            const proximoJogo = matches
+              .filter(function(m) { return m.date > hojeISO; })
+              .sort(function(a, b) {
+                if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+                const ta = a.time === 'TBD' ? '99:99' : a.time;
+                const tb = b.time === 'TBD' ? '99:99' : b.time;
+                return ta < tb ? -1 : ta > tb ? 1 : 0;
+              })[0];
+
+            if (proximoJogo) {
+              const horarioStr = proximoJogo.time === 'TBD'
+                ? '(a definir)'
+                : 'às ' + timeLabel(proximoJogo.time);
+              html = '<p class="empty-state">Sem jogos hoje. Próximo jogo: ' +
+                     formatDate(proximoJogo.date) + ' ' + horarioStr +
+                     ' — ' + proximoJogo.team1 + ' × ' + proximoJogo.team2 + '.</p>';
+            } else {
+              // Pós-Copa
+              html = '<p class="empty-state">Sem jogos hoje. A Copa já encerrou.</p>';
+            }
+          } else {
+            html = '<p class="empty-state">Nenhum jogo encontrado com os filtros atuais.</p>';
+          }
         } else {
           html = days.map(function(date) {
             return renderDayGroup(date, byDate[date], date === hojeISO);
@@ -859,6 +977,7 @@
         console.log(`[Copa 2026] ${visible.length} de ${matches.length} jogos exibidos em ${days.length} dias.`);
       }
 
+      renderShortcutChips();
       renderTimeChips();
       renderPhaseChips();
       attachFilterHandlers();
