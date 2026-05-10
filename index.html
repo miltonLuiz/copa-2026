@@ -240,6 +240,35 @@
         border-radius: 4px;
         letter-spacing: 0.1em;
       }
+
+      /* ===== contador de jogos exibidos ===== */
+      .header__count {
+        margin-top: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .header__count-current {
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      .header__count-sep {
+        color: var(--muted);
+        margin: 0 4px;
+      }
+
+      .header__count-total {
+        color: var(--muted);
+        margin-right: 8px;
+      }
+
+      .header__count-label {
+        color: var(--muted);
+      }
     </style>
   </head>
   <body>
@@ -247,6 +276,12 @@
       <header>
         <h1>Copa 2026 — Tabela de Jogos</h1>
         <p>11 de junho — 19 de julho de 2026</p>
+        <p class="header__count" aria-live="polite">
+          <span class="header__count-current">104</span>
+          <span class="header__count-sep">/</span>
+          <span class="header__count-total">104</span>
+          <span class="header__count-label">exibidos</span>
+        </p>
       </header>
 
       <div id="countdown" aria-live="polite"></div>
@@ -275,6 +310,13 @@
     <script>
       const DATA_INICIO_COPA = '2026-06-11';
       const DATA_FIM_COPA = '2026-07-19';
+
+      const state = {
+        selectedTimes:  new Set(),
+        selectedPhases: new Set(),
+        shortcut:       null,
+        searchQuery:    ''
+      };
 
       const matches = [
         // === FASE DE GRUPOS (72 jogos) ===
@@ -471,6 +513,62 @@
         return hojeBrasilia().toISOString().slice(0, 10);
       }
 
+      function normalizar(s) {
+        return s.toLowerCase()
+                .normalize('NFD')
+                .replace(/[̀-ͯ]/g, '');
+      }
+
+      function jogoMatchSelecao(jogo, query) {
+        if (!query) return true;
+        const q = normalizar(query);
+        return normalizar(jogo.team1).includes(q) ||
+               normalizar(jogo.team2).includes(q);
+      }
+
+      function getUniqueTimes() {
+        const set = new Set();
+        matches.forEach(function(m) { if (m.time !== 'TBD') set.add(m.time); });
+        return Array.from(set).sort(function(a, b) {
+          const ha = parseInt(a.split(':')[0], 10);
+          const hb = parseInt(b.split(':')[0], 10);
+          // 13–23 vêm antes de 0–4; dentro da partição, ordem numérica
+          const ka = ha >= 13 ? ha : ha + 100;
+          const kb = hb >= 13 ? hb : hb + 100;
+          if (ka !== kb) return ka - kb;
+          return a < b ? -1 : a > b ? 1 : 0; // desempate por minuto (20:00 < 20:30)
+        });
+      }
+
+      function getUniquePhases() {
+        const ORDEM = ['Fase de grupos', '16-avos', 'Oitavas', 'Quartas', 'Semifinal', '3º lugar', 'Final'];
+        const presentes = new Set(matches.map(function(m) { return m.phase; }));
+        return ORDEM.filter(function(p) { return presentes.has(p); });
+      }
+
+      function matchAtalho(match, shortcut) {
+        // Stub. Implementação real virá na Etapa 8 com a UI dos atalhos.
+        return false;
+      }
+
+      function filterMatches() {
+        const selectedTimes  = state.selectedTimes;
+        const selectedPhases = state.selectedPhases;
+        const shortcut       = state.shortcut;
+        const searchQuery    = state.searchQuery;
+
+        if (shortcut !== null) {
+          return matches.filter(function(m) { return matchAtalho(m, shortcut); });
+        }
+
+        return matches.filter(function(m) {
+          if (selectedTimes.size  > 0 && !selectedTimes.has(m.time))   return false;
+          if (selectedPhases.size > 0 && !selectedPhases.has(m.phase)) return false;
+          if (searchQuery && !jogoMatchSelecao(m, searchQuery))         return false;
+          return true;
+        });
+      }
+
       // ===== render =====
 
       function renderCard(match) {
@@ -535,10 +633,11 @@
 
       function render() {
         const hojeISO = hojeBrasiliaISO();
+        const visible = filterMatches();
 
         // agrupar por date
         const byDate = {};
-        matches.forEach(function(match) {
+        visible.forEach(function(match) {
           if (!byDate[match.date]) byDate[match.date] = [];
           byDate[match.date].push(match);
         });
@@ -552,7 +651,10 @@
 
         document.getElementById('matches').innerHTML = html;
 
-        console.log(`[Copa 2026] ${matches.length} jogos renderizados em ${days.length} dias.`);
+        // Atualiza contador no header
+        document.querySelector('.header__count-current').textContent = visible.length;
+
+        console.log(`[Copa 2026] ${visible.length} de ${matches.length} jogos exibidos em ${days.length} dias.`);
       }
 
       render();
