@@ -413,6 +413,16 @@
           </div>
           <div class="filters__chips" id="time-chips" role="group" aria-label="Filtrar por horário"></div>
         </div>
+        <div class="filters__group">
+          <div class="filters__group-header">
+            <h2 class="filters__title">Fase</h2>
+            <div class="filters__actions">
+              <button type="button" class="filters__action" data-action="phase-all">Todas</button>
+              <button type="button" class="filters__action" data-action="phase-clear">Limpar</button>
+            </div>
+          </div>
+          <div class="filters__chips" id="phase-chips" role="group" aria-label="Filtrar por fase"></div>
+        </div>
       </section>
 
       <section id="matches" aria-label="Lista de jogos"></section>
@@ -695,6 +705,20 @@
         document.getElementById('time-chips').innerHTML = html;
       }
 
+      function renderPhaseChips() {
+        const phases = getUniquePhases();
+        const html = phases.map(function(p) {
+          const count = matches.filter(function(m) { return m.phase === p; }).length;
+          const isActive = state.selectedPhases.has(p);
+          const activeClass = isActive ? ' chip--active' : '';
+          const pressed = isActive ? 'true' : 'false';
+          return '<button type="button" class="chip' + activeClass + '" data-phase="' + p + '" aria-pressed="' + pressed + '">' +
+            p + ' · ' + count +
+            '</button>';
+        }).join('');
+        document.getElementById('phase-chips').innerHTML = html;
+      }
+
       function attachFilterHandlers() {
         // Event delegation nos chips de horário
         document.getElementById('time-chips').addEventListener('click', function(e) {
@@ -715,6 +739,29 @@
           btn.addEventListener('click', function() {
             state.selectedTimes.clear();
             renderTimeChips();
+            render();
+          });
+        });
+
+        // Event delegation nos chips de fase
+        document.getElementById('phase-chips').addEventListener('click', function(e) {
+          const chip = e.target.closest('.chip');
+          if (!chip) return;
+          const p = chip.dataset.phase;
+          if (state.selectedPhases.has(p)) {
+            state.selectedPhases.delete(p);
+          } else {
+            state.selectedPhases.add(p);
+          }
+          renderPhaseChips();
+          render();
+        });
+
+        // Botões "Todas" e "Limpar" — ambos limpam o Set
+        document.querySelectorAll('.filters__action[data-action="phase-all"], .filters__action[data-action="phase-clear"]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            state.selectedPhases.clear();
+            renderPhaseChips();
             render();
           });
         });
@@ -813,6 +860,7 @@
       }
 
       renderTimeChips();
+      renderPhaseChips();
       attachFilterHandlers();
       render();
     </script>
