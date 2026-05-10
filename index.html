@@ -90,7 +90,27 @@
 
       /* ===== countdown ===== */
       #countdown {
-        margin-block-end: 32px;
+        margin-block: 16px;
+        padding: 16px 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .countdown__main {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 28px;
+        letter-spacing: 0.02em;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .countdown__secondary {
+        margin-top: 4px;
+        font-family: 'Manrope', sans-serif;
+        font-size: 13px;
+        color: var(--muted);
       }
 
       /* ===== stats ===== */
@@ -716,6 +736,20 @@
         return hojeBrasilia().toISOString().slice(0, 10);
       }
 
+      function diasAteCopa() {
+        const hoje = new Date(hojeBrasiliaISO() + 'T00:00:00Z');
+        const inicio = new Date(DATA_INICIO_COPA + 'T00:00:00Z');
+        return Math.round((inicio - hoje) / (1000 * 60 * 60 * 24));
+      }
+
+      function diaDaCopa() {
+        const hojeISO = hojeBrasiliaISO();
+        if (hojeISO < DATA_INICIO_COPA || hojeISO > DATA_FIM_COPA) return null;
+        const hoje = new Date(hojeISO + 'T00:00:00Z');
+        const inicio = new Date(DATA_INICIO_COPA + 'T00:00:00Z');
+        return Math.round((hoje - inicio) / (1000 * 60 * 60 * 24)) + 1;
+      }
+
       function normalizar(s) {
         return s.toLowerCase()
                 .normalize('NFD')
@@ -849,6 +883,44 @@
             '</button>';
         }).join('');
         document.getElementById('shortcut-chips').innerHTML = html;
+      }
+
+      function renderCountdown() {
+        const hojeISO = hojeBrasiliaISO();
+        const el = document.getElementById('countdown');
+        let html;
+
+        if (hojeISO < DATA_INICIO_COPA) {
+          // Estado 1: antes da Copa
+          const dias = diasAteCopa();
+          const principal = dias === 1 ? 'Falta 1 dia' : 'Faltam ' + dias + ' dias';
+          html = '<p class="countdown__main">' + principal + '</p>' +
+                 '<p class="countdown__secondary">para a abertura no Estádio Azteca</p>';
+        } else if (hojeISO <= DATA_FIM_COPA) {
+          // Estado 2: durante a Copa
+          const dia = diaDaCopa();
+          const jogosHoje = matches.filter(function(m) { return m.date === hojeISO; }).length;
+          let secundario;
+          if (jogosHoje === 0) {
+            const proximo = matches
+              .filter(function(m) { return m.date > hojeISO; })
+              .sort(function(a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })[0];
+            secundario = proximo
+              ? 'Sem jogos hoje. Próximo: ' + formatDate(proximo.date)
+              : 'Sem jogos hoje.';
+          } else {
+            const palavra = jogosHoje === 1 ? 'jogo' : 'jogos';
+            secundario = jogosHoje + ' ' + palavra + ' hoje';
+          }
+          html = '<p class="countdown__main">Dia ' + dia + ' de 39</p>' +
+                 '<p class="countdown__secondary">' + secundario + '</p>';
+        } else {
+          // Estado 3: depois da Copa
+          html = '<p class="countdown__main">Copa encerrada</p>' +
+                 '<p class="countdown__secondary">Campeão: a definir</p>';
+        }
+
+        el.innerHTML = html;
       }
 
       function attachFilterHandlers() {
@@ -1085,6 +1157,8 @@
       renderPhaseChips();
       attachFilterHandlers();
       render();
+      renderCountdown();
+      setInterval(renderCountdown, 60000);
     </script>
   </body>
 </html>
