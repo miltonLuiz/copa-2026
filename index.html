@@ -159,5 +159,167 @@
 
       <section id="matches" aria-label="Lista de jogos"></section>
     </main>
+    <script>
+      const DATA_INICIO_COPA = '2026-06-11';
+      const DATA_FIM_COPA = '2026-07-19';
+
+      const matches = [
+        // === FASE DE GRUPOS (72 jogos) ===
+
+        // 11/06 — quinta-feira
+        { date: '2026-06-11', weekday: 'qui', time: '16:00', team1: 'México', team2: 'África do Sul', group: 'A', phase: 'Fase de grupos', stadium: 'Estádio Azteca', city: 'Cidade do México' },
+        { date: '2026-06-11', weekday: 'qui', time: '23:00', team1: 'Coreia do Sul', team2: 'Europa D', group: 'A', phase: 'Fase de grupos', stadium: 'Estádio Akron', city: 'Guadalajara' },
+
+        // 12/06 — sexta-feira
+        { date: '2026-06-12', weekday: 'sex', time: '16:00', team1: 'Canadá', team2: 'Europa A', group: 'B', phase: 'Fase de grupos', stadium: 'BMO Field', city: 'Toronto' },
+        { date: '2026-06-12', weekday: 'sex', time: '22:00', team1: 'EUA', team2: 'Paraguai', group: 'D', phase: 'Fase de grupos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+
+        // 13/06 — sábado
+        { date: '2026-06-13', weekday: 'sáb', time: '01:00', team1: 'Austrália', team2: 'Europa C', group: 'D', phase: 'Fase de grupos', stadium: 'BC Place', city: 'Vancouver' },
+        { date: '2026-06-13', weekday: 'sáb', time: '16:00', team1: 'Catar', team2: 'Suíça', group: 'B', phase: 'Fase de grupos', stadium: "Levi's Stadium", city: 'San Francisco' },
+        { date: '2026-06-13', weekday: 'sáb', time: '19:00', team1: 'Brasil', team2: 'Marrocos', group: 'C', phase: 'Fase de grupos', stadium: 'MetLife Stadium', city: 'New York/New Jersey', brasil: true },
+        { date: '2026-06-13', weekday: 'sáb', time: '22:00', team1: 'Haiti', team2: 'Escócia', group: 'C', phase: 'Fase de grupos', stadium: 'Gillette Stadium', city: 'Boston' },
+
+        // 14/06 — domingo
+        { date: '2026-06-14', weekday: 'dom', time: '14:00', team1: 'Alemanha', team2: 'Curaçao', group: 'E', phase: 'Fase de grupos', stadium: 'NRG Stadium', city: 'Houston' },
+        { date: '2026-06-14', weekday: 'dom', time: '17:00', team1: 'Holanda', team2: 'Japão', group: 'F', phase: 'Fase de grupos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { date: '2026-06-14', weekday: 'dom', time: '20:00', team1: 'Costa do Marfim', team2: 'Equador', group: 'E', phase: 'Fase de grupos', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
+        { date: '2026-06-14', weekday: 'dom', time: '23:00', team1: 'Europa B', team2: 'Tunísia', group: 'F', phase: 'Fase de grupos', stadium: 'Estádio BBVA', city: 'Monterrey' },
+
+        // 15/06 — segunda-feira
+        { date: '2026-06-15', weekday: 'seg', time: '13:00', team1: 'Espanha', team2: 'Cabo Verde', group: 'H', phase: 'Fase de grupos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { date: '2026-06-15', weekday: 'seg', time: '16:00', team1: 'Bélgica', team2: 'Egito', group: 'G', phase: 'Fase de grupos', stadium: 'Lumen Field', city: 'Seattle' },
+        { date: '2026-06-15', weekday: 'seg', time: '19:00', team1: 'Arábia Saudita', team2: 'Uruguai', group: 'H', phase: 'Fase de grupos', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { date: '2026-06-15', weekday: 'seg', time: '22:00', team1: 'Irã', team2: 'Nova Zelândia', group: 'G', phase: 'Fase de grupos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+
+        // 16/06 — terça-feira
+        { date: '2026-06-16', weekday: 'ter', time: '01:00', team1: 'Áustria', team2: 'Jordânia', group: 'J', phase: 'Fase de grupos', stadium: "Levi's Stadium", city: 'San Francisco' },
+        { date: '2026-06-16', weekday: 'ter', time: '16:00', team1: 'França', team2: 'Senegal', group: 'I', phase: 'Fase de grupos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { date: '2026-06-16', weekday: 'ter', time: '19:00', team1: 'Intercontinental 2', team2: 'Noruega', group: 'I', phase: 'Fase de grupos', stadium: 'Gillette Stadium', city: 'Boston' },
+        { date: '2026-06-16', weekday: 'ter', time: '22:00', team1: 'Argentina', team2: 'Argélia', group: 'J', phase: 'Fase de grupos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+
+        // 17/06 — quarta-feira
+        { date: '2026-06-17', weekday: 'qua', time: '14:00', team1: 'Portugal', team2: 'Intercontinental 1', group: 'K', phase: 'Fase de grupos', stadium: 'NRG Stadium', city: 'Houston' },
+        { date: '2026-06-17', weekday: 'qua', time: '17:00', team1: 'Inglaterra', team2: 'Croácia', group: 'L', phase: 'Fase de grupos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { date: '2026-06-17', weekday: 'qua', time: '20:00', team1: 'Gana', team2: 'Panamá', group: 'L', phase: 'Fase de grupos', stadium: 'BMO Field', city: 'Toronto' },
+        { date: '2026-06-17', weekday: 'qua', time: '23:00', team1: 'Uzbequistão', team2: 'Colômbia', group: 'K', phase: 'Fase de grupos', stadium: 'Estádio Azteca', city: 'Cidade do México' },
+
+        // 18/06 — quinta-feira
+        { date: '2026-06-18', weekday: 'qui', time: '13:00', team1: 'Europa D', team2: 'África do Sul', group: 'A', phase: 'Fase de grupos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { date: '2026-06-18', weekday: 'qui', time: '16:00', team1: 'Suíça', team2: 'Europa A', group: 'B', phase: 'Fase de grupos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { date: '2026-06-18', weekday: 'qui', time: '19:00', team1: 'Canadá', team2: 'Catar', group: 'B', phase: 'Fase de grupos', stadium: 'BC Place', city: 'Vancouver' },
+        { date: '2026-06-18', weekday: 'qui', time: '22:00', team1: 'México', team2: 'Coreia do Sul', group: 'A', phase: 'Fase de grupos', stadium: 'Estádio Akron', city: 'Guadalajara' },
+
+        // 19/06 — sexta-feira
+        { date: '2026-06-19', weekday: 'sex', time: '01:00', team1: 'Europa C', team2: 'Paraguai', group: 'D', phase: 'Fase de grupos', stadium: "Levi's Stadium", city: 'San Francisco' },
+        { date: '2026-06-19', weekday: 'sex', time: '16:00', team1: 'EUA', team2: 'Austrália', group: 'D', phase: 'Fase de grupos', stadium: 'Lumen Field', city: 'Seattle' },
+        { date: '2026-06-19', weekday: 'sex', time: '19:00', team1: 'Escócia', team2: 'Marrocos', group: 'C', phase: 'Fase de grupos', stadium: 'Gillette Stadium', city: 'Boston' },
+        { date: '2026-06-19', weekday: 'sex', time: '22:00', team1: 'Brasil', team2: 'Haiti', group: 'C', phase: 'Fase de grupos', stadium: 'Lincoln Financial Field', city: 'Filadélfia', brasil: true },
+
+        // 20/06 — sábado
+        { date: '2026-06-20', weekday: 'sáb', time: '01:00', team1: 'Tunísia', team2: 'Japão', group: 'F', phase: 'Fase de grupos', stadium: 'Estádio BBVA', city: 'Monterrey' },
+        { date: '2026-06-20', weekday: 'sáb', time: '14:00', team1: 'Holanda', team2: 'Europa B', group: 'F', phase: 'Fase de grupos', stadium: 'NRG Stadium', city: 'Houston' },
+        { date: '2026-06-20', weekday: 'sáb', time: '17:00', team1: 'Alemanha', team2: 'Costa do Marfim', group: 'E', phase: 'Fase de grupos', stadium: 'BMO Field', city: 'Toronto' },
+        { date: '2026-06-20', weekday: 'sáb', time: '21:00', team1: 'Equador', team2: 'Curaçao', group: 'E', phase: 'Fase de grupos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+
+        // 21/06 — domingo
+        { date: '2026-06-21', weekday: 'dom', time: '13:00', team1: 'Espanha', team2: 'Arábia Saudita', group: 'H', phase: 'Fase de grupos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { date: '2026-06-21', weekday: 'dom', time: '16:00', team1: 'Bélgica', team2: 'Irã', group: 'G', phase: 'Fase de grupos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { date: '2026-06-21', weekday: 'dom', time: '19:00', team1: 'Uruguai', team2: 'Cabo Verde', group: 'H', phase: 'Fase de grupos', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { date: '2026-06-21', weekday: 'dom', time: '22:00', team1: 'Nova Zelândia', team2: 'Egito', group: 'G', phase: 'Fase de grupos', stadium: 'BC Place', city: 'Vancouver' },
+
+        // 22/06 — segunda-feira
+        { date: '2026-06-22', weekday: 'seg', time: '00:00', team1: 'Jordânia', team2: 'Argélia', group: 'J', phase: 'Fase de grupos', stadium: "Levi's Stadium", city: 'San Francisco' },
+        { date: '2026-06-22', weekday: 'seg', time: '14:00', team1: 'Argentina', team2: 'Áustria', group: 'J', phase: 'Fase de grupos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { date: '2026-06-22', weekday: 'seg', time: '18:00', team1: 'França', team2: 'Intercontinental 2', group: 'I', phase: 'Fase de grupos', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
+        { date: '2026-06-22', weekday: 'seg', time: '21:00', team1: 'Noruega', team2: 'Senegal', group: 'I', phase: 'Fase de grupos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+
+        // 23/06 — terça-feira
+        { date: '2026-06-23', weekday: 'ter', time: '14:00', team1: 'Portugal', team2: 'Uzbequistão', group: 'K', phase: 'Fase de grupos', stadium: 'NRG Stadium', city: 'Houston' },
+        { date: '2026-06-23', weekday: 'ter', time: '17:00', team1: 'Inglaterra', team2: 'Gana', group: 'L', phase: 'Fase de grupos', stadium: 'Gillette Stadium', city: 'Boston' },
+        { date: '2026-06-23', weekday: 'ter', time: '20:00', team1: 'Panamá', team2: 'Croácia', group: 'L', phase: 'Fase de grupos', stadium: 'BMO Field', city: 'Toronto' },
+        { date: '2026-06-23', weekday: 'ter', time: '23:00', team1: 'Colômbia', team2: 'Intercontinental 1', group: 'K', phase: 'Fase de grupos', stadium: 'Estádio Akron', city: 'Guadalajara' },
+
+        // 24/06 — quarta-feira
+        { date: '2026-06-24', weekday: 'qua', time: '16:00', team1: 'Suíça', team2: 'Canadá', group: 'B', phase: 'Fase de grupos', stadium: 'BC Place', city: 'Vancouver' },
+        { date: '2026-06-24', weekday: 'qua', time: '16:00', team1: 'Europa A', team2: 'Catar', group: 'B', phase: 'Fase de grupos', stadium: 'Lumen Field', city: 'Seattle' },
+        { date: '2026-06-24', weekday: 'qua', time: '19:00', team1: 'Escócia', team2: 'Brasil', group: 'C', phase: 'Fase de grupos', stadium: 'Hard Rock Stadium', city: 'Miami', brasil: true },
+        { date: '2026-06-24', weekday: 'qua', time: '19:00', team1: 'Marrocos', team2: 'Haiti', group: 'C', phase: 'Fase de grupos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { date: '2026-06-24', weekday: 'qua', time: '22:00', team1: 'Europa D', team2: 'México', group: 'A', phase: 'Fase de grupos', stadium: 'Estádio Azteca', city: 'Cidade do México' },
+        { date: '2026-06-24', weekday: 'qua', time: '22:00', team1: 'África do Sul', team2: 'Coreia do Sul', group: 'A', phase: 'Fase de grupos', stadium: 'Estádio BBVA', city: 'Monterrey' },
+
+        // 25/06 — quinta-feira
+        { date: '2026-06-25', weekday: 'qui', time: '17:00', team1: 'Equador', team2: 'Alemanha', group: 'E', phase: 'Fase de grupos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { date: '2026-06-25', weekday: 'qui', time: '17:00', team1: 'Curaçao', team2: 'Costa do Marfim', group: 'E', phase: 'Fase de grupos', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
+        { date: '2026-06-25', weekday: 'qui', time: '20:00', team1: 'Japão', team2: 'Europa B', group: 'F', phase: 'Fase de grupos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { date: '2026-06-25', weekday: 'qui', time: '20:00', team1: 'Tunísia', team2: 'Holanda', group: 'F', phase: 'Fase de grupos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+        { date: '2026-06-25', weekday: 'qui', time: '23:00', team1: 'Europa C', team2: 'EUA', group: 'D', phase: 'Fase de grupos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { date: '2026-06-25', weekday: 'qui', time: '23:00', team1: 'Paraguai', team2: 'Austrália', group: 'D', phase: 'Fase de grupos', stadium: "Levi's Stadium", city: 'San Francisco' },
+
+        // 26/06 — sexta-feira
+        { date: '2026-06-26', weekday: 'sex', time: '00:00', team1: 'Egito', team2: 'Irã', group: 'G', phase: 'Fase de grupos', stadium: 'Lumen Field', city: 'Seattle' },
+        { date: '2026-06-26', weekday: 'sex', time: '00:00', team1: 'Nova Zelândia', team2: 'Bélgica', group: 'G', phase: 'Fase de grupos', stadium: 'BC Place', city: 'Vancouver' },
+        { date: '2026-06-26', weekday: 'sex', time: '16:00', team1: 'Noruega', team2: 'França', group: 'I', phase: 'Fase de grupos', stadium: 'Gillette Stadium', city: 'Boston' },
+        { date: '2026-06-26', weekday: 'sex', time: '16:00', team1: 'Senegal', team2: 'Intercontinental 2', group: 'I', phase: 'Fase de grupos', stadium: 'BMO Field', city: 'Toronto' },
+        { date: '2026-06-26', weekday: 'sex', time: '21:00', team1: 'Cabo Verde', team2: 'Arábia Saudita', group: 'H', phase: 'Fase de grupos', stadium: 'NRG Stadium', city: 'Houston' },
+        { date: '2026-06-26', weekday: 'sex', time: '21:00', team1: 'Uruguai', team2: 'Espanha', group: 'H', phase: 'Fase de grupos', stadium: 'Estádio Akron', city: 'Guadalajara' },
+
+        // 27/06 — sábado
+        { date: '2026-06-27', weekday: 'sáb', time: '18:00', team1: 'Panamá', team2: 'Inglaterra', group: 'L', phase: 'Fase de grupos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { date: '2026-06-27', weekday: 'sáb', time: '18:00', team1: 'Croácia', team2: 'Gana', group: 'L', phase: 'Fase de grupos', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
+        { date: '2026-06-27', weekday: 'sáb', time: '20:30', team1: 'Colômbia', team2: 'Portugal', group: 'K', phase: 'Fase de grupos', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { date: '2026-06-27', weekday: 'sáb', time: '20:30', team1: 'Intercontinental 1', team2: 'Uzbequistão', group: 'K', phase: 'Fase de grupos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { date: '2026-06-27', weekday: 'sáb', time: '23:00', team1: 'Argélia', team2: 'Áustria', group: 'J', phase: 'Fase de grupos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+        { date: '2026-06-27', weekday: 'sáb', time: '23:00', team1: 'Jordânia', team2: 'Argentina', group: 'J', phase: 'Fase de grupos', stadium: 'AT&T Stadium', city: 'Dallas' },
+
+        // === MATA-MATA (32 jogos) ===
+
+        // 16-avos
+        { date: '2026-06-28', weekday: 'dom', time: 'TBD', team1: '2º A', team2: '2º B', group: '—', phase: '16-avos', stadium: 'Jogo 73', city: 'Los Angeles' },
+        { date: '2026-06-29', weekday: 'seg', time: 'TBD', team1: '1º E', team2: '3º (A/B/C/D/F)', group: '—', phase: '16-avos', stadium: 'Jogo 74', city: 'Boston' },
+        { date: '2026-06-29', weekday: 'seg', time: 'TBD', team1: '1º F', team2: '2º C', group: '—', phase: '16-avos', stadium: 'Jogo 75', city: 'Monterrey' },
+        { date: '2026-06-29', weekday: 'seg', time: 'TBD', team1: '1º C', team2: '2º F', group: '—', phase: '16-avos', stadium: 'Jogo 76', city: 'Houston' },
+        { date: '2026-06-30', weekday: 'ter', time: 'TBD', team1: '1º I', team2: '3º (C/D/F/G/H)', group: '—', phase: '16-avos', stadium: 'Jogo 77', city: 'New York/New Jersey' },
+        { date: '2026-06-30', weekday: 'ter', time: 'TBD', team1: '2º E', team2: '2º I', group: '—', phase: '16-avos', stadium: 'Jogo 78', city: 'Dallas' },
+        { date: '2026-06-30', weekday: 'ter', time: 'TBD', team1: '1º A', team2: '3º (C/E/F/H/I)', group: '—', phase: '16-avos', stadium: 'Jogo 79', city: 'Cidade do México' },
+        { date: '2026-07-01', weekday: 'qua', time: 'TBD', team1: '1º L', team2: '3º (E/H/I/J/K)', group: '—', phase: '16-avos', stadium: 'Jogo 80', city: 'Atlanta' },
+        { date: '2026-07-01', weekday: 'qua', time: 'TBD', team1: '1º D', team2: '3º (B/E/F/I/J)', group: '—', phase: '16-avos', stadium: "Levi's Stadium", city: 'Santa Clara' },
+        { date: '2026-07-01', weekday: 'qua', time: 'TBD', team1: '1º G', team2: '3º (A/E/H/I/J)', group: '—', phase: '16-avos', stadium: 'Jogo 82', city: 'Seattle' },
+        { date: '2026-07-02', weekday: 'qui', time: 'TBD', team1: '2º K', team2: '2º L', group: '—', phase: '16-avos', stadium: 'Jogo 83', city: 'Toronto' },
+        { date: '2026-07-02', weekday: 'qui', time: 'TBD', team1: '1º H', team2: '2º J', group: '—', phase: '16-avos', stadium: 'Jogo 84', city: 'Los Angeles' },
+        { date: '2026-07-02', weekday: 'qui', time: 'TBD', team1: '1º B', team2: '3º (E/F/G/I/J)', group: '—', phase: '16-avos', stadium: 'Jogo 85', city: 'Vancouver' },
+        { date: '2026-07-03', weekday: 'sex', time: 'TBD', team1: '1º J', team2: '2º H', group: '—', phase: '16-avos', stadium: 'Jogo 86', city: 'Miami' },
+        { date: '2026-07-03', weekday: 'sex', time: 'TBD', team1: '1º K', team2: '3º (D/E/I/J/L)', group: '—', phase: '16-avos', stadium: 'Jogo 87', city: 'Kansas City' },
+        { date: '2026-07-03', weekday: 'sex', time: 'TBD', team1: '2º D', team2: '2º G', group: '—', phase: '16-avos', stadium: 'Jogo 88', city: 'Dallas' },
+
+        // Oitavas
+        { date: '2026-07-04', weekday: 'sáb', time: 'TBD', team1: 'Vencedor 74', team2: 'Vencedor 77', group: '—', phase: 'Oitavas', stadium: 'Jogo 89', city: 'Filadélfia' },
+        { date: '2026-07-04', weekday: 'sáb', time: 'TBD', team1: 'Vencedor 73', team2: 'Vencedor 75', group: '—', phase: 'Oitavas', stadium: 'Jogo 90', city: 'Houston' },
+        { date: '2026-07-05', weekday: 'dom', time: 'TBD', team1: 'Vencedor 76', team2: 'Vencedor 78', group: '—', phase: 'Oitavas', stadium: 'Jogo 91', city: 'New York/New Jersey' },
+        { date: '2026-07-05', weekday: 'dom', time: 'TBD', team1: 'Vencedor 79', team2: 'Vencedor 80', group: '—', phase: 'Oitavas', stadium: 'Jogo 92', city: 'Cidade do México' },
+        { date: '2026-07-06', weekday: 'seg', time: 'TBD', team1: 'Vencedor 83', team2: 'Vencedor 84', group: '—', phase: 'Oitavas', stadium: 'Jogo 93', city: 'Dallas' },
+        { date: '2026-07-06', weekday: 'seg', time: 'TBD', team1: 'Vencedor 81', team2: 'Vencedor 82', group: '—', phase: 'Oitavas', stadium: 'Jogo 94', city: 'Seattle' },
+        { date: '2026-07-07', weekday: 'ter', time: 'TBD', team1: 'Vencedor 86', team2: 'Vencedor 88', group: '—', phase: 'Oitavas', stadium: 'Jogo 95', city: 'Atlanta' },
+        { date: '2026-07-07', weekday: 'ter', time: 'TBD', team1: 'Vencedor 85', team2: 'Vencedor 87', group: '—', phase: 'Oitavas', stadium: 'Jogo 96', city: 'Vancouver' },
+
+        // Quartas
+        { date: '2026-07-09', weekday: 'qui', time: 'TBD', team1: 'Vencedor 89', team2: 'Vencedor 90', group: '—', phase: 'Quartas', stadium: 'Jogo 97', city: 'Boston' },
+        { date: '2026-07-10', weekday: 'sex', time: 'TBD', team1: 'Vencedor 93', team2: 'Vencedor 94', group: '—', phase: 'Quartas', stadium: 'Jogo 98', city: 'Los Angeles' },
+        { date: '2026-07-11', weekday: 'sáb', time: 'TBD', team1: 'Vencedor 91', team2: 'Vencedor 92', group: '—', phase: 'Quartas', stadium: 'Jogo 99', city: 'Miami' },
+        { date: '2026-07-11', weekday: 'sáb', time: 'TBD', team1: 'Vencedor 95', team2: 'Vencedor 96', group: '—', phase: 'Quartas', stadium: 'Jogo 100', city: 'Kansas City' },
+
+        // Semifinal
+        { date: '2026-07-14', weekday: 'ter', time: 'TBD', team1: 'Vencedor 97', team2: 'Vencedor 98', group: '—', phase: 'Semifinal', stadium: 'Jogo 101', city: 'Dallas' },
+        { date: '2026-07-15', weekday: 'qua', time: 'TBD', team1: 'Vencedor 99', team2: 'Vencedor 100', group: '—', phase: 'Semifinal', stadium: 'Jogo 102', city: 'Atlanta' },
+
+        // 3º lugar
+        { date: '2026-07-18', weekday: 'sáb', time: 'TBD', team1: 'Perdedor 101', team2: 'Perdedor 102', group: '—', phase: '3º lugar', stadium: 'Jogo 103', city: 'Miami' },
+
+        // Final
+        { date: '2026-07-19', weekday: 'dom', time: 'TBD', team1: 'Vencedor 101', team2: 'Vencedor 102', group: '—', phase: 'Final', stadium: 'Jogo 104', city: 'New York/New Jersey' },
+      ];
+
+      console.log(`[Copa 2026] ${matches.length} jogos carregados.`);
+    </script>
   </body>
 </html>
