@@ -214,6 +214,32 @@
         color: var(--text);
         font-weight: 500;
       }
+
+      /* ===== destaque Brasil ===== */
+      .match-card--brasil {
+        border-left: 3px solid var(--br);
+        background: linear-gradient(90deg, rgba(0,155,58,0.08), var(--surface) 30%);
+      }
+
+      .match-card--brasil .match-card__time {
+        color: var(--br-yellow);
+      }
+
+      /* ===== badge HOJE ===== */
+      .day-header--today {
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .day-header__today {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        background: var(--accent);
+        color: var(--bg);
+        padding: 2px 8px;
+        border-radius: 4px;
+        letter-spacing: 0.1em;
+      }
     </style>
   </head>
   <body>
@@ -435,6 +461,16 @@
         return m === 0 ? h + 'h' : h + 'h' + mStr;
       }
 
+      function hojeBrasilia() {
+        const agora = new Date();
+        const utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
+        return new Date(utc + (-3 * 3600000));
+      }
+
+      function hojeBrasiliaISO() {
+        return hojeBrasilia().toISOString().slice(0, 10);
+      }
+
       // ===== render =====
 
       function renderCard(match) {
@@ -442,8 +478,10 @@
           ? 'Grupo ' + match.group
           : match.phase;
 
+        const brasilClass = match.brasil === true ? ' match-card--brasil' : '';
+
         return `
-          <article class="match-card">
+          <article class="match-card${brasilClass}">
             <div class="match-card__time">${timeLabel(match.time)}</div>
             <div class="match-card__main">
               <div class="match-card__teams">
@@ -460,7 +498,7 @@
           </article>`;
       }
 
-      function renderDayGroup(date, dayMatches) {
+      function renderDayGroup(date, dayMatches, isToday) {
         // dentro do dia: ordem crescente de horário; TBD por último
         const sorted = dayMatches.slice().sort((a, b) => {
           const ta = a.time === 'TBD' ? '99:99' : a.time;
@@ -475,12 +513,19 @@
 
         const cards = sorted.map(renderCard).join('');
 
+        const todayClass = isToday ? ' day-header--today' : '';
+        const todayBadge = isToday
+          ? `<span class="day-header__sep">·</span>
+              <span class="day-header__today">HOJE</span>`
+          : '';
+
         return `
           <section class="day-group">
-            <h2 class="day-header">
+            <h2 class="day-header${todayClass}">
               <span class="day-header__date">${formatDate(date)}</span>
               <span class="day-header__sep">—</span>
               <span class="day-header__weekday">${weekday}</span>
+              ${todayBadge}
               <span class="day-header__sep">·</span>
               <span class="day-header__count">${countLabel}</span>
             </h2>
@@ -489,6 +534,8 @@
       }
 
       function render() {
+        const hojeISO = hojeBrasiliaISO();
+
         // agrupar por date
         const byDate = {};
         matches.forEach(function(match) {
@@ -500,7 +547,7 @@
         const days = Object.keys(byDate).sort();
 
         const html = days.map(function(date) {
-          return renderDayGroup(date, byDate[date]);
+          return renderDayGroup(date, byDate[date], date === hojeISO);
         }).join('');
 
         document.getElementById('matches').innerHTML = html;
