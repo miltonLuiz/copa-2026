@@ -123,9 +123,96 @@
         letter-spacing: 0.08em;
       }
 
-      /* ===== matches placeholder ===== */
-      #matches {
-        /* vazio nesta etapa — sem estilo adicional necessário */
+      /* ===== day-group ===== */
+      .day-group {
+        margin-block-end: 32px;
+      }
+
+      .day-header {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 24px;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px;
+        padding-bottom: 8px;
+        margin-block-end: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .day-header__weekday {
+        text-transform: lowercase;
+      }
+
+      .day-header__sep {
+        color: var(--muted);
+        font-family: 'Manrope', sans-serif;
+        font-weight: 400;
+      }
+
+      .day-header__count {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+
+      /* ===== match-card ===== */
+      .match-card {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 16px;
+        align-items: center;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-block-end: 12px;
+      }
+
+      .match-card__time {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 32px;
+        line-height: 1;
+        color: var(--accent);
+        min-width: 90px;
+      }
+
+      .match-card__teams {
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .match-card__vs {
+        color: var(--muted);
+        margin: 0 8px;
+      }
+
+      .match-card__phase {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--accent-2);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 4px;
+      }
+
+      .match-card__venue {
+        text-align: right;
+        font-size: 13px;
+      }
+
+      .match-card__stadium {
+        color: var(--muted);
+      }
+
+      .match-card__city {
+        color: var(--text);
+        font-weight: 500;
       }
     </style>
   </head>
@@ -319,7 +406,109 @@
         { date: '2026-07-19', weekday: 'dom', time: 'TBD', team1: 'Vencedor 101', team2: 'Vencedor 102', group: '—', phase: 'Final', stadium: 'Jogo 104', city: 'New York/New Jersey' },
       ];
 
-      console.log(`[Copa 2026] ${matches.length} jogos carregados.`);
+      // ===== helpers =====
+
+      function formatDate(dateISO) {
+        // '2026-06-13' → '13/06'
+        const parts = dateISO.split('-');
+        return parts[2] + '/' + parts[1];
+      }
+
+      function fullWeekday(weekdayShort) {
+        const map = {
+          'seg': 'segunda-feira',
+          'ter': 'terça-feira',
+          'qua': 'quarta-feira',
+          'qui': 'quinta-feira',
+          'sex': 'sexta-feira',
+          'sáb': 'sábado',
+          'dom': 'domingo',
+        };
+        return map[weekdayShort] || weekdayShort;
+      }
+
+      function timeLabel(time) {
+        if (time === 'TBD') return 'a definir';
+        const [hStr, mStr] = time.split(':');
+        const h = parseInt(hStr, 10);
+        const m = parseInt(mStr, 10);
+        return m === 0 ? h + 'h' : h + 'h' + mStr;
+      }
+
+      // ===== render =====
+
+      function renderCard(match) {
+        const phaseLabel = match.phase === 'Fase de grupos'
+          ? 'Grupo ' + match.group
+          : match.phase;
+
+        return `
+          <article class="match-card">
+            <div class="match-card__time">${timeLabel(match.time)}</div>
+            <div class="match-card__main">
+              <div class="match-card__teams">
+                <span class="match-card__team">${match.team1}</span>
+                <span class="match-card__vs">×</span>
+                <span class="match-card__team">${match.team2}</span>
+              </div>
+              <div class="match-card__phase">${phaseLabel}</div>
+            </div>
+            <div class="match-card__venue">
+              <div class="match-card__stadium">${match.stadium}</div>
+              <div class="match-card__city">${match.city}</div>
+            </div>
+          </article>`;
+      }
+
+      function renderDayGroup(date, dayMatches) {
+        // dentro do dia: ordem crescente de horário; TBD por último
+        const sorted = dayMatches.slice().sort((a, b) => {
+          const ta = a.time === 'TBD' ? '99:99' : a.time;
+          const tb = b.time === 'TBD' ? '99:99' : b.time;
+          return ta < tb ? -1 : ta > tb ? 1 : 0;
+        });
+
+        const count = sorted.length;
+        const countLabel = count === 1 ? '1 jogo' : count + ' jogos';
+        // usa o weekday do primeiro jogo do dia (todos do mesmo dia têm o mesmo)
+        const weekday = fullWeekday(sorted[0].weekday);
+
+        const cards = sorted.map(renderCard).join('');
+
+        return `
+          <section class="day-group">
+            <h2 class="day-header">
+              <span class="day-header__date">${formatDate(date)}</span>
+              <span class="day-header__sep">—</span>
+              <span class="day-header__weekday">${weekday}</span>
+              <span class="day-header__sep">·</span>
+              <span class="day-header__count">${countLabel}</span>
+            </h2>
+            ${cards}
+          </section>`;
+      }
+
+      function render() {
+        // agrupar por date
+        const byDate = {};
+        matches.forEach(function(match) {
+          if (!byDate[match.date]) byDate[match.date] = [];
+          byDate[match.date].push(match);
+        });
+
+        // ordenar dias em ordem cronológica (ISO YYYY-MM-DD ordena alfabeticamente)
+        const days = Object.keys(byDate).sort();
+
+        const html = days.map(function(date) {
+          return renderDayGroup(date, byDate[date]);
+        }).join('');
+
+        document.getElementById('matches').innerHTML = html;
+
+        console.log(`[Copa 2026] ${matches.length} jogos renderizados em ${days.length} dias.`);
+      }
+
+      render();
     </script>
   </body>
 </html>
