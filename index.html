@@ -441,6 +441,48 @@
         outline-offset: 2px;
         border-radius: 4px;
       }
+
+      /* ===== responsividade mobile ===== */
+
+      @media (max-width: 720px) {
+        .match-card {
+          grid-template-columns: auto 1fr;
+          grid-template-areas:
+            "time main"
+            "venue venue";
+          gap: 12px 16px;
+        }
+
+        .match-card__time {
+          grid-area: time;
+          font-size: 28px;
+        }
+
+        .match-card__main {
+          grid-area: main;
+        }
+
+        .match-card__venue {
+          grid-area: venue;
+          text-align: left;
+          padding-top: 8px;
+          border-top: 1px dashed var(--border);
+        }
+
+        .chip {
+          font-size: 12px;
+          padding: 6px 10px;
+          min-height: 32px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+      }
     </style>
   </head>
   <body>
