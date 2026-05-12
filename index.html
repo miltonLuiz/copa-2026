@@ -489,6 +489,181 @@
           gap: 16px;
         }
       }
+
+      /* ===== install banners ===== */
+
+      .install-banner {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        z-index: 1000;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        animation: slide-up 300ms ease-out;
+      }
+
+      .install-banner.hidden {
+        display: none;
+      }
+
+      @keyframes slide-up {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      .install-banner__icon {
+        font-size: 32px;
+        flex-shrink: 0;
+      }
+
+      .install-banner__text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .install-banner__text strong {
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .install-banner__text span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .install-banner__btn {
+        background: var(--accent);
+        color: var(--bg);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        min-height: 44px;
+        flex-shrink: 0;
+      }
+
+      .install-banner__btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .install-banner__btn--secondary {
+        background: var(--accent);
+      }
+
+      .install-banner__btn--ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+
+      .install-banner__btn--ghost:hover,
+      .install-banner__btn--ghost:focus-visible {
+        color: var(--text);
+        border-color: var(--accent);
+      }
+
+      .install-banner__dismiss {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 4px 10px;
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .install-banner__dismiss:hover,
+      .install-banner__dismiss:focus-visible {
+        color: var(--text);
+      }
+
+      .install-banner__dismiss:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      /* Android — layout horizontal */
+      .install-banner--android {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* iOS — card centralizado */
+      .install-banner--ios {
+        max-width: 480px;
+        margin: 0 auto;
+        text-align: left;
+        padding: 24px;
+      }
+
+      .install-banner--ios .install-banner__dismiss {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+      }
+
+      .install-banner--ios h3 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 24px;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        margin-bottom: 16px;
+        padding-right: 32px;
+      }
+
+      .install-banner__steps {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin: 0 0 20px 0;
+        padding: 0;
+      }
+
+      .install-banner__steps li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .install-banner__steps li strong {
+        font-weight: 600;
+      }
+
+      .install-banner__step-icon {
+        font-size: 24px;
+        width: 36px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .install-banner__actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
     </style>
   </head>
   <body>
@@ -567,6 +742,41 @@
 
       <section id="matches" aria-label="Lista de jogos"></section>
     </main>
+
+    <!-- ===== install banners ===== -->
+    <div id="install-banner" class="install-banner install-banner--android hidden">
+      <div class="install-banner__icon">📱</div>
+      <div class="install-banner__text">
+        <strong>Instale o app na tela inicial</strong>
+        <span>Use offline e tenha acesso rápido à tabela.</span>
+      </div>
+      <button id="install-btn" type="button" class="install-banner__btn">Instalar</button>
+      <button id="install-dismiss" type="button" class="install-banner__dismiss" aria-label="Fechar">×</button>
+    </div>
+
+    <div id="install-banner-ios" class="install-banner install-banner--ios hidden" role="dialog" aria-modal="true" aria-labelledby="install-banner-ios-title">
+      <button id="install-ios-dismiss" type="button" class="install-banner__dismiss" aria-label="Fechar">×</button>
+      <h3 id="install-banner-ios-title">Instale na tela inicial</h3>
+      <ol class="install-banner__steps">
+        <li>
+          <span class="install-banner__step-icon">⬆️</span>
+          <span>Toque no ícone <strong>Compartilhar</strong> na barra do Safari</span>
+        </li>
+        <li>
+          <span class="install-banner__step-icon">➕</span>
+          <span>Role e toque em <strong>Adicionar à Tela de Início</strong></span>
+        </li>
+        <li>
+          <span class="install-banner__step-icon">✓</span>
+          <span>Confirme tocando em <strong>Adicionar</strong></span>
+        </li>
+      </ol>
+      <div class="install-banner__actions">
+        <button id="install-ios-ok" type="button" class="install-banner__btn install-banner__btn--secondary">Entendi</button>
+        <button id="install-ios-never" type="button" class="install-banner__btn install-banner__btn--ghost">Não mostrar mais</button>
+      </div>
+    </div>
+
     <script>
       const DATA_INICIO_COPA = '2026-06-11';
       const DATA_FIM_COPA = '2026-07-19';
@@ -1216,6 +1426,88 @@
             .catch(err => console.warn('SW register failed:', err));
         });
       }
+
+      // ===== install banners =====
+      (function() {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                          || window.navigator.standalone === true;
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+        const banner = document.getElementById('install-banner');
+        const bannerIOS = document.getElementById('install-banner-ios');
+
+        let deferredPrompt = null;
+
+        function bannerOculto() {
+          const ate = localStorage.getItem('install-banner-hidden-until');
+          return ate && parseInt(ate, 10) > Date.now();
+        }
+
+        function esconderBanner() {
+          banner.classList.add('hidden');
+          bannerIOS.classList.add('hidden');
+        }
+
+        function esconderPor7Dias() {
+          const ate = Date.now() + (7 * 24 * 60 * 60 * 1000);
+          localStorage.setItem('install-banner-hidden-until', ate);
+          esconderBanner();
+        }
+
+        function mostrarBannerAndroid() {
+          if (isStandalone || bannerOculto()) return;
+          banner.classList.remove('hidden');
+        }
+
+        function mostrarBannerIOS() {
+          if (isStandalone || bannerOculto()) return;
+          bannerIOS.classList.remove('hidden');
+        }
+
+        // Android: captura beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          mostrarBannerAndroid();
+        });
+
+        window.addEventListener('appinstalled', () => {
+          esconderBanner();
+          deferredPrompt = null;
+        });
+
+        // Handlers Android
+        document.getElementById('install-btn').addEventListener('click', async () => {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          if (outcome === 'accepted') esconderBanner();
+        });
+
+        document.getElementById('install-dismiss').addEventListener('click', esconderPor7Dias);
+
+        // Handlers iOS
+        document.getElementById('install-ios-ok').addEventListener('click', () => {
+          bannerIOS.classList.add('hidden');
+        });
+
+        document.getElementById('install-ios-never').addEventListener('click', esconderPor7Dias);
+
+        document.getElementById('install-ios-dismiss').addEventListener('click', esconderPor7Dias);
+
+        // ESC fecha o banner iOS (apenas na sessão)
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !bannerIOS.classList.contains('hidden')) {
+            bannerIOS.classList.add('hidden');
+          }
+        });
+
+        // Inicialização: iOS aparece após 3s; Android espera o evento
+        if (isIOS) {
+          setTimeout(mostrarBannerIOS, 3000);
+        }
+      })();
     </script>
   </body>
 </html>
