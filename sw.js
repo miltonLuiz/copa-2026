@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copa2026-v5';
+const CACHE_NAME = 'copa2026-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -25,6 +25,24 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+
+  // standings.json: network-first para garantir dados atualizados;
+  // cai no cache apenas se a rede falhar (offline).
+  if (url.pathname.endsWith('/data/standings.json')) {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const copia = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(e.request, copia));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Demais recursos: cache-first (comportamento original)
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
