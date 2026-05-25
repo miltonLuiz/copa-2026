@@ -984,7 +984,7 @@
       </div>
 
       <div id="painel-grupos" role="tabpanel" aria-labelledby="tab-grupos" tabindex="0" hidden>
-        <p class="grupos__nota">A fase de grupos começa em 11/06. A classificação é atualizada automaticamente durante a Copa.</p>
+        <p class="grupos__nota" id="grupos-nota">A fase de grupos começa em 11/06. A classificação é atualizada automaticamente durante a Copa.</p>
         <div id="grupos-conteudo"><p class="grupos__loading">Carregando classificação…</p></div>
       </div>
 
@@ -1752,6 +1752,19 @@
           }).join('');
 
           document.getElementById('grupos-conteudo').innerHTML = html;
+
+          // Exibe timestamp de atualização no fuso de Brasília (UTC−3)
+          const nota = document.getElementById('grupos-nota');
+          if (nota && data.atualizadoEm) {
+            const ts = new Date(data.atualizadoEm);
+            // Converte para Brasília: UTC−3 fixo (sem depender do fuso do dispositivo)
+            const brt = new Date(ts.getTime() + (-3 * 3600000));
+            const dd  = String(brt.getUTCDate()).padStart(2, '0');
+            const mm  = String(brt.getUTCMonth() + 1).padStart(2, '0');
+            const hh  = String(brt.getUTCHours()).padStart(2, '0');
+            const min = String(brt.getUTCMinutes()).padStart(2, '0');
+            nota.textContent = 'Atualizado em ' + dd + '/' + mm + ' às ' + hh + 'h' + min;
+          }
         }
 
         // Deep-link: respeitar hash na carga inicial
