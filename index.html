@@ -801,6 +801,7 @@
       .grupo-tabela {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
       }
 
       .grupo-tabela thead th {
@@ -814,13 +815,16 @@
         text-align: center;
       }
 
+      /* Coluna # — largura fixa pequena */
       .grupo-tabela thead th:first-child {
         text-align: center;
-        width: 28px;
+        width: 32px;
       }
 
+      /* Coluna Seleção — largura generosa para caber "República Tcheca" */
       .grupo-tabela thead th.col-selecao {
         text-align: left;
+        width: 26%;
       }
 
       .grupo-tabela thead th.col-p {
@@ -887,11 +891,18 @@
           display: none;
         }
 
-        .grupo-tabela td.col-selecao {
-          max-width: 120px;
+        /* Com table-layout: fixed, a width da coluna vem do layout.
+           max-width conflitaria; overflow/ellipsis truncam nomes longos. */
+        .grupo-tabela td.col-selecao,
+        .grupo-tabela th.col-selecao {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+
+        /* No mobile (7 colunas visíveis) a Seleção pode ocupar mais espaço */
+        .grupo-tabela thead th.col-selecao {
+          width: 34%;
         }
       }
     </style>
