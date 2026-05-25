@@ -124,36 +124,46 @@ const GRUPOS_ORDEM = ['A','B','C','D','E','F','G','H','I','J','K','L'];
 /**
  * Extrai a letra do grupo a partir de formatos variados da API.
  * Exemplos: "Group A", "GROUP_A", "group a", "GROUP_L" → "A", "L"
+ *
+ * Retorna null (sem lançar) quando group é null/undefined ou não casa a regex.
+ * Isso é esperado no período pré-torneio, antes da API publicar as divisões A–L.
  */
-function extrairLetra(groupStr) {
-  const m = String(groupStr).match(/group[_ ]?([a-l])/i);
-  if (!m) throw new Error('Formato de grupo não reconhecido: ' + groupStr);
+function extrairLetra(group) {
+  if (group == null) return null;
+  const m = String(group).match(/group[_ ]?([a-l])/i);
+  if (!m) return null;
   return m[1].toUpperCase();
 }
 
 /**
- * Valida que temos exatamente 12 grupos (A–L) com 4 seleções cada.
- * Lança erro se a cobertura for incompleta — assim o arquivo não é escrito parcialmente.
+ * Verifica a cobertura dos grupos montados.
+ * Retorna um objeto { completo: boolean, montados: number, ausentes: string[], extras: string[] }
+ * sem lançar — o chamador decide o que fazer com o resultado.
+ *
+ * "completo" = true somente quando temos exatamente 12 grupos A–L, cada um com 4 seleções.
  */
 function validarCobertura(grupos) {
   const letrasEsperadas = GRUPOS_ORDEM;
   const letrasPresentes = Object.keys(grupos);
+  const ausentes = [];
+  const extras   = [];
 
   for (const letra of letrasEsperadas) {
-    if (!grupos[letra]) {
-      throw new Error('Grupo ' + letra + ' ausente na resposta da API.');
-    }
-    if (grupos[letra].length !== 4) {
-      throw new Error('Grupo ' + letra + ' tem ' + grupos[letra].length + ' seleções (esperado: 4).');
+    if (!grupos[letra] || grupos[letra].length !== 4) {
+      ausentes.push(letra);
     }
   }
 
-  // Sem grupos extras inesperados
   for (const letra of letrasPresentes) {
     if (!letrasEsperadas.includes(letra)) {
-      throw new Error('Grupo inesperado na resposta: ' + letra);
+      extras.push(letra);
     }
   }
+
+  const montados = letrasPresentes.filter(l => letrasEsperadas.includes(l) && grupos[l].length === 4).length;
+  const completo = ausentes.length === 0 && extras.length === 0;
+
+  return { completo, montados, ausentes, extras };
 }
 
 /**
@@ -168,18 +178,35 @@ function ordenarPorGrupo(grupos) {
 }
 
 /**
- * Função pura: recebe o body JSON da API e devolve o objeto pronto para salvar.
- * Lança erro (fail-loud) se qualquer seleção não for mapeada ou a cobertura for incompleta.
+ * Função pura: recebe o body JSON da API e tenta construir o objeto pronto para salvar.
+ *
+ * Retorna { saida, cobertura } onde:
+ *   - saida: objeto com atualizadoEm + grupos (se cobertura.completo = true), ou null.
+ *   - cobertura: resultado de validarCobertura (sempre presente).
+ *
+ * Lança erro (fail-loud) apenas se um time dentro de um grupo válido (letra != null)
+ * não estiver mapeado — isso é erro de dados que precisa de correção no mapa.
+ *
+ * Blocos sem grupo (group: null) são silenciosamente pulados; são esperados pré-torneio.
+ * Grupos extras além de A–L são reportados em cobertura.extras (anomalia, não fatal).
  */
 function construirSaida(data) {
   const grupos = {};
+  let blocosSemGrupo = 0;
 
   for (const bloco of data.standings.filter(s => s.type === 'TOTAL')) {
     const letra = extrairLetra(bloco.group);
 
-    grupos[letra] = bloco.table.map(function(linha) {
+    // Bloco sem grupo reconhecido: estado pré-torneio esperado — pula sem errar
+    if (letra === null) {
+      blocosSemGrupo++;
+      continue;
+    }
+
+    grupos[letra] = (bloco.table || []).map(function(linha) {
       const selecao = TRADUCAO[linha.team.tla] || TRADUCAO_POR_NOME[linha.team.name];
       if (!selecao) {
+        // Fail-loud: time dentro de grupo válido sem mapeamento é erro de dados real
         throw new Error(
           'Seleção não mapeada: tla=' + linha.team.tla + ' / name=' + linha.team.name
         );
@@ -199,13 +226,18 @@ function construirSaida(data) {
     }).sort(function(a, b) { return a.pos - b.pos; });
   }
 
-  // Falha se a cobertura for incompleta — não escreve JSON parcial
-  validarCobertura(grupos);
+  if (blocosSemGrupo > 0) {
+    console.log('Blocos sem grupo (pré-torneio):', blocosSemGrupo);
+  }
 
-  return {
-    atualizadoEm: new Date().toISOString(),
-    grupos: ordenarPorGrupo(grupos),
-  };
+  const cobertura = validarCobertura(grupos);
+
+  // Só monta saida quando a cobertura está completa
+  const saida = cobertura.completo
+    ? { atualizadoEm: new Date().toISOString(), grupos: ordenarPorGrupo(grupos) }
+    : null;
+
+  return { saida, cobertura };
 }
 
 // ─── Exporta funções puras para testes externos (não executa main) ────────────
@@ -251,16 +283,39 @@ async function main() {
     process.exit(0);
   }
 
-  let saida;
+  // Log de diagnóstico da estrutura — confirma formato real no log do Actions
+  // (sem expor dados sensíveis: o token já é mascarado pelo GitHub)
+  console.log('Diagnóstico da resposta:', JSON.stringify({
+    season: data.season && { startDate: data.season.startDate, currentMatchday: data.season.currentMatchday },
+    blocos: (data.standings || []).map(b => ({ stage: b.stage, type: b.type, group: b.group, times: (b.table || []).length })),
+  }));
+
+  let resultado;
   try {
-    saida = construirSaida(data);
+    resultado = construirSaida(data);
   } catch (e) {
+    // Erro lançado somente para time não-mapeado dentro de grupo válido
     console.error('Erro ao construir saída:', e.message);
     process.exit(1);
   }
 
-  fs.writeFileSync(CAMINHO, JSON.stringify(saida, null, 2) + '\n');
-  console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+  const { saida, cobertura } = resultado;
+
+  // Cobertura completa → escreve o JSON
+  if (cobertura.completo) {
+    fs.writeFileSync(CAMINHO, JSON.stringify(saida, null, 2) + '\n');
+    console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+    process.exit(0);
+  }
+
+  // Cobertura incompleta → estado pré-torneio esperado; preserva sem falhar
+  // (grupos extras além de A–L seriam anomalia, mas também preservamos por segurança)
+  console.log(
+    'Classificação por grupo ainda não publicada pela API' +
+    (cobertura.extras.length > 0 ? ' (grupos inesperados: ' + cobertura.extras.join(', ') + ')' : '') +
+    ' (montados ' + cobertura.montados + ' de 12 grupos). JSON preservado.'
+  );
+  process.exit(0);
 }
 
 if (require.main === module) {
