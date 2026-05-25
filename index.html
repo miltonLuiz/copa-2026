@@ -675,6 +675,225 @@
         justify-content: flex-end;
         flex-wrap: wrap;
       }
+
+      /* ===== tabs ===== */
+
+      .tabs {
+        margin-block: 24px 0;
+      }
+
+      .tabs [role="tablist"] {
+        display: flex;
+        gap: 8px;
+      }
+
+      .tabs__tab {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 20px;
+        border-radius: 999px;
+        cursor: pointer;
+        min-height: 36px;
+        line-height: 1;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .tabs__tab:hover {
+        border-color: var(--accent-2);
+      }
+
+      .tabs__tab:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .tabs__tab--active {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+      }
+
+      /* ===== painel-jogos ===== */
+
+      #painel-jogos {
+        outline: none;
+      }
+
+      #painel-jogos:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      /* ===== painel-grupos ===== */
+
+      #painel-grupos {
+        padding-top: 24px;
+        outline: none;
+      }
+
+      #painel-grupos:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      /* ===== nota grupos ===== */
+
+      .grupos__nota {
+        font-family: 'Manrope', sans-serif;
+        font-size: 13px;
+        color: var(--muted);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-block-end: 24px;
+      }
+
+      /* ===== loading grupos ===== */
+
+      .grupos__loading {
+        text-align: center;
+        padding: 48px 16px;
+        color: var(--muted);
+        font-size: 14px;
+        font-family: 'Manrope', sans-serif;
+      }
+
+      /* ===== erro grupos ===== */
+
+      .grupos__erro {
+        text-align: center;
+        padding: 48px 16px;
+        color: var(--muted);
+        font-size: 14px;
+        font-family: 'Manrope', sans-serif;
+      }
+
+      /* ===== card de grupo ===== */
+
+      .grupo {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-block-end: 16px;
+      }
+
+      .grupo__titulo {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 22px;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        margin-block-end: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* ===== tabela de grupo ===== */
+
+      .grupo-tabela {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .grupo-tabela thead th {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 4px 8px;
+        text-align: center;
+      }
+
+      .grupo-tabela thead th:first-child {
+        text-align: center;
+        width: 28px;
+      }
+
+      .grupo-tabela thead th.col-selecao {
+        text-align: left;
+      }
+
+      .grupo-tabela thead th.col-p {
+        color: var(--accent);
+      }
+
+      .grupo-tabela tbody td {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--text);
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .grupo-tabela tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .grupo-tabela td.col-selecao {
+        font-family: 'Manrope', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        padding-left: 4px;
+      }
+
+      .grupo-tabela td.col-p {
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* Destaque dos 2 primeiros classificados */
+      .grupo-tabela__row--classificado td:first-child {
+        border-left: 3px solid var(--accent-2);
+      }
+
+      /* Destaque Brasil */
+      .grupo-tabela__row--brasil td.col-selecao {
+        color: var(--br-yellow);
+      }
+
+      /* ===== responsividade grupos ===== */
+
+      @media (max-width: 720px) {
+        .grupo {
+          padding: 12px 14px;
+        }
+
+        .grupo-tabela tbody td {
+          font-size: 12px;
+          padding: 7px 6px;
+        }
+
+        .grupo-tabela thead th {
+          padding: 4px 6px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .col-j,
+        .col-gp,
+        .col-gc {
+          display: none;
+        }
+
+        .grupo-tabela td.col-selecao {
+          max-width: 120px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
     </style>
   </head>
   <body>
@@ -690,68 +909,85 @@
         </p>
       </header>
 
-      <div id="countdown" aria-live="polite"></div>
+      <nav class="tabs">
+        <div role="tablist" aria-label="Seções">
+          <button role="tab" id="tab-jogos" aria-selected="true" aria-controls="painel-jogos" class="tabs__tab tabs__tab--active">Jogos</button>
+          <button role="tab" id="tab-grupos" aria-selected="false" aria-controls="painel-grupos" tabindex="-1" class="tabs__tab">Grupos</button>
+        </div>
+      </nav>
 
-      <section class="stats" aria-label="Estatísticas gerais">
-        <div class="stats__item">
-          <span class="stats__value">104</span>
-          <span class="stats__label">Jogos</span>
-        </div>
-        <div class="stats__item">
-          <span class="stats__value">48</span>
-          <span class="stats__label">Seleções</span>
-        </div>
-        <div class="stats__item">
-          <span class="stats__value">39</span>
-          <span class="stats__label">Dias</span>
-        </div>
-        <div class="stats__item">
-          <span class="stats__value">16</span>
-          <span class="stats__label">Cidades-sede</span>
-        </div>
-      </section>
+      <div id="painel-jogos" role="tabpanel" aria-labelledby="tab-jogos" tabindex="0">
 
-      <section class="filters" aria-label="Filtros">
-        <div class="search">
-          <input
-            type="search"
-            id="search-input"
-            class="search__input"
-            placeholder="Buscar por seleção (ex: Brasil, França, Marrocos…)"
-            aria-label="Buscar por seleção"
-            autocomplete="off"
-          />
-          <button type="button" class="search__clear" aria-label="Limpar busca" hidden>×</button>
-        </div>
-        <div class="filters__group">
-          <div class="filters__group-header">
-            <h2 class="filters__title">Atalhos</h2>
+        <div id="countdown" aria-live="polite"></div>
+
+        <section class="stats" aria-label="Estatísticas gerais">
+          <div class="stats__item">
+            <span class="stats__value">104</span>
+            <span class="stats__label">Jogos</span>
           </div>
-          <div class="filters__chips" id="shortcut-chips" role="group" aria-label="Atalhos rápidos"></div>
-        </div>
-        <div class="filters__group">
-          <div class="filters__group-header">
-            <h2 class="filters__title">Horário</h2>
-            <div class="filters__actions">
-              <button type="button" class="filters__action" data-action="time-all">Todos</button>
-              <button type="button" class="filters__action" data-action="time-clear">Limpar</button>
+          <div class="stats__item">
+            <span class="stats__value">48</span>
+            <span class="stats__label">Seleções</span>
+          </div>
+          <div class="stats__item">
+            <span class="stats__value">39</span>
+            <span class="stats__label">Dias</span>
+          </div>
+          <div class="stats__item">
+            <span class="stats__value">16</span>
+            <span class="stats__label">Cidades-sede</span>
+          </div>
+        </section>
+
+        <section class="filters" aria-label="Filtros">
+          <div class="search">
+            <input
+              type="search"
+              id="search-input"
+              class="search__input"
+              placeholder="Buscar por seleção (ex: Brasil, França, Marrocos…)"
+              aria-label="Buscar por seleção"
+              autocomplete="off"
+            />
+            <button type="button" class="search__clear" aria-label="Limpar busca" hidden>×</button>
+          </div>
+          <div class="filters__group">
+            <div class="filters__group-header">
+              <h2 class="filters__title">Atalhos</h2>
             </div>
+            <div class="filters__chips" id="shortcut-chips" role="group" aria-label="Atalhos rápidos"></div>
           </div>
-          <div class="filters__chips" id="time-chips" role="group" aria-label="Filtrar por horário"></div>
-        </div>
-        <div class="filters__group">
-          <div class="filters__group-header">
-            <h2 class="filters__title">Fase</h2>
-            <div class="filters__actions">
-              <button type="button" class="filters__action" data-action="phase-all">Todas</button>
-              <button type="button" class="filters__action" data-action="phase-clear">Limpar</button>
+          <div class="filters__group">
+            <div class="filters__group-header">
+              <h2 class="filters__title">Horário</h2>
+              <div class="filters__actions">
+                <button type="button" class="filters__action" data-action="time-all">Todos</button>
+                <button type="button" class="filters__action" data-action="time-clear">Limpar</button>
+              </div>
             </div>
+            <div class="filters__chips" id="time-chips" role="group" aria-label="Filtrar por horário"></div>
           </div>
-          <div class="filters__chips" id="phase-chips" role="group" aria-label="Filtrar por fase"></div>
-        </div>
-      </section>
+          <div class="filters__group">
+            <div class="filters__group-header">
+              <h2 class="filters__title">Fase</h2>
+              <div class="filters__actions">
+                <button type="button" class="filters__action" data-action="phase-all">Todas</button>
+                <button type="button" class="filters__action" data-action="phase-clear">Limpar</button>
+              </div>
+            </div>
+            <div class="filters__chips" id="phase-chips" role="group" aria-label="Filtrar por fase"></div>
+          </div>
+        </section>
 
-      <section id="matches" aria-label="Lista de jogos"></section>
+        <section id="matches" aria-label="Lista de jogos"></section>
+
+      </div>
+
+      <div id="painel-grupos" role="tabpanel" aria-labelledby="tab-grupos" tabindex="0" hidden>
+        <p class="grupos__nota">A fase de grupos começa em 11/06. A classificação é atualizada automaticamente durante a Copa.</p>
+        <div id="grupos-conteudo"><p class="grupos__loading">Carregando classificação…</p></div>
+      </div>
+
     </main>
 
     <!-- ===== install banners ===== -->
@@ -1394,6 +1630,137 @@
       render();
       renderCountdown();
       setInterval(renderCountdown, 60000);
+
+      // ===== abas + grupos =====
+
+      (function() {
+        const GRUPOS_ORDEM = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+
+        let gruposJaCarregados = false;
+
+        function ativarAba(idTab) {
+          const tabJogos   = document.getElementById('tab-jogos');
+          const tabGrupos  = document.getElementById('tab-grupos');
+          const painelJogos  = document.getElementById('painel-jogos');
+          const painelGrupos = document.getElementById('painel-grupos');
+
+          const ativarJogos = (idTab === 'tab-jogos');
+
+          tabJogos.setAttribute('aria-selected', ativarJogos ? 'true' : 'false');
+          tabJogos.setAttribute('tabindex',       ativarJogos ? '0' : '-1');
+          tabJogos.classList.toggle('tabs__tab--active', ativarJogos);
+
+          tabGrupos.setAttribute('aria-selected', ativarJogos ? 'false' : 'true');
+          tabGrupos.setAttribute('tabindex',       ativarJogos ? '-1' : '0');
+          tabGrupos.classList.toggle('tabs__tab--active', !ativarJogos);
+
+          painelJogos.hidden  =  !ativarJogos;
+          painelGrupos.hidden =   ativarJogos;
+
+          const hashNovo = ativarJogos ? '#jogos' : '#grupos';
+          history.replaceState(null, '', hashNovo);
+
+          if (!ativarJogos && !gruposJaCarregados) {
+            fetchStandings();
+          }
+        }
+
+        function attachTabHandlers() {
+          const tablist = document.querySelector('[role="tablist"]');
+
+          tablist.addEventListener('click', function(e) {
+            const tab = e.target.closest('[role="tab"]');
+            if (!tab) return;
+            ativarAba(tab.id);
+            tab.focus();
+          });
+
+          tablist.addEventListener('keydown', function(e) {
+            const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+            const idx  = tabs.indexOf(document.activeElement);
+            if (idx === -1) return;
+
+            if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              const prox = tabs[(idx + 1) % tabs.length];
+              ativarAba(prox.id);
+              prox.focus();
+            } else if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              const ant = tabs[(idx - 1 + tabs.length) % tabs.length];
+              ativarAba(ant.id);
+              ant.focus();
+            }
+          });
+        }
+
+        async function fetchStandings() {
+          try {
+            const res = await fetch('./data/standings.json');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            gruposJaCarregados = true;
+            renderGrupos(data);
+          } catch (err) {
+            console.warn('[Copa 2026] Erro ao carregar standings:', err);
+            const el = document.getElementById('grupos-conteudo');
+            el.innerHTML = '<p class="grupos__erro">Não foi possível carregar a classificação. Tente novamente mais tarde.</p>';
+          }
+        }
+
+        function renderGrupos(data) {
+          const grupos = data.grupos || {};
+          const html = GRUPOS_ORDEM.map(function(letra) {
+            const selecoes = grupos[letra];
+            if (!selecoes) return '';
+
+            const linhas = selecoes.map(function(s) {
+              const classificadoClass = s.pos <= 2 ? ' grupo-tabela__row--classificado' : '';
+              const brasilClass       = s.selecao === 'Brasil' ? ' grupo-tabela__row--brasil' : '';
+              return '<tr class="grupo-tabela__row' + classificadoClass + brasilClass + '">' +
+                '<td>' + s.pos + '</td>' +
+                '<td class="col-selecao">' + s.selecao + '</td>' +
+                '<td class="col-p">' + s.p + '</td>' +
+                '<td class="col-j">' + s.j + '</td>' +
+                '<td>' + s.v + '</td>' +
+                '<td>' + s.e + '</td>' +
+                '<td>' + s.d + '</td>' +
+                '<td class="col-gp">' + s.gp + '</td>' +
+                '<td class="col-gc">' + s.gc + '</td>' +
+                '<td>' + s.sg + '</td>' +
+              '</tr>';
+            }).join('');
+
+            return '<div class="grupo">' +
+              '<h2 class="grupo__titulo">Grupo ' + letra + '</h2>' +
+              '<table class="grupo-tabela">' +
+                '<thead><tr>' +
+                  '<th scope="col">#</th>' +
+                  '<th scope="col" class="col-selecao">Seleção</th>' +
+                  '<th scope="col" class="col-p">P</th>' +
+                  '<th scope="col" class="col-j">J</th>' +
+                  '<th scope="col">V</th>' +
+                  '<th scope="col">E</th>' +
+                  '<th scope="col">D</th>' +
+                  '<th scope="col" class="col-gp">GP</th>' +
+                  '<th scope="col" class="col-gc">GC</th>' +
+                  '<th scope="col">SG</th>' +
+                '</tr></thead>' +
+                '<tbody>' + linhas + '</tbody>' +
+              '</table>' +
+            '</div>';
+          }).join('');
+
+          document.getElementById('grupos-conteudo').innerHTML = html;
+        }
+
+        // Deep-link: respeitar hash na carga inicial
+        if (location.hash === '#grupos') {
+          ativarAba('tab-grupos');
+        }
+
+        attachTabHandlers();
+      })();
 
       // ===== service worker =====
 
