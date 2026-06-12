@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copa2026-v8';
+const CACHE_NAME = 'copa2026-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -25,6 +25,19 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
+// Retorna true se a requisição é uma navegação para o HTML do app.
+// Cobre: mode 'navigate', /copa-2026/ (GitHub Pages), /copa-2026/index.html,
+// raiz '/' e '/index.html' (domínio próprio/local).
+function ehNavegacao(request, url) {
+  if (request.mode === 'navigate') return true;
+  const p = url.pathname;
+  return p === '/'
+    || p === '/index.html'
+    || p === '/copa-2026/'
+    || p === '/copa-2026/index.html'
+    || p.endsWith('/index.html');
+}
+
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
@@ -39,6 +52,32 @@ self.addEventListener('fetch', e => {
           return res;
         })
         .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Navegação (HTML): network-first para que o usuário veja a versão nova ao abrir
+  // o atalho PWA, mesmo sem botão de reload. Usamos e.request.url (string) em vez
+  // de e.request direto porque alguns browsers rejeitem fetch() com um Request de
+  // mode 'navigate' passado diretamente — string é universalmente aceita.
+  // cache: 'no-cache' força revalidação no CDN do GitHub Pages (max-age=600),
+  // eliminando a janela de ~10 min de HTML velho.
+  if (ehNavegacao(e.request, url)) {
+    e.respondWith(
+      fetch(e.request.url, { cache: 'no-cache' })
+        .then(res => {
+          if (res.ok) {
+            const copia = res.clone();
+            caches.open(CACHE_NAME).then(c => c.put(e.request.url, copia));
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.match(e.request)
+            .then(cached => cached
+              || caches.match('./index.html')
+              || caches.match('./'))
+        )
     );
     return;
   }
