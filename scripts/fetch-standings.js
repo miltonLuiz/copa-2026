@@ -1,13 +1,20 @@
 // fetch-standings.js — busca classificação dos grupos na API football-data.org
 // e escreve em data/standings.json (relativo à raiz do repo).
 // Executado pelo GitHub Actions a cada 6h durante a Copa.
+//
+// Fonte primária: /standings. Na Copa 2026 a API vem devolvendo esse endpoint
+// com um tabelão único de 48 times e group: null (sem a divisão A–L). Quando
+// isso acontece, o script cai pro fallback: busca os jogos da fase de grupos
+// em /matches (cada jogo traz o campo group, ex: "GROUP_A") e calcula a
+// classificação a partir dos resultados.
 
 'use strict';
 
 const fs = require('node:fs');
 
-const ENDPOINT = 'https://api.football-data.org/v4/competitions/WC/standings?season=2026';
-const CAMINHO  = 'data/standings.json';
+const ENDPOINT         = 'https://api.football-data.org/v4/competitions/WC/standings?season=2026';
+const ENDPOINT_JOGOS   = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026&stage=GROUP_STAGE';
+const CAMINHO          = 'data/standings.json';
 
 // ─── Dicionário de tradução: tla → nome PT-BR ────────────────────────────────
 // Fonte: /tmp/mapa-traducao-selecoes.txt (validado contra data/standings.json)
@@ -190,6 +197,18 @@ function ordenarPorGrupo(grupos) {
  * Blocos sem grupo (group: null) são silenciosamente pulados; são esperados pré-torneio.
  * Grupos extras além de A–L são reportados em cobertura.extras (anomalia, não fatal).
  */
+/**
+ * Traduz um team da API pro nome PT-BR. Fail-loud: seleção sem mapeamento
+ * é erro de dados real que precisa de correção no mapa.
+ */
+function traduzir(team) {
+  const selecao = TRADUCAO[team.tla] || TRADUCAO_POR_NOME[team.name];
+  if (!selecao) {
+    throw new Error('Seleção não mapeada: tla=' + team.tla + ' / name=' + team.name);
+  }
+  return selecao;
+}
+
 function construirSaida(data) {
   const grupos = {};
   let blocosSemGrupo = 0;
@@ -204,13 +223,7 @@ function construirSaida(data) {
     }
 
     grupos[letra] = (bloco.table || []).map(function(linha) {
-      const selecao = TRADUCAO[linha.team.tla] || TRADUCAO_POR_NOME[linha.team.name];
-      if (!selecao) {
-        // Fail-loud: time dentro de grupo válido sem mapeamento é erro de dados real
-        throw new Error(
-          'Seleção não mapeada: tla=' + linha.team.tla + ' / name=' + linha.team.name
-        );
-      }
+      const selecao = traduzir(linha.team);
       return {
         selecao: selecao,
         pos: linha.position,
@@ -240,12 +253,128 @@ function construirSaida(data) {
   return { saida, cobertura };
 }
 
+/**
+ * Função pura: recebe o body JSON de /matches (fase de grupos) e calcula a
+ * classificação a partir dos resultados. Mesmo contrato de construirSaida:
+ * retorna { saida, cobertura }.
+ *
+ * Todos os 72 jogos da fase de grupos já vêm com os times definidos, então os
+ * 12 grupos ficam completos mesmo com 0 jogos disputados.
+ *
+ * Só jogos FINISHED (e AWARDED) contam pontos. Desempate: pontos > saldo >
+ * gols pró > nome — aproximação dos critérios FIFA (não cobre confronto
+ * direto entre empatados); quando /standings voltar a publicar os grupos,
+ * as posições oficiais da API têm precedência no main().
+ */
+function construirSaidaDeJogos(data) {
+  const grupos = {};   // letra → { selecao → linha }
+  let jogosSemGrupo = 0;
+
+  for (const jogo of (data.matches || [])) {
+    const letra = extrairLetra(jogo.group);
+    if (letra === null) {
+      jogosSemGrupo++;
+      continue;
+    }
+
+    if (!grupos[letra]) grupos[letra] = {};
+    const tabela = grupos[letra];
+
+    const casa = traduzir(jogo.homeTeam);
+    const fora = traduzir(jogo.awayTeam);
+    for (const selecao of [casa, fora]) {
+      if (!tabela[selecao]) {
+        tabela[selecao] = { selecao: selecao, pos: 0, p: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0 };
+      }
+    }
+
+    const terminou = jogo.status === 'FINISHED' || jogo.status === 'AWARDED';
+    const placar = jogo.score && jogo.score.fullTime;
+    if (!terminou || !placar || placar.home == null || placar.away == null) continue;
+
+    const lcasa = tabela[casa];
+    const lfora = tabela[fora];
+
+    lcasa.j++; lfora.j++;
+    lcasa.gp += placar.home; lcasa.gc += placar.away;
+    lfora.gp += placar.away; lfora.gc += placar.home;
+
+    if (placar.home > placar.away) {
+      lcasa.v++; lcasa.p += 3; lfora.d++;
+    } else if (placar.home < placar.away) {
+      lfora.v++; lfora.p += 3; lcasa.d++;
+    } else {
+      lcasa.e++; lfora.e++; lcasa.p++; lfora.p++;
+    }
+  }
+
+  if (jogosSemGrupo > 0) {
+    console.log('Jogos sem grupo reconhecido (ignorados):', jogosSemGrupo);
+  }
+
+  const gruposOrdenados = {};
+  for (const letra of Object.keys(grupos)) {
+    gruposOrdenados[letra] = Object.values(grupos[letra]).map(function(linha) {
+      linha.sg = linha.gp - linha.gc;
+      return linha;
+    }).sort(function(a, b) {
+      return (b.p - a.p) || (b.sg - a.sg) || (b.gp - a.gp) || a.selecao.localeCompare(b.selecao, 'pt');
+    }).map(function(linha, i) {
+      linha.pos = i + 1;
+      return linha;
+    });
+  }
+
+  const cobertura = validarCobertura(gruposOrdenados);
+
+  const saida = cobertura.completo
+    ? { atualizadoEm: new Date().toISOString(), grupos: ordenarPorGrupo(gruposOrdenados) }
+    : null;
+
+  return { saida, cobertura };
+}
+
 // ─── Exporta funções puras para testes externos (não executa main) ────────────
 if (require.main !== module) {
-  module.exports = { construirSaida, extrairLetra, validarCobertura, TRADUCAO, TRADUCAO_POR_NOME };
+  module.exports = { construirSaida, construirSaidaDeJogos, extrairLetra, validarCobertura, TRADUCAO, TRADUCAO_POR_NOME };
 }
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
+
+/**
+ * GET autenticado com tratamento padrão de erro. Retorna o body JSON,
+ * null em 404 (recurso ainda não publicado) ou encerra o processo em
+ * erro HTTP/rede — nunca loga o token.
+ */
+async function buscar(url, token, rotulo) {
+  let res;
+  try {
+    res = await fetch(url, { headers: { 'X-Auth-Token': token } });
+  } catch (e) {
+    console.error('Falha no fetch (' + rotulo + '):', e.message);
+    process.exit(1);
+  }
+
+  if (res.status === 404) return null;
+
+  if (!res.ok) {
+    console.error('Erro da API (' + rotulo + '): status HTTP ' + res.status);
+    process.exit(1);
+  }
+
+  try {
+    return await res.json();
+  } catch (e) {
+    console.error('Falha no parse (' + rotulo + '):', e.message);
+    process.exit(1);
+  }
+}
+
+function escrever(saida) {
+  fs.writeFileSync(CAMINHO, JSON.stringify(saida, null, 2) + '\n');
+  console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+}
+
 async function main() {
   const token = process.env.FOOTBALL_DATA_TOKEN;
   if (!token) {
@@ -253,67 +382,72 @@ async function main() {
     process.exit(1);
   }
 
-  let data;
-  try {
-    const res = await fetch(ENDPOINT, {
-      headers: { 'X-Auth-Token': token },
-    });
+  // ── Fonte primária: /standings (traz as posições oficiais da API) ──────────
+  const data = await buscar(ENDPOINT, token, 'standings');
 
-    // 404 = competição ainda não tem standings (pré-Copa); preserva o JSON atual
-    if (res.status === 404) {
-      console.log('Standings ainda não disponível (404). JSON preservado.');
-      process.exit(0);
-    }
+  if (data && data.standings && data.standings.length > 0) {
+    // Log de diagnóstico da estrutura — confirma formato real no log do Actions
+    console.log('Diagnóstico de /standings:', JSON.stringify({
+      season: data.season && { startDate: data.season.startDate, currentMatchday: data.season.currentMatchday },
+      blocos: data.standings.map(b => ({ stage: b.stage, type: b.type, group: b.group, times: (b.table || []).length })),
+    }));
 
-    // Qualquer outro erro HTTP — nunca loga o token
-    if (!res.ok) {
-      console.error('Erro da API: status HTTP ' + res.status);
+    let resultado;
+    try {
+      resultado = construirSaida(data);
+    } catch (e) {
+      // Erro lançado somente para time não-mapeado dentro de grupo válido
+      console.error('Erro ao construir saída de /standings:', e.message);
       process.exit(1);
     }
 
-    data = await res.json();
-  } catch (e) {
-    console.error('Falha no fetch/parse:', e.message);
-    process.exit(1);
+    if (resultado.cobertura.completo) {
+      escrever(resultado.saida);
+      process.exit(0);
+    }
+
+    console.log(
+      '/standings sem a divisão por grupos (montados ' + resultado.cobertura.montados +
+      ' de 12). Caindo pro fallback via /matches.'
+    );
+  } else {
+    console.log('/standings indisponível ou vazio. Caindo pro fallback via /matches.');
   }
 
-  // Array vazio = competição existe mas ainda sem standings; preserva o JSON atual
-  if (!data.standings || data.standings.length === 0) {
-    console.log('Sem standings disponíveis. JSON preservado.');
+  // ── Fallback: calcula a classificação a partir dos jogos da fase de grupos ─
+  const dataJogos = await buscar(ENDPOINT_JOGOS, token, 'matches');
+
+  if (!dataJogos || !dataJogos.matches || dataJogos.matches.length === 0) {
+    console.log('/matches também indisponível. JSON preservado.');
     process.exit(0);
   }
 
-  // Log de diagnóstico da estrutura — confirma formato real no log do Actions
-  // (sem expor dados sensíveis: o token já é mascarado pelo GitHub)
-  console.log('Diagnóstico da resposta:', JSON.stringify({
-    season: data.season && { startDate: data.season.startDate, currentMatchday: data.season.currentMatchday },
-    blocos: (data.standings || []).map(b => ({ stage: b.stage, type: b.type, group: b.group, times: (b.table || []).length })),
+  console.log('Diagnóstico de /matches:', JSON.stringify({
+    total: dataJogos.matches.length,
+    finalizados: dataJogos.matches.filter(m => m.status === 'FINISHED' || m.status === 'AWARDED').length,
+    exemploGroup: dataJogos.matches[0] && dataJogos.matches[0].group,
   }));
 
   let resultado;
   try {
-    resultado = construirSaida(data);
+    resultado = construirSaidaDeJogos(dataJogos);
   } catch (e) {
-    // Erro lançado somente para time não-mapeado dentro de grupo válido
-    console.error('Erro ao construir saída:', e.message);
+    console.error('Erro ao construir saída de /matches:', e.message);
     process.exit(1);
   }
 
   const { saida, cobertura } = resultado;
 
-  // Cobertura completa → escreve o JSON
   if (cobertura.completo) {
-    fs.writeFileSync(CAMINHO, JSON.stringify(saida, null, 2) + '\n');
-    console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+    escrever(saida);
     process.exit(0);
   }
 
-  // Cobertura incompleta → estado pré-torneio esperado; preserva sem falhar
-  // (grupos extras além de A–L seriam anomalia, mas também preservamos por segurança)
+  // Cobertura incompleta nas duas fontes → preserva sem falhar
   console.log(
-    'Classificação por grupo ainda não publicada pela API' +
+    'Classificação por grupo indisponível nas duas fontes' +
     (cobertura.extras.length > 0 ? ' (grupos inesperados: ' + cobertura.extras.join(', ') + ')' : '') +
-    ' (montados ' + cobertura.montados + ' de 12 grupos). JSON preservado.'
+    ' (montados ' + cobertura.montados + ' de 12 grupos via /matches). JSON preservado.'
   );
   process.exit(0);
 }
