@@ -1,4 +1,1054 @@
 {
-  "atualizadoEm": null,
-  "jogos": []
+  "atualizadoEm": "2026-06-12T23:06:01.130Z",
+  "jogos": [
+    {
+      "id": 537327,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-11T19:00:00Z",
+      "casa": "México",
+      "fora": "África do Sul",
+      "status": "FINISHED",
+      "placar": {
+        "casa": 2,
+        "fora": 0
+      }
+    },
+    {
+      "id": 537328,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-12T02:00:00Z",
+      "casa": "Coreia do Sul",
+      "fora": "República Tcheca",
+      "status": "FINISHED",
+      "placar": {
+        "casa": 2,
+        "fora": 1
+      }
+    },
+    {
+      "id": 537333,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-12T19:00:00Z",
+      "casa": "Canadá",
+      "fora": "Bósnia",
+      "status": "FINISHED",
+      "placar": {
+        "casa": 1,
+        "fora": 1
+      }
+    },
+    {
+      "id": 537345,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-13T01:00:00Z",
+      "casa": "EUA",
+      "fora": "Paraguai",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537334,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-13T19:00:00Z",
+      "casa": "Catar",
+      "fora": "Suíça",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537339,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-13T22:00:00Z",
+      "casa": "Brasil",
+      "fora": "Marrocos",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537340,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-14T01:00:00Z",
+      "casa": "Haiti",
+      "fora": "Escócia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537346,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-14T04:00:00Z",
+      "casa": "Austrália",
+      "fora": "Turquia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537351,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-14T17:00:00Z",
+      "casa": "Alemanha",
+      "fora": "Curaçao",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537357,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-14T20:00:00Z",
+      "casa": "Holanda",
+      "fora": "Japão",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537352,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-14T23:00:00Z",
+      "casa": "Costa do Marfim",
+      "fora": "Equador",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537358,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-15T02:00:00Z",
+      "casa": "Suécia",
+      "fora": "Tunísia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537369,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-15T16:00:00Z",
+      "casa": "Espanha",
+      "fora": "Cabo Verde",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537363,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-15T19:00:00Z",
+      "casa": "Bélgica",
+      "fora": "Egito",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537370,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-15T22:00:00Z",
+      "casa": "Arábia Saudita",
+      "fora": "Uruguai",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537364,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-16T01:00:00Z",
+      "casa": "Irã",
+      "fora": "Nova Zelândia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537391,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-16T19:00:00Z",
+      "casa": "França",
+      "fora": "Senegal",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537392,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-16T22:00:00Z",
+      "casa": "Iraque",
+      "fora": "Noruega",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537397,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-17T01:00:00Z",
+      "casa": "Argentina",
+      "fora": "Argélia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537398,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-17T04:00:00Z",
+      "casa": "Áustria",
+      "fora": "Jordânia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537403,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-17T17:00:00Z",
+      "casa": "Portugal",
+      "fora": "RD Congo",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537409,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-17T20:00:00Z",
+      "casa": "Inglaterra",
+      "fora": "Croácia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537410,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-17T23:00:00Z",
+      "casa": "Gana",
+      "fora": "Panamá",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537404,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-18T02:00:00Z",
+      "casa": "Uzbequistão",
+      "fora": "Colômbia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537329,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-18T16:00:00Z",
+      "casa": "República Tcheca",
+      "fora": "África do Sul",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537335,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-18T19:00:00Z",
+      "casa": "Suíça",
+      "fora": "Bósnia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537336,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-18T22:00:00Z",
+      "casa": "Canadá",
+      "fora": "Catar",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537330,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-19T01:00:00Z",
+      "casa": "México",
+      "fora": "Coreia do Sul",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537348,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-19T19:00:00Z",
+      "casa": "EUA",
+      "fora": "Austrália",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537342,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-19T22:00:00Z",
+      "casa": "Escócia",
+      "fora": "Marrocos",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537341,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-20T00:30:00Z",
+      "casa": "Brasil",
+      "fora": "Haiti",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537347,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-20T03:00:00Z",
+      "casa": "Turquia",
+      "fora": "Paraguai",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537359,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-20T17:00:00Z",
+      "casa": "Holanda",
+      "fora": "Suécia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537353,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-20T20:00:00Z",
+      "casa": "Alemanha",
+      "fora": "Costa do Marfim",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537354,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-21T00:00:00Z",
+      "casa": "Equador",
+      "fora": "Curaçao",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537360,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-21T04:00:00Z",
+      "casa": "Tunísia",
+      "fora": "Japão",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537371,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-21T16:00:00Z",
+      "casa": "Espanha",
+      "fora": "Arábia Saudita",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537365,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-21T19:00:00Z",
+      "casa": "Bélgica",
+      "fora": "Irã",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537372,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-21T22:00:00Z",
+      "casa": "Uruguai",
+      "fora": "Cabo Verde",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537366,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-22T01:00:00Z",
+      "casa": "Nova Zelândia",
+      "fora": "Egito",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537399,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-22T17:00:00Z",
+      "casa": "Argentina",
+      "fora": "Áustria",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537393,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-22T21:00:00Z",
+      "casa": "França",
+      "fora": "Iraque",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537394,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-23T00:00:00Z",
+      "casa": "Noruega",
+      "fora": "Senegal",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537400,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-23T03:00:00Z",
+      "casa": "Jordânia",
+      "fora": "Argélia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537405,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-23T17:00:00Z",
+      "casa": "Portugal",
+      "fora": "Uzbequistão",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537411,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-23T20:00:00Z",
+      "casa": "Inglaterra",
+      "fora": "Gana",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537412,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-23T23:00:00Z",
+      "casa": "Panamá",
+      "fora": "Croácia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537406,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-24T02:00:00Z",
+      "casa": "Colômbia",
+      "fora": "RD Congo",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537337,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-24T19:00:00Z",
+      "casa": "Suíça",
+      "fora": "Canadá",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537338,
+      "fase": "Grupo B",
+      "grupo": "B",
+      "utcDate": "2026-06-24T19:00:00Z",
+      "casa": "Bósnia",
+      "fora": "Catar",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537344,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-24T22:00:00Z",
+      "casa": "Marrocos",
+      "fora": "Haiti",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537343,
+      "fase": "Grupo C",
+      "grupo": "C",
+      "utcDate": "2026-06-24T22:00:00Z",
+      "casa": "Escócia",
+      "fora": "Brasil",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537331,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-25T01:00:00Z",
+      "casa": "República Tcheca",
+      "fora": "México",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537332,
+      "fase": "Grupo A",
+      "grupo": "A",
+      "utcDate": "2026-06-25T01:00:00Z",
+      "casa": "África do Sul",
+      "fora": "Coreia do Sul",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537355,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-25T20:00:00Z",
+      "casa": "Equador",
+      "fora": "Alemanha",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537356,
+      "fase": "Grupo E",
+      "grupo": "E",
+      "utcDate": "2026-06-25T20:00:00Z",
+      "casa": "Curaçao",
+      "fora": "Costa do Marfim",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537361,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-25T23:00:00Z",
+      "casa": "Tunísia",
+      "fora": "Holanda",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537362,
+      "fase": "Grupo F",
+      "grupo": "F",
+      "utcDate": "2026-06-25T23:00:00Z",
+      "casa": "Japão",
+      "fora": "Suécia",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537349,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-26T02:00:00Z",
+      "casa": "Turquia",
+      "fora": "EUA",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537350,
+      "fase": "Grupo D",
+      "grupo": "D",
+      "utcDate": "2026-06-26T02:00:00Z",
+      "casa": "Paraguai",
+      "fora": "Austrália",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537395,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-26T19:00:00Z",
+      "casa": "Noruega",
+      "fora": "França",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537396,
+      "fase": "Grupo I",
+      "grupo": "I",
+      "utcDate": "2026-06-26T19:00:00Z",
+      "casa": "Senegal",
+      "fora": "Iraque",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537373,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-27T00:00:00Z",
+      "casa": "Uruguai",
+      "fora": "Espanha",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537374,
+      "fase": "Grupo H",
+      "grupo": "H",
+      "utcDate": "2026-06-27T00:00:00Z",
+      "casa": "Cabo Verde",
+      "fora": "Arábia Saudita",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537367,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-27T03:00:00Z",
+      "casa": "Nova Zelândia",
+      "fora": "Bélgica",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537368,
+      "fase": "Grupo G",
+      "grupo": "G",
+      "utcDate": "2026-06-27T03:00:00Z",
+      "casa": "Egito",
+      "fora": "Irã",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537413,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-27T21:00:00Z",
+      "casa": "Panamá",
+      "fora": "Inglaterra",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537414,
+      "fase": "Grupo L",
+      "grupo": "L",
+      "utcDate": "2026-06-27T21:00:00Z",
+      "casa": "Croácia",
+      "fora": "Gana",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537407,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-27T23:30:00Z",
+      "casa": "Colômbia",
+      "fora": "Portugal",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537408,
+      "fase": "Grupo K",
+      "grupo": "K",
+      "utcDate": "2026-06-27T23:30:00Z",
+      "casa": "RD Congo",
+      "fora": "Uzbequistão",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537401,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-28T02:00:00Z",
+      "casa": "Jordânia",
+      "fora": "Argentina",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537402,
+      "fase": "Grupo J",
+      "grupo": "J",
+      "utcDate": "2026-06-28T02:00:00Z",
+      "casa": "Argélia",
+      "fora": "Áustria",
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537417,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-28T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537423,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-29T17:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537415,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-29T20:30:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537418,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-30T01:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537424,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-30T17:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537416,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-06-30T21:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537425,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-01T01:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537426,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-01T16:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537422,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-01T20:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537421,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-02T00:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537420,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-02T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537419,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-02T23:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537429,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-03T03:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537428,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-03T18:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537427,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-03T22:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537430,
+      "fase": "32-avos",
+      "grupo": null,
+      "utcDate": "2026-07-04T01:30:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537376,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-04T17:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537375,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-04T21:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537377,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-05T20:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537378,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-06T00:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537379,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-06T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537380,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-07T00:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537381,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-07T16:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537382,
+      "fase": "Oitavas",
+      "grupo": null,
+      "utcDate": "2026-07-07T20:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537383,
+      "fase": "Quartas",
+      "grupo": null,
+      "utcDate": "2026-07-09T20:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537384,
+      "fase": "Quartas",
+      "grupo": null,
+      "utcDate": "2026-07-10T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537385,
+      "fase": "Quartas",
+      "grupo": null,
+      "utcDate": "2026-07-11T21:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537386,
+      "fase": "Quartas",
+      "grupo": null,
+      "utcDate": "2026-07-12T01:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537387,
+      "fase": "Semifinal",
+      "grupo": null,
+      "utcDate": "2026-07-14T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537388,
+      "fase": "Semifinal",
+      "grupo": null,
+      "utcDate": "2026-07-15T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537389,
+      "fase": "Terceiro lugar",
+      "grupo": null,
+      "utcDate": "2026-07-18T21:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    },
+    {
+      "id": 537390,
+      "fase": "Final",
+      "grupo": null,
+      "utcDate": "2026-07-19T19:00:00Z",
+      "casa": null,
+      "fora": null,
+      "status": "TIMED",
+      "placar": null
+    }
+  ]
 }
