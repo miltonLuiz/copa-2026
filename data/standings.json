@@ -1,77 +1,605 @@
 {
-  "atualizadoEm": null,
+  "atualizadoEm": "2026-06-12T22:22:24.206Z",
   "grupos": {
     "A": [
-      { "selecao": "México",           "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "África do Sul",    "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Coreia do Sul",    "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "República Tcheca", "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "México",
+        "pos": 1,
+        "p": 3,
+        "j": 1,
+        "v": 1,
+        "e": 0,
+        "d": 0,
+        "gp": 2,
+        "gc": 0,
+        "sg": 2
+      },
+      {
+        "selecao": "Coreia do Sul",
+        "pos": 2,
+        "p": 3,
+        "j": 1,
+        "v": 1,
+        "e": 0,
+        "d": 0,
+        "gp": 2,
+        "gc": 1,
+        "sg": 1
+      },
+      {
+        "selecao": "República Tcheca",
+        "pos": 3,
+        "p": 0,
+        "j": 1,
+        "v": 0,
+        "e": 0,
+        "d": 1,
+        "gp": 1,
+        "gc": 2,
+        "sg": -1
+      },
+      {
+        "selecao": "África do Sul",
+        "pos": 4,
+        "p": 0,
+        "j": 1,
+        "v": 0,
+        "e": 0,
+        "d": 1,
+        "gp": 0,
+        "gc": 2,
+        "sg": -2
+      }
     ],
     "B": [
-      { "selecao": "Canadá",  "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Bósnia",  "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Catar",   "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Suíça",   "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Bósnia",
+        "pos": 1,
+        "p": 1,
+        "j": 1,
+        "v": 0,
+        "e": 1,
+        "d": 0,
+        "gp": 1,
+        "gc": 1,
+        "sg": 0
+      },
+      {
+        "selecao": "Canadá",
+        "pos": 2,
+        "p": 1,
+        "j": 1,
+        "v": 0,
+        "e": 1,
+        "d": 0,
+        "gp": 1,
+        "gc": 1,
+        "sg": 0
+      },
+      {
+        "selecao": "Catar",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Suíça",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "C": [
-      { "selecao": "Brasil",   "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Marrocos", "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Haiti",    "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Escócia",  "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Brasil",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Escócia",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Haiti",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Marrocos",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "D": [
-      { "selecao": "EUA",       "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Paraguai",  "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Austrália", "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Turquia",   "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Austrália",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "EUA",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Paraguai",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Turquia",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "E": [
-      { "selecao": "Alemanha",        "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Curaçao",         "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Costa do Marfim", "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Equador",         "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Alemanha",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Costa do Marfim",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Curaçao",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Equador",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "F": [
-      { "selecao": "Holanda", "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Japão",   "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Suécia",  "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Tunísia", "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Holanda",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Japão",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Suécia",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Tunísia",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "G": [
-      { "selecao": "Bélgica",       "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Egito",         "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Irã",           "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Nova Zelândia", "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Bélgica",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Egito",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Irã",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Nova Zelândia",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "H": [
-      { "selecao": "Espanha",        "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Cabo Verde",     "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Arábia Saudita", "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Uruguai",        "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Arábia Saudita",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Cabo Verde",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Espanha",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Uruguai",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "I": [
-      { "selecao": "França",   "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Senegal",  "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Iraque",   "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Noruega",  "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "França",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Iraque",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Noruega",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Senegal",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "J": [
-      { "selecao": "Argentina", "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Argélia",   "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Áustria",   "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Jordânia",  "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Argélia",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Argentina",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Áustria",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Jordânia",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "K": [
-      { "selecao": "Portugal",      "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "RD Congo",      "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Uzbequistão",   "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Colômbia",      "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Colômbia",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Portugal",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "RD Congo",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Uzbequistão",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ],
     "L": [
-      { "selecao": "Inglaterra", "pos": 1, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Croácia",    "pos": 2, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Panamá",     "pos": 3, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 },
-      { "selecao": "Gana",       "pos": 4, "p": 0, "j": 0, "v": 0, "e": 0, "d": 0, "gp": 0, "gc": 0, "sg": 0 }
+      {
+        "selecao": "Croácia",
+        "pos": 1,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Gana",
+        "pos": 2,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Inglaterra",
+        "pos": 3,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      },
+      {
+        "selecao": "Panamá",
+        "pos": 4,
+        "p": 0,
+        "j": 0,
+        "v": 0,
+        "e": 0,
+        "d": 0,
+        "gp": 0,
+        "gc": 0,
+        "sg": 0
+      }
     ]
   }
 }
