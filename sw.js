@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copa2026-v7';
+const CACHE_NAME = 'copa2026-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,8 @@ const ASSETS = [
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png',
-  './data/standings.json'
+  './data/standings.json',
+  './data/matches.json'
 ];
 
 self.addEventListener('install', e => {
@@ -27,9 +28,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // standings.json: network-first para garantir dados atualizados;
+  // standings.json e matches.json: network-first para garantir dados atualizados;
   // cai no cache apenas se a rede falhar (offline).
-  if (url.pathname.endsWith('/data/standings.json')) {
+  if (url.pathname.endsWith('/data/standings.json') || url.pathname.endsWith('/data/matches.json')) {
     e.respondWith(
       fetch(e.request)
         .then(res => {
