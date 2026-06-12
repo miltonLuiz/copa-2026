@@ -1,20 +1,22 @@
 // fetch-standings.js — busca classificação dos grupos na API football-data.org
 // e escreve em data/standings.json (relativo à raiz do repo).
-// Executado pelo GitHub Actions a cada 6h durante a Copa.
+// Também busca todos os 104 jogos em /matches e grava data/matches.json.
+// Executado pelo GitHub Actions a cada 30min durante a Copa.
 //
 // Fonte primária: /standings. Na Copa 2026 a API vem devolvendo esse endpoint
 // com um tabelão único de 48 times e group: null (sem a divisão A–L). Quando
-// isso acontece, o script cai pro fallback: busca os jogos da fase de grupos
-// em /matches (cada jogo traz o campo group, ex: "GROUP_A") e calcula a
-// classificação a partir dos resultados.
+// isso acontece, o script cai pro fallback: reutiliza a resposta de /matches já
+// buscada no início (cada jogo de grupo traz o campo group, ex: "GROUP_A") e
+// calcula a classificação a partir dos resultados.
 
 'use strict';
 
 const fs = require('node:fs');
 
 const ENDPOINT         = 'https://api.football-data.org/v4/competitions/WC/standings?season=2026';
-const ENDPOINT_JOGOS   = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026&stage=GROUP_STAGE';
+const ENDPOINT_MATCHES = 'https://api.football-data.org/v4/competitions/WC/matches?season=2026';
 const CAMINHO          = 'data/standings.json';
+const CAMINHO_MATCHES  = 'data/matches.json';
 
 // ─── Dicionário de tradução: tla → nome PT-BR ────────────────────────────────
 // Fonte: /tmp/mapa-traducao-selecoes.txt (validado contra data/standings.json)
@@ -334,9 +336,110 @@ function construirSaidaDeJogos(data) {
   return { saida, cobertura };
 }
 
+// Mapeamento de stage da API → rótulo PT-BR para o mata-mata da Copa 2026 (48 times)
+const STAGE_ROTULO = {
+  LAST_32:       '32-avos',
+  LAST_16:       'Oitavas',
+  QUARTER_FINALS: 'Quartas',
+  SEMI_FINALS:   'Semifinal',
+  THIRD_PLACE:   'Terceiro lugar',
+  FINAL:         'Final',
+};
+
+/**
+ * Função pura: recebe o body JSON de /matches (sem filtro de stage — todos os jogos)
+ * e retorna o objeto pronto para gravar em data/matches.json.
+ *
+ * Jogos de grupo: fase = "Grupo X", grupo = letra A–L.
+ * Jogos de mata-mata: fase = rótulo PT via STAGE_ROTULO, grupo = null.
+ * times indefinidos no mata-mata (homeTeam/awayTeam sem nome): casa/fora = null
+ *   — NÃO chama traduzir() nesses casos para não derrubar o job.
+ * Time definido mas não-mapeado: continua lançando (fail-loud preservado).
+ */
+function construirMatches(data) {
+  const jogos = (data.matches || []).map(function(match) {
+    const letra = extrairLetra(match.group);
+
+    // Determina rótulo de fase
+    let fase;
+    if (letra !== null) {
+      fase = 'Grupo ' + letra;
+    } else {
+      fase = STAGE_ROTULO[match.stage] || match.stage || 'Desconhecido';
+    }
+
+    // Traduz os times — só quando o time tem nome definido
+    let casa = null;
+    let fora = null;
+    const temCasa = match.homeTeam && match.homeTeam.name;
+    const temFora = match.awayTeam && match.awayTeam.name;
+    if (temCasa) casa = traduzir(match.homeTeam);
+    if (temFora) fora = traduzir(match.awayTeam);
+
+    // Placar — fullTime null quando home ou away forem null
+    let placar = null;
+    if (match.score && match.score.fullTime) {
+      const { home, away } = match.score.fullTime;
+      if (home !== null && away !== null) {
+        placar = { casa: home, fora: away };
+      }
+    }
+
+    return {
+      id:      match.id,
+      fase:    fase,
+      grupo:   letra,
+      utcDate: match.utcDate,
+      casa:    casa,
+      fora:    fora,
+      status:  match.status,
+      placar:  placar,
+    };
+  });
+
+  return {
+    atualizadoEm: new Date().toISOString(),
+    jogos:        jogos,
+  };
+}
+
+/**
+ * Verifica se o momento atual está dentro de uma janela de jogo.
+ *
+ * Retorna true se:
+ * - algum jogo tem agoraMs entre (utcDate - 15 min) e (utcDate + 4 h), OU
+ * - algum jogo tem status IN_PLAY ou PAUSED (segurança contra dados velhos).
+ *
+ * A janela de 4 h após o início cobre prorrogação/pênaltis e garante algumas
+ * execuções após o apito final do último jogo do dia.
+ * Jogos com utcDate ausente ou inválido são ignorados sem lançar erro.
+ *
+ * @param {Array} jogos  - Array de jogos de data/matches.json (campo "jogos").
+ * @param {number} agoraMs - Timestamp atual em milissegundos (Date.now()).
+ * @returns {boolean}
+ */
+function dentroDaJanela(jogos, agoraMs) {
+  const QUINZE_MIN = 15 * 60 * 1000;
+  const QUATRO_H   = 4 * 60 * 60 * 1000;
+
+  for (const jogo of (jogos || [])) {
+    // Segurança: jogo em andamento ou pausado — executa independente de horário
+    if (jogo.status === 'IN_PLAY' || jogo.status === 'PAUSED') return true;
+
+    // Verifica janela temporal
+    if (!jogo.utcDate) continue;
+    const inicio = Date.parse(jogo.utcDate);
+    if (!isFinite(inicio)) continue; // utcDate inválido — ignora
+
+    if (agoraMs >= inicio - QUINZE_MIN && agoraMs <= inicio + QUATRO_H) return true;
+  }
+
+  return false;
+}
+
 // ─── Exporta funções puras para testes externos (não executa main) ────────────
 if (require.main !== module) {
-  module.exports = { construirSaida, construirSaidaDeJogos, extrairLetra, validarCobertura, TRADUCAO, TRADUCAO_POR_NOME };
+  module.exports = { construirSaida, construirSaidaDeJogos, construirMatches, extrairLetra, validarCobertura, dentroDaJanela, TRADUCAO, TRADUCAO_POR_NOME };
 }
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
@@ -375,11 +478,88 @@ function escrever(saida) {
   console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
 }
 
+function escreverMatches(saida) {
+  fs.writeFileSync(CAMINHO_MATCHES, JSON.stringify(saida, null, 2) + '\n');
+  console.log('Jogos atualizados:', saida.jogos.length, 'jogos gravados em', CAMINHO_MATCHES);
+}
+
 async function main() {
   const token = process.env.FOOTBALL_DATA_TOKEN;
   if (!token) {
     console.error('FOOTBALL_DATA_TOKEN ausente. Defina a variável de ambiente antes de executar.');
     process.exit(1);
+  }
+
+  // ── Guarda de janela de jogos ──────────────────────────────────────────────
+  // Evita chamadas desnecessárias à API fora dos horários de jogo.
+  // FORCAR_EXECUCAO=1 pula a guarda (útil para workflow_dispatch e debug).
+  if (process.env.FORCAR_EXECUCAO === '1') {
+    console.log('FORCAR_EXECUCAO=1 — guarda de janela ignorada.');
+  } else {
+    let jogosSalvos = [];
+    let motivo = '';
+
+    try {
+      const conteudo = fs.readFileSync(CAMINHO_MATCHES, 'utf8');
+      const parsed = JSON.parse(conteudo);
+      jogosSalvos = (parsed && Array.isArray(parsed.jogos)) ? parsed.jogos : [];
+    } catch (e) {
+      // Arquivo inexistente ou JSON inválido: fail-open — executa normalmente
+      motivo = e.code === 'ENOENT'
+        ? CAMINHO_MATCHES + ' ainda não existe'
+        : 'Falha ao ler ' + CAMINHO_MATCHES + ': ' + e.message;
+      console.log('Guarda de janela: ' + motivo + '. Execução prossegue normalmente.');
+      jogosSalvos = null; // sinaliza que não foi possível ler
+    }
+
+    // Calendário vazio (arquivo seed, pré-primeira carga): fail-open — sem ele
+    // o cron nunca faria a primeira busca e o arquivo nunca seria populado
+    if (jogosSalvos !== null && jogosSalvos.length === 0) {
+      console.log('Guarda de janela: calendário vazio em ' + CAMINHO_MATCHES + ' (primeira carga). Execução prossegue normalmente.');
+      jogosSalvos = null;
+    }
+
+    if (jogosSalvos !== null) {
+      if (!dentroDaJanela(jogosSalvos, Date.now())) {
+        // Determina o próximo jogo futuro para log informativo
+        const agora = Date.now();
+        const proximos = jogosSalvos
+          .filter(function(j) { return j.utcDate && isFinite(Date.parse(j.utcDate)) && Date.parse(j.utcDate) > agora; })
+          .sort(function(a, b) { return Date.parse(a.utcDate) - Date.parse(b.utcDate); });
+        const infoProximo = proximos.length > 0
+          ? 'Próximo jogo: ' + proximos[0].utcDate
+          : 'Nenhum jogo futuro encontrado no calendário.';
+        console.log('Fora da janela de jogos (' + infoProximo + '). Nenhuma chamada à API.');
+        process.exit(0);
+      }
+    }
+  }
+
+  // ── Busca todos os jogos em /matches (não-fatal) ───────────────────────────
+  // Grava matches.json e reutiliza a resposta como fallback de standings.
+  // Falha de rede ou HTTP aqui não derruba o job — preserva o arquivo existente.
+  let dataMatches = null;
+  try {
+    let resMatches;
+    try {
+      resMatches = await fetch(ENDPOINT_MATCHES, { headers: { 'X-Auth-Token': token } });
+    } catch (e) {
+      console.warn('Falha de rede em /matches (não-fatal):', e.message);
+      resMatches = null;
+    }
+
+    if (resMatches && resMatches.ok) {
+      dataMatches = await resMatches.json();
+      const saidaMatches = construirMatches(dataMatches);
+      escreverMatches(saidaMatches);
+    } else if (resMatches) {
+      console.warn('Erro HTTP em /matches (não-fatal): status', resMatches.status, '— matches.json preservado.');
+    }
+  } catch (e) {
+    // construirMatches pode lançar para time não-mapeado — é erro de dados real,
+    // mas não deve derrubar o job inteiro; apenas logamos e preservamos o arquivo.
+    console.warn('Erro ao processar /matches (não-fatal):', e.message, '— matches.json preservado.');
+    dataMatches = null;
   }
 
   // ── Fonte primária: /standings (traz as posições oficiais da API) ──────────
@@ -415,22 +595,29 @@ async function main() {
   }
 
   // ── Fallback: calcula a classificação a partir dos jogos da fase de grupos ─
-  const dataJogos = await buscar(ENDPOINT_JOGOS, token, 'matches');
-
-  if (!dataJogos || !dataJogos.matches || dataJogos.matches.length === 0) {
+  // Reutiliza dataMatches já buscado acima; filtra só jogos de GROUP_STAGE.
+  if (!dataMatches || !dataMatches.matches || dataMatches.matches.length === 0) {
     console.log('/matches também indisponível. JSON preservado.');
     process.exit(0);
   }
 
+  // Filtra apenas jogos de grupo para alimentar o construirSaidaDeJogos
+  // (que assume group != null; mata-mata tem group: null e seria ignorado de
+  // qualquer forma, mas filtramos explicitamente para evitar poluição nos logs)
+  const dataJogosGrupo = {
+    matches: dataMatches.matches.filter(function(m) { return m.stage === 'GROUP_STAGE'; }),
+  };
+
   console.log('Diagnóstico de /matches:', JSON.stringify({
-    total: dataJogos.matches.length,
-    finalizados: dataJogos.matches.filter(m => m.status === 'FINISHED' || m.status === 'AWARDED').length,
-    exemploGroup: dataJogos.matches[0] && dataJogos.matches[0].group,
+    total: dataMatches.matches.length,
+    grupoStage: dataJogosGrupo.matches.length,
+    finalizados: dataJogosGrupo.matches.filter(m => m.status === 'FINISHED' || m.status === 'AWARDED').length,
+    exemploGroup: dataJogosGrupo.matches[0] && dataJogosGrupo.matches[0].group,
   }));
 
   let resultado;
   try {
-    resultado = construirSaidaDeJogos(dataJogos);
+    resultado = construirSaidaDeJogos(dataJogosGrupo);
   } catch (e) {
     console.error('Erro ao construir saída de /matches:', e.message);
     process.exit(1);

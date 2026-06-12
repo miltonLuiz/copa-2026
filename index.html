@@ -459,6 +459,89 @@
         border-radius: 4px;
       }
 
+      /* ===== placar ao vivo ===== */
+
+      /* Coluna de placar / horário no card */
+      .match-card__time--placar {
+        font-size: 26px;
+        line-height: 1;
+        color: var(--text);
+      }
+
+      .match-card__time--placar.encerrado {
+        color: var(--muted);
+      }
+
+      .match-card__time-hora {
+        display: block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        margin-top: 2px;
+      }
+
+      /* Rótulo "Encerrado" abaixo do placar */
+      .match-card__status {
+        display: block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* Selo AO VIVO */
+      .ao-vivo {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        /* vermelho com contraste AA sobre var(--surface) #161b2c */
+        color: #ff5470;
+        margin-top: 4px;
+      }
+
+      .ao-vivo__ponto {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #ff5470;
+        flex-shrink: 0;
+        animation: pulsar 1.2s ease-in-out infinite;
+      }
+
+      @keyframes pulsar {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50%       { opacity: 0.3; transform: scale(0.7); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ao-vivo__ponto {
+          animation: none;
+        }
+      }
+
+      /* Linha de transparência no topo da aba Jogos */
+      .matches__meta {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 16px;
+        /* não interativo, não quebrável em telas estreitas */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       /* ===== responsividade mobile ===== */
 
       @media (max-width: 720px) {
@@ -1041,6 +1124,14 @@
 
       let searchDebounceTimer = null;
 
+      // ===== estado dos placares ao vivo =====
+      // Map preenchido após o fetch de data/matches.json.
+      // Chave: par de seleções ordenados alfabeticamente + data Brasília (ex: "Brasil|Marrocos|2026-06-13")
+      // Valor: objeto { status, placar: {casa, fora} | null }
+      const placares = new Map();
+      // Timestamp de atualização do matches.json (string ISO ou null)
+      let placaresMeta = null;
+
       const SHORTCUTS = [
         { slug: 'hoje',       label: '📅 Jogos hoje' },
         { slug: 'brasil',     label: '🇧🇷 Só jogos do Brasil' },
@@ -1236,6 +1327,25 @@
         return s.toLowerCase()
                 .normalize('NFD')
                 .replace(/[̀-ͯ]/g, '');
+      }
+
+      // Gera a chave do Map de placares a partir de dois nomes de seleção e a data ISO Brasília.
+      // Os nomes são ordenados alfabeticamente para que a chave seja independente de quem é casa/fora.
+      function chaveJogo(nomeA, nomeB, dataISO) {
+        const par = [nomeA, nomeB].sort().join('|');
+        return par + '|' + dataISO;
+      }
+
+      // Converte um utcDate ISO da API para a data de Brasília (UTC−3) no formato YYYY-MM-DD,
+      // sem depender do fuso horário do dispositivo.
+      function utcParaDataBrasilia(utcDate) {
+        const ts = new Date(utcDate);
+        // Desloca −3 horas em milissegundos
+        const brt = new Date(ts.getTime() + (-3 * 3600000));
+        const yyyy = brt.getUTCFullYear();
+        const mm   = String(brt.getUTCMonth() + 1).padStart(2, '0');
+        const dd   = String(brt.getUTCDate()).padStart(2, '0');
+        return yyyy + '-' + mm + '-' + dd;
       }
 
       function jogoMatchSelecao(jogo, query) {
@@ -1523,9 +1633,37 @@
 
         const brasilClass = match.brasil === true ? ' match-card--brasil' : '';
 
+        // Busca dados ao vivo do Map de placares (só jogos de grupo com times definidos)
+        const dadosVivo = placares.get(chaveJogo(match.team1, match.team2, match.date));
+
+        let blocoTempo;
+        if (dadosVivo && dadosVivo.placar &&
+            (dadosVivo.status === 'FINISHED' || dadosVivo.status === 'AWARDED')) {
+          // Jogo encerrado com placar
+          blocoTempo = '<div class="match-card__time match-card__time--placar encerrado">' +
+            dadosVivo.placar.casa + ' × ' + dadosVivo.placar.fora +
+            '<span class="match-card__time-hora">' + timeLabel(match.time) + '</span>' +
+            '<span class="match-card__status">Encerrado</span>' +
+            '</div>';
+        } else if (dadosVivo && dadosVivo.placar &&
+                   (dadosVivo.status === 'IN_PLAY' || dadosVivo.status === 'PAUSED')) {
+          // Jogo ao vivo ou pausado com placar
+          blocoTempo = '<div class="match-card__time match-card__time--placar">' +
+            dadosVivo.placar.casa + ' × ' + dadosVivo.placar.fora +
+            '<span class="match-card__time-hora">' + timeLabel(match.time) + '</span>' +
+            '<span class="ao-vivo" aria-label="Ao vivo">' +
+              '<span class="ao-vivo__ponto" aria-hidden="true"></span>' +
+              'AO VIVO' +
+            '</span>' +
+            '</div>';
+        } else {
+          // Comportamento padrão: horário
+          blocoTempo = '<div class="match-card__time">' + timeLabel(match.time) + '</div>';
+        }
+
         return `
           <article class="match-card${brasilClass}">
-            <div class="match-card__time">${timeLabel(match.time)}</div>
+            ${blocoTempo}
             <div class="match-card__main">
               <div class="match-card__teams">
                 <span class="match-card__team">${match.team1}</span>
@@ -1626,7 +1764,30 @@
           }).join('');
         }
 
-        document.getElementById('matches').innerHTML = html;
+        // Linha de transparência no topo: "Placares atualizados às HH:MM" (ou com data se não for hoje)
+        let metaHtml = '';
+        if (placaresMeta) {
+          try {
+            const ts = new Date(placaresMeta);
+            if (!isNaN(ts.getTime())) {
+              const brt    = new Date(ts.getTime() + (-3 * 3600000));
+              const hh     = String(brt.getUTCHours()).padStart(2, '0');
+              const min    = String(brt.getUTCMinutes()).padStart(2, '0');
+              const ddMeta = String(brt.getUTCDate()).padStart(2, '0');
+              const mmMeta = String(brt.getUTCMonth() + 1).padStart(2, '0');
+              const dataMeta = brt.getUTCFullYear() + '-' + mmMeta + '-' + ddMeta;
+              const hojeISO2 = hojeBrasiliaISO();
+              const textoData = dataMeta === hojeISO2
+                ? ''
+                : ' em ' + ddMeta + '/' + mmMeta;
+              metaHtml = '<p class="matches__meta">Placares atualizados' + textoData + ' às ' + hh + ':' + min + '</p>';
+            }
+          } catch (_) {
+            // atualizadoEm inválido — não renderiza a linha
+          }
+        }
+
+        document.getElementById('matches').innerHTML = metaHtml + html;
 
         // Atualiza contador no header
         document.querySelector('.header__count-current').textContent = visible.length;
@@ -1641,6 +1802,45 @@
       render();
       renderCountdown();
       setInterval(renderCountdown, 60000);
+
+      // ===== placares ao vivo =====
+      // Carrega data/matches.json após o primeiro render. Qualquer falha é silenciosa:
+      // a aba Jogos fica exatamente como hoje (sem placar, sem linha de meta).
+      (function() {
+        async function carregarPlacares() {
+          try {
+            const res = await fetch('./data/matches.json');
+            if (!res.ok) return; // 404 ou outro erro HTTP — silencioso
+            const data = await res.json();
+
+            if (!data || !Array.isArray(data.jogos)) return;
+
+            // Indexa apenas jogos de grupo com times definidos (mata-mata tem casa/fora null)
+            for (const jogo of data.jogos) {
+              if (jogo.grupo === null || jogo.grupo === undefined) continue;
+              if (!jogo.casa || !jogo.fora) continue;
+              if (!jogo.utcDate) continue;
+
+              const dataBrasilia = utcParaDataBrasilia(jogo.utcDate);
+              const chave = chaveJogo(jogo.casa, jogo.fora, dataBrasilia);
+              placares.set(chave, {
+                status: jogo.status,
+                placar: jogo.placar,  // { casa, fora } ou null
+              });
+            }
+
+            // Guarda o timestamp para a linha de transparência
+            placaresMeta = data.atualizadoEm || null;
+
+            // Re-renderiza os cards com os dados de placar
+            render();
+          } catch (_) {
+            // Rede offline, JSON inválido, etc. — silencioso; aba permanece como hoje
+          }
+        }
+
+        carregarPlacares();
+      })();
 
       // ===== abas + grupos =====
 
