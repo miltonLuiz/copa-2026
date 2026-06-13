@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-13T18:58:40.280Z",
+  "atualizadoEm": "2026-06-13T19:38:33.174Z",
   "jogos": [
     {
       "id": 537327,
@@ -60,8 +60,11 @@
       "utcDate": "2026-06-13T19:00:00Z",
       "casa": "Catar",
       "fora": "Suíça",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 1
+      }
     },
     {
       "id": 537339,
@@ -120,7 +123,7 @@
       "utcDate": "2026-06-14T23:00:00Z",
       "casa": "Costa do Marfim",
       "fora": "Equador",
-      "status": "SCHEDULED",
+      "status": "TIMED",
       "placar": null
     },
     {
