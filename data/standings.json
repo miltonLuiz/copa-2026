@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-13T02:26:54.078Z",
+  "atualizadoEm": "2026-06-13T03:48:37.687Z",
   "grupos": {
     "A": [
       {
@@ -153,19 +153,19 @@
     ],
     "D": [
       {
-        "selecao": "Austrália",
+        "selecao": "EUA",
         "pos": 1,
-        "p": 0,
-        "j": 0,
-        "v": 0,
+        "p": 3,
+        "j": 1,
+        "v": 1,
         "e": 0,
         "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
+        "gp": 4,
+        "gc": 1,
+        "sg": 3
       },
       {
-        "selecao": "EUA",
+        "selecao": "Austrália",
         "pos": 2,
         "p": 0,
         "j": 0,
@@ -177,7 +177,7 @@
         "sg": 0
       },
       {
-        "selecao": "Paraguai",
+        "selecao": "Turquia",
         "pos": 3,
         "p": 0,
         "j": 0,
@@ -189,16 +189,16 @@
         "sg": 0
       },
       {
-        "selecao": "Turquia",
+        "selecao": "Paraguai",
         "pos": 4,
         "p": 0,
-        "j": 0,
+        "j": 1,
         "v": 0,
         "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
+        "d": 1,
+        "gp": 1,
+        "gc": 4,
+        "sg": -3
       }
     ],
     "E": [
