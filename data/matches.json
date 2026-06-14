@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-14T00:44:34.400Z",
+  "atualizadoEm": "2026-06-14T01:48:47.565Z",
   "jogos": [
     {
       "id": 537327,
@@ -87,7 +87,10 @@
       "casa": "Haiti",
       "fora": "Escócia",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 1
+      }
     },
     {
       "id": 537346,
