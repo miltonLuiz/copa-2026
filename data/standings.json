@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-14T17:36:52.740Z",
+  "atualizadoEm": "2026-06-14T19:55:17.110Z",
   "grupos": {
     "A": [
       {
@@ -205,14 +205,14 @@
       {
         "selecao": "Alemanha",
         "pos": 1,
-        "p": 0,
-        "j": 0,
-        "v": 0,
+        "p": 3,
+        "j": 1,
+        "v": 1,
         "e": 0,
         "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
+        "gp": 7,
+        "gc": 1,
+        "sg": 6
       },
       {
         "selecao": "Costa do Marfim",
@@ -227,7 +227,7 @@
         "sg": 0
       },
       {
-        "selecao": "Curaçao",
+        "selecao": "Equador",
         "pos": 3,
         "p": 0,
         "j": 0,
@@ -239,16 +239,16 @@
         "sg": 0
       },
       {
-        "selecao": "Equador",
+        "selecao": "Curaçao",
         "pos": 4,
         "p": 0,
-        "j": 0,
+        "j": 1,
         "v": 0,
         "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
+        "d": 1,
+        "gp": 1,
+        "gc": 7,
+        "sg": -6
       }
     ],
     "F": [
