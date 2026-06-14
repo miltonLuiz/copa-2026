@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-14T20:52:43.071Z",
+  "atualizadoEm": "2026-06-14T21:28:56.230Z",
   "jogos": [
     {
       "id": 537327,
@@ -35,10 +35,7 @@
       "casa": "Canadá",
       "fora": "Bósnia",
       "status": "FINISHED",
-      "placar": {
-        "casa": 1,
-        "fora": 1
-      }
+      "placar": null
     },
     {
       "id": 537345,
@@ -127,8 +124,8 @@
       "fora": "Japão",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 0,
-        "fora": 0
+        "casa": 2,
+        "fora": 1
       }
     },
     {
