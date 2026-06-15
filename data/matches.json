@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-15T00:53:17.770Z",
+  "atualizadoEm": "2026-06-15T01:17:04.166Z",
   "jogos": [
     {
       "id": 537327,
@@ -138,8 +138,11 @@
       "utcDate": "2026-06-14T23:00:00Z",
       "casa": "Costa do Marfim",
       "fora": "Equador",
-      "status": "IN_PLAY",
-      "placar": null
+      "status": "FINISHED",
+      "placar": {
+        "casa": 1,
+        "fora": 0
+      }
     },
     {
       "id": 537358,
