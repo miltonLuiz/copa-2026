@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-15T03:49:21.005Z",
+  "atualizadoEm": "2026-06-15T05:14:59.240Z",
   "grupos": {
     "A": [
       {
@@ -253,19 +253,19 @@
     ],
     "F": [
       {
-        "selecao": "Holanda",
+        "selecao": "Suécia",
         "pos": 1,
-        "p": 1,
+        "p": 3,
         "j": 1,
-        "v": 0,
-        "e": 1,
+        "v": 1,
+        "e": 0,
         "d": 0,
-        "gp": 2,
-        "gc": 2,
-        "sg": 0
+        "gp": 5,
+        "gc": 1,
+        "sg": 4
       },
       {
-        "selecao": "Japão",
+        "selecao": "Holanda",
         "pos": 2,
         "p": 1,
         "j": 1,
@@ -277,28 +277,28 @@
         "sg": 0
       },
       {
-        "selecao": "Suécia",
+        "selecao": "Japão",
         "pos": 3,
-        "p": 0,
-        "j": 0,
+        "p": 1,
+        "j": 1,
         "v": 0,
-        "e": 0,
+        "e": 1,
         "d": 0,
-        "gp": 0,
-        "gc": 0,
+        "gp": 2,
+        "gc": 2,
         "sg": 0
       },
       {
         "selecao": "Tunísia",
         "pos": 4,
         "p": 0,
-        "j": 0,
+        "j": 1,
         "v": 0,
         "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
+        "d": 1,
+        "gp": 1,
+        "gc": 5,
+        "sg": -4
       }
     ],
     "G": [
