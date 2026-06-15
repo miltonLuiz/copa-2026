@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-15T21:31:32.939Z",
+  "atualizadoEm": "2026-06-15T22:41:25.038Z",
   "jogos": [
     {
       "id": 537327,
@@ -190,8 +190,11 @@
       "utcDate": "2026-06-15T22:00:00Z",
       "casa": "Arábia Saudita",
       "fora": "Uruguai",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537364,
