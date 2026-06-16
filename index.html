@@ -547,26 +547,29 @@
       .dias-encerrados__toggle {
         display: flex;
         align-items: center;
-        gap: 8px;
-        background: transparent;
+        gap: 10px;
+        background: var(--surface);
         border: 1px solid var(--border);
-        color: var(--muted);
+        border-left: 3px solid var(--accent-2);
+        color: var(--text);
         font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: 13px;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        padding: 8px 14px;
+        padding: 13px 16px;
         border-radius: 8px;
         cursor: pointer;
         width: 100%;
         text-align: left;
         margin-bottom: 24px;
+        transition: background-color 150ms ease, border-color 150ms ease;
       }
 
       .dias-encerrados__toggle:hover {
+        background: var(--bg-2);
         border-color: var(--accent-2);
-        color: var(--text);
+        border-left-color: var(--accent-2);
       }
 
       .dias-encerrados__toggle:focus-visible {
@@ -574,10 +577,28 @@
         outline-offset: 2px;
       }
 
+      /* dica de ação ("ver" / "ocultar") à direita do rótulo */
+      .dias-encerrados__dica {
+        margin-left: auto;
+        color: var(--accent-2);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+      }
+
       .dias-encerrados__seta {
         display: inline-block;
-        margin-left: auto;
+        color: var(--accent-2);
+        font-size: 14px;
+        line-height: 1;
         transition: transform 200ms ease;
+      }
+
+      .dias-encerrados__toggle[aria-expanded="false"] .dias-encerrados__dica::after {
+        content: 'ver';
+      }
+
+      .dias-encerrados__toggle[aria-expanded="true"] .dias-encerrados__dica::after {
+        content: 'ocultar';
       }
 
       .dias-encerrados__toggle[aria-expanded="true"] .dias-encerrados__seta {
@@ -585,6 +606,7 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
+        .dias-encerrados__toggle,
         .dias-encerrados__seta {
           transition: none;
         }
@@ -1883,6 +1905,7 @@
               ' aria-expanded="' + expandedAttr + '"' +
               ' aria-controls="dias-encerrados-conteudo">' +
               'Dias encerrados (' + diasEncerrados.length + ')' +
+              '<span class="dias-encerrados__dica" aria-hidden="true"></span>' +
               '<span class="dias-encerrados__seta" aria-hidden="true">▼</span>' +
             '</button>' +
             '<div id="dias-encerrados-conteudo" class="dias-encerrados__conteudo"' + hiddenAttr + '>' +
