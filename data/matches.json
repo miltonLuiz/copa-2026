@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-16T22:55:10.687Z",
+  "atualizadoEm": "2026-06-16T23:03:33.743Z",
   "jogos": [
     {
       "id": 537327,
@@ -35,7 +35,10 @@
       "casa": "Canadá",
       "fora": "Bósnia",
       "status": "FINISHED",
-      "placar": null
+      "placar": {
+        "casa": 1,
+        "fora": 1
+      }
     },
     {
       "id": 537345,
@@ -226,7 +229,7 @@
       "utcDate": "2026-06-16T22:00:00Z",
       "casa": "Iraque",
       "fora": "Noruega",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "placar": {
         "casa": 1,
         "fora": 2
