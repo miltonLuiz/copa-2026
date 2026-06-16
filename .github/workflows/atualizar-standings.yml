@@ -2,7 +2,12 @@ name: Atualizar classificação dos grupos
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    # A cada 5 min. A guarda de janela em fetch-standings.js só chama a API
+    # durante os jogos (15 min antes do início até 4h depois, ou jogo IN_PLAY/PAUSED);
+    # fora da janela a execução sai cedo sem gastar requests.
+    # Cada execução faz 2 chamadas (/matches + /standings) — bem abaixo do limite
+    # de 10 req/min do plano free, mesmo no pico.
+    - cron: '*/5 * * * *'
   workflow_dispatch: {}
 
 permissions:
