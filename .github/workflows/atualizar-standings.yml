@@ -1,13 +1,17 @@
 name: Atualizar classificação dos grupos
 
 on:
+  # Rede de segurança: o schedule do GitHub é "melhor esforço" e descarta a
+  # maioria dos ticks curtos, então a atualização de ~5 min de verdade vem do
+  # repository_dispatch disparado por um cron externo (ex: cron-job.org).
   schedule:
-    # A cada 5 min. A guarda de janela em fetch-standings.js só chama a API
-    # durante os jogos (15 min antes do início até 4h depois, ou jogo IN_PLAY/PAUSED);
-    # fora da janela a execução sai cedo sem gastar requests.
-    # Cada execução faz 2 chamadas (/matches + /standings) — bem abaixo do limite
-    # de 10 req/min do plano free, mesmo no pico.
-    - cron: '*/5 * * * *'
+    - cron: '*/30 * * * *'
+  # Disparo externo a cada ~5 min. event_name != workflow_dispatch, então
+  # FORCAR_EXECUCAO fica '0' e a guarda de janela continua valendo (só chama a
+  # API durante os jogos).
+  repository_dispatch:
+    types: [atualizar]
+  # Manual (debug): força a execução ignorando a guarda de janela.
   workflow_dispatch: {}
 
 permissions:
