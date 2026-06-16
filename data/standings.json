@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-15T23:34:24.913Z",
+  "atualizadoEm": "2026-06-16T00:51:54.845Z",
   "grupos": {
     "A": [
       {
@@ -353,8 +353,32 @@
     ],
     "H": [
       {
-        "selecao": "Cabo Verde",
+        "selecao": "Arábia Saudita",
         "pos": 1,
+        "p": 1,
+        "j": 1,
+        "v": 0,
+        "e": 1,
+        "d": 0,
+        "gp": 1,
+        "gc": 1,
+        "sg": 0
+      },
+      {
+        "selecao": "Uruguai",
+        "pos": 2,
+        "p": 1,
+        "j": 1,
+        "v": 0,
+        "e": 1,
+        "d": 0,
+        "gp": 1,
+        "gc": 1,
+        "sg": 0
+      },
+      {
+        "selecao": "Cabo Verde",
+        "pos": 3,
         "p": 1,
         "j": 1,
         "v": 0,
@@ -366,35 +390,11 @@
       },
       {
         "selecao": "Espanha",
-        "pos": 2,
+        "pos": 4,
         "p": 1,
         "j": 1,
         "v": 0,
         "e": 1,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
-      },
-      {
-        "selecao": "Arábia Saudita",
-        "pos": 3,
-        "p": 0,
-        "j": 0,
-        "v": 0,
-        "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0
-      },
-      {
-        "selecao": "Uruguai",
-        "pos": 4,
-        "p": 0,
-        "j": 0,
-        "v": 0,
-        "e": 0,
         "d": 0,
         "gp": 0,
         "gc": 0,
