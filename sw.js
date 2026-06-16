@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copa2026-v9';
+const CACHE_NAME = 'copa2026-v10';
 const ASSETS = [
   './',
   './index.html',
