@@ -542,6 +542,58 @@
         text-overflow: ellipsis;
       }
 
+      /* ===== dias encerrados collapse ===== */
+
+      .dias-encerrados__toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 24px;
+      }
+
+      .dias-encerrados__toggle:hover {
+        border-color: var(--accent-2);
+        color: var(--text);
+      }
+
+      .dias-encerrados__toggle:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .dias-encerrados__seta {
+        display: inline-block;
+        margin-left: auto;
+        transition: transform 200ms ease;
+      }
+
+      .dias-encerrados__toggle[aria-expanded="true"] .dias-encerrados__seta {
+        transform: rotate(180deg);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .dias-encerrados__seta {
+          transition: none;
+        }
+      }
+
+      .dias-encerrados__conteudo {
+        /* hidden attribute é suficiente para ocultar; nenhum CSS extra necessário */
+      }
+
       /* ===== responsividade mobile ===== */
 
       @media (max-width: 720px) {
@@ -1142,10 +1194,11 @@
       ];
 
       const state = {
-        selectedTimes:  new Set(),
-        selectedPhases: new Set(),
-        shortcut:       null,
-        searchQuery:    ''
+        selectedTimes:     new Set(),
+        selectedPhases:    new Set(),
+        shortcut:          null,
+        searchQuery:       '',
+        encerradosAbertos: false
       };
 
       const matches = [
@@ -1353,6 +1406,29 @@
         const q = normalizar(query);
         return normalizar(jogo.team1).includes(q) ||
                normalizar(jogo.team2).includes(q);
+      }
+
+      // Retorna true se TODOS os jogos do dia têm status FINISHED ou AWARDED no Map placares.
+      // Qualquer jogo sem entrada ou com status diferente retorna false.
+      // Só considera dias que têm ao menos 1 jogo no array estático matches.
+      function diaEncerrado(date) {
+        const jogos = matches.filter(function(m) { return m.date === date; });
+        if (jogos.length === 0) return false;
+        return jogos.every(function(m) {
+          const dados = placares.get(chaveJogo(m.team1, m.team2, m.date));
+          if (!dados) return false;
+          return dados.status === 'FINISHED' || dados.status === 'AWARDED';
+        });
+      }
+
+      // Retorna o menor date de matches que NÃO está encerrado.
+      // Se todos encerrados, retorna null. Se nenhum encerrado, retorna o primeiro dia do calendário.
+      function calcDataAtual() {
+        const datas = Array.from(new Set(matches.map(function(m) { return m.date; }))).sort();
+        for (var i = 0; i < datas.length; i++) {
+          if (!diaEncerrado(datas[i])) return datas[i];
+        }
+        return null; // todos encerrados
       }
 
       function syncSearchInput() {
@@ -1624,6 +1700,22 @@
           renderPhaseChips();
           render();
         });
+
+        // Toggle do bloco de dias encerrados — sem re-render, apenas DOM update
+        document.getElementById('matches').addEventListener('click', function(e) {
+          const btn = e.target.closest('.dias-encerrados__toggle');
+          if (!btn) return;
+          state.encerradosAbertos = !state.encerradosAbertos;
+          btn.setAttribute('aria-expanded', state.encerradosAbertos ? 'true' : 'false');
+          const conteudo = document.getElementById('dias-encerrados-conteudo');
+          if (conteudo) {
+            if (state.encerradosAbertos) {
+              conteudo.removeAttribute('hidden');
+            } else {
+              conteudo.setAttribute('hidden', '');
+            }
+          }
+        });
       }
 
       function renderCard(match) {
@@ -1718,6 +1810,9 @@
         const hojeISO = hojeBrasiliaISO();
         const visible = filterMatches();
 
+        // dataAtual: primeiro dia NÃO encerrado (calculado sobre matches completo, não filtrado)
+        const dataAtual = calcDataAtual();
+
         // agrupar por date
         const byDate = {};
         visible.forEach(function(match) {
@@ -1727,6 +1822,20 @@
 
         // ordenar dias em ordem cronológica (ISO YYYY-MM-DD ordena alfabeticamente)
         const days = Object.keys(byDate).sort();
+
+        // Detecta se há filtro/busca/atalho ativo
+        const temFiltro = state.shortcut !== null ||
+                          state.selectedTimes.size > 0 ||
+                          state.selectedPhases.size > 0 ||
+                          state.searchQuery !== '';
+
+        // Dias encerrados presentes na lista visível (apenas quando sem filtro)
+        const diasEncerrados = (!temFiltro)
+          ? days.filter(function(d) { return diaEncerrado(d); })
+          : [];
+        const diasVisiveis = (!temFiltro)
+          ? days.filter(function(d) { return !diaEncerrado(d); })
+          : days;
 
         // estado vazio
         let html;
@@ -1758,9 +1867,37 @@
           } else {
             html = '<p class="empty-state">Nenhum jogo encontrado com os filtros atuais.</p>';
           }
+        } else if (!temFiltro && diasEncerrados.length > 0) {
+          // Monta o bloco recolhível de dias encerrados no topo
+          const abertos = state.encerradosAbertos;
+          const expandedAttr = abertos ? 'true' : 'false';
+          const hiddenAttr   = abertos ? '' : ' hidden';
+
+          const conteudoEncerrados = diasEncerrados.map(function(date) {
+            // Dias encerrados nunca recebem badge HOJE
+            return renderDayGroup(date, byDate[date], false);
+          }).join('');
+
+          const blocoEncerrados =
+            '<button type="button" class="dias-encerrados__toggle"' +
+              ' aria-expanded="' + expandedAttr + '"' +
+              ' aria-controls="dias-encerrados-conteudo">' +
+              'Dias encerrados (' + diasEncerrados.length + ')' +
+              '<span class="dias-encerrados__seta" aria-hidden="true">▼</span>' +
+            '</button>' +
+            '<div id="dias-encerrados-conteudo" class="dias-encerrados__conteudo"' + hiddenAttr + '>' +
+              conteudoEncerrados +
+            '</div>';
+
+          const conteudoVisiveis = diasVisiveis.map(function(date) {
+            return renderDayGroup(date, byDate[date], date === dataAtual);
+          }).join('');
+
+          html = blocoEncerrados + conteudoVisiveis;
         } else {
+          // Sem filtro e sem dias encerrados, ou com filtro: render normal com dataAtual como badge HOJE
           html = days.map(function(date) {
-            return renderDayGroup(date, byDate[date], date === hojeISO);
+            return renderDayGroup(date, byDate[date], date === dataAtual);
           }).join('');
         }
 
