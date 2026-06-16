@@ -211,7 +211,43 @@ function traduzir(team) {
   return selecao;
 }
 
-function construirSaida(data) {
+/**
+ * Função pura: percorre os jogos da fase de grupos e acumula penalidades de
+ * fair play por seleção. Considera apenas matches com stage === 'GROUP_STAGE'.
+ *
+ * Penalidades: YELLOW → −1, RED → −3, YELLOW_RED → −4.
+ * Tolerante a bookings ausentes/vazios e a booking.team sem nome.
+ * Usa traduzir() para normalizar o nome — fail-loud preservado para times
+ * mapeáveis mas não mapeados.
+ *
+ * @param {object} dataMatches - Body JSON de /matches (sem filtro de stage).
+ * @returns {{ [selecaoPT]: number }} pontosFP ≤ 0; seleções sem cartão omitidas (default 0 no consumo).
+ */
+function acumularFairPlay(dataMatches) {
+  // A API football-data emite um único evento YELLOW_RED para a expulsão por 2º amarelo,
+  // então YELLOW_RED = −4 cobre o caso "amarelo + vermelho no mesmo jogo". Se em algum
+  // dado real a API emitir o 1º amarelo (YELLOW) separado do YELLOW_RED, a soma daria −5;
+  // como fair play é o 4º critério de desempate (raro), o ajuste fino fica para quando houver
+  // expulsões reais nos dados de grupo.
+  const PENALIDADE = { YELLOW: -1, RED: -3, YELLOW_RED: -4 };
+  const fp = {};
+
+  for (const match of (dataMatches.matches || [])) {
+    if (match.stage !== 'GROUP_STAGE') continue;
+
+    for (const booking of (match.bookings || [])) {
+      if (!booking.team || !booking.team.name) continue;
+      const selecao = traduzir(booking.team);
+      const pena = PENALIDADE[booking.card] || 0;
+      fp[selecao] = (fp[selecao] || 0) + pena;
+    }
+  }
+
+  return fp;
+}
+
+function construirSaida(data, fairPlay) {
+  if (fairPlay === undefined) fairPlay = {};
   const grupos = {};
   let blocosSemGrupo = 0;
 
@@ -237,6 +273,7 @@ function construirSaida(data) {
         gp:  linha.goalsFor,
         gc:  linha.goalsAgainst,
         sg:  linha.goalDifference,
+        fp:  fairPlay[selecao] || 0,
       };
     }).sort(function(a, b) { return a.pos - b.pos; });
   }
@@ -268,7 +305,8 @@ function construirSaida(data) {
  * direto entre empatados); quando /standings voltar a publicar os grupos,
  * as posições oficiais da API têm precedência no main().
  */
-function construirSaidaDeJogos(data) {
+function construirSaidaDeJogos(data, fairPlay) {
+  if (fairPlay === undefined) fairPlay = {};
   const grupos = {};   // letra → { selecao → linha }
   let jogosSemGrupo = 0;
 
@@ -286,7 +324,7 @@ function construirSaidaDeJogos(data) {
     const fora = traduzir(jogo.awayTeam);
     for (const selecao of [casa, fora]) {
       if (!tabela[selecao]) {
-        tabela[selecao] = { selecao: selecao, pos: 0, p: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0 };
+        tabela[selecao] = { selecao: selecao, pos: 0, p: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, fp: 0 };
       }
     }
 
@@ -318,6 +356,7 @@ function construirSaidaDeJogos(data) {
   for (const letra of Object.keys(grupos)) {
     gruposOrdenados[letra] = Object.values(grupos[letra]).map(function(linha) {
       linha.sg = linha.gp - linha.gc;
+      linha.fp = fairPlay[linha.selecao] || 0;
       return linha;
     }).sort(function(a, b) {
       return (b.p - a.p) || (b.sg - a.sg) || (b.gp - a.gp) || a.selecao.localeCompare(b.selecao, 'pt');
@@ -439,7 +478,7 @@ function dentroDaJanela(jogos, agoraMs) {
 
 // ─── Exporta funções puras para testes externos (não executa main) ────────────
 if (require.main !== module) {
-  module.exports = { construirSaida, construirSaidaDeJogos, construirMatches, extrairLetra, validarCobertura, dentroDaJanela, TRADUCAO, TRADUCAO_POR_NOME };
+  module.exports = { acumularFairPlay, construirSaida, construirSaidaDeJogos, construirMatches, extrairLetra, validarCobertura, dentroDaJanela, TRADUCAO, TRADUCAO_POR_NOME };
 }
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
@@ -562,6 +601,20 @@ async function main() {
     dataMatches = null;
   }
 
+  // ── Fair play: calculado a partir de dataMatches completo (inclui todos os stages) ──
+  // Usado tanto no caminho /standings quanto no fallback /matches.
+  // Não-fatal: um booking de time não-mapeado faria traduzir() lançar; preservamos o
+  // padrão do script (degradar sem derrubar o job) caindo para fairPlay vazio nesse caso.
+  let fairPlay = {};
+  if (dataMatches) {
+    try {
+      fairPlay = acumularFairPlay(dataMatches);
+    } catch (e) {
+      console.warn('Erro ao acumular fair play (não-fatal):', e.message, '— fp tratado como 0.');
+      fairPlay = {};
+    }
+  }
+
   // ── Fonte primária: /standings (traz as posições oficiais da API) ──────────
   const data = await buscar(ENDPOINT, token, 'standings');
 
@@ -574,7 +627,7 @@ async function main() {
 
     let resultado;
     try {
-      resultado = construirSaida(data);
+      resultado = construirSaida(data, fairPlay);
     } catch (e) {
       // Erro lançado somente para time não-mapeado dentro de grupo válido
       console.error('Erro ao construir saída de /standings:', e.message);
@@ -617,7 +670,7 @@ async function main() {
 
   let resultado;
   try {
-    resultado = construirSaidaDeJogos(dataJogosGrupo);
+    resultado = construirSaidaDeJogos(dataJogosGrupo, fairPlay);
   } catch (e) {
     console.error('Erro ao construir saída de /matches:', e.message);
     process.exit(1);
