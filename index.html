@@ -1019,6 +1019,15 @@
         border-left: 3px solid var(--accent-2);
       }
 
+      /* Destaque do 3º melhor classificado (melhores 8 entre 12 grupos) */
+      .grupo-tabela__row--terceiro-classificado td:first-child {
+        border-left: 3px solid var(--accent);
+      }
+
+      .grupo-tabela__row--terceiro-classificado {
+        background-color: rgba(255, 210, 48, 0.06);
+      }
+
       /* Destaque Brasil */
       .grupo-tabela__row--brasil td.col-selecao {
         color: var(--br-yellow);
@@ -2002,6 +2011,68 @@
         carregarPlacares();
       })();
 
+      // ===== melhores terceiros colocados =====
+
+      // Ranking FIFA junho/2026 — valores aproximados nas posições 11–25, validar futuramente
+      const RANKING_FIFA = {
+        'Argentina': 1, 'Espanha': 2, 'França': 3, 'Inglaterra': 4, 'Portugal': 5,
+        'Brasil': 6, 'Marrocos': 7, 'Holanda': 8, 'Bélgica': 9, 'Alemanha': 10,
+        'Colômbia': 11, 'Croácia': 12, 'Uruguai': 13, 'México': 14, 'Senegal': 15,
+        'Suíça': 16, 'EUA': 17, 'Japão': 18, 'Irã': 19, 'Coreia do Sul': 20,
+        'Equador': 21, 'Áustria': 22, 'Turquia': 23, 'Austrália': 24, 'Argélia': 25,
+        'Egito': 26, 'Canadá': 30, 'Noruega': 31, 'Costa do Marfim': 33, 'Panamá': 34,
+        'Suécia': 38, 'República Tcheca': 40, 'Paraguai': 41, 'Escócia': 42,
+        'Tunísia': 45, 'RD Congo': 46, 'Uzbequistão': 50, 'Catar': 56, 'Iraque': 57,
+        'África do Sul': 60, 'Arábia Saudita': 61, 'Jordânia': 63, 'Bósnia': 64,
+        'Cabo Verde': 67, 'Gana': 73, 'Curaçao': 82, 'Haiti': 83, 'Nova Zelândia': 85,
+      };
+
+      /**
+       * Calcula quais dos 12 terceiros colocados (um por grupo) se classificam.
+       * Retorna um Set com as letras dos grupos cujo 3º avança (os 8 melhores terceiros).
+       *
+       * Critérios de desempate (em ordem): pontos desc, saldo desc, gols pró desc,
+       * fair play desc (menos cartões = maior fp, pois fp ≤ 0), ranking FIFA asc.
+       *
+       * @param {{ [letra: string]: Array<{selecao, pos, p, sg, gp, fp}> }} grupos
+       * @returns {Set<string>} letras dos grupos classificados
+       */
+      function calcularMelhoresTerceiros(grupos) {
+        const terceiros = [];
+
+        for (const letra of Object.keys(grupos)) {
+          const lista = grupos[letra];
+          if (!lista) continue;
+          const item = lista.find(function(s) { return s.pos === 3; });
+          if (!item) continue;
+          terceiros.push({
+            letra:   letra,
+            selecao: item.selecao,
+            p:       item.p,
+            sg:      item.sg,
+            gp:      item.gp,
+            fp:      item.fp || 0,
+            fifa:    RANKING_FIFA[item.selecao] !== undefined ? RANKING_FIFA[item.selecao] : Infinity,
+          });
+        }
+
+        // Ordena: p desc, sg desc, gp desc, fp desc (menos cartões = mais alto), fifa asc
+        terceiros.sort(function(a, b) {
+          if (b.p  !== a.p)   return b.p  - a.p;
+          if (b.sg !== a.sg)  return b.sg - a.sg;
+          if (b.gp !== a.gp)  return b.gp - a.gp;
+          if (b.fp !== a.fp)  return b.fp - a.fp;
+          return a.fifa - b.fifa;
+        });
+
+        const classificados = new Set();
+        const limite = Math.min(8, terceiros.length);
+        for (var i = 0; i < limite; i++) {
+          classificados.add(terceiros[i].letra);
+        }
+        return classificados;
+      }
+
       // ===== abas + grupos =====
 
       (function() {
@@ -2081,14 +2152,23 @@
 
         function renderGrupos(data) {
           const grupos = data.grupos || {};
+          const gruposClassificados = calcularMelhoresTerceiros(grupos);
+
           const html = GRUPOS_ORDEM.map(function(letra) {
             const selecoes = grupos[letra];
             if (!selecoes) return '';
 
             const linhas = selecoes.map(function(s) {
               const classificadoClass = s.pos <= 2 ? ' grupo-tabela__row--classificado' : '';
+              const terceiroClass     = s.pos === 3 && gruposClassificados.has(letra)
+                                        ? ' grupo-tabela__row--terceiro-classificado'
+                                        : '';
               const brasilClass       = s.selecao === 'Brasil' ? ' grupo-tabela__row--brasil' : '';
-              return '<tr class="grupo-tabela__row' + classificadoClass + brasilClass + '">' +
+              const tituloLinha       = terceiroClass
+                                        ? ' title="' + s.selecao + ' — classificado como um dos 8 melhores terceiros"' +
+                                          ' aria-label="' + s.selecao + ', classificado como um dos 8 melhores terceiros"'
+                                        : '';
+              return '<tr class="grupo-tabela__row' + classificadoClass + terceiroClass + brasilClass + '"' + tituloLinha + '>' +
                 '<td>' + s.pos + '</td>' +
                 '<td class="col-selecao">' + s.selecao + '</td>' +
                 '<td class="col-p">' + s.p + '</td>' +
@@ -2098,7 +2178,7 @@
                 '<td>' + s.d + '</td>' +
                 '<td class="col-gp">' + s.gp + '</td>' +
                 '<td class="col-gc">' + s.gc + '</td>' +
-                '<td>' + s.sg + '</td>' +
+                '<td>' + (s.sg || 0) + '</td>' +
               '</tr>';
             }).join('');
 
