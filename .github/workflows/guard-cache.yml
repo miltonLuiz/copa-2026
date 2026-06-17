@@ -1,0 +1,70 @@
+name: Guard do CACHE_NAME
+
+# Garante a regra do CLAUDE.md: se um asset estático cacheado mudar
+# (index.html, manifest.json, icons/), o CACHE_NAME em sw.js precisa ser
+# bumpado — senão usuários ficam presos na versão antiga em cache.
+#
+# Os JSONs em data/ NÃO entram aqui de propósito: são atualizados pelo bot
+# a cada poucos minutos e não devem disparar bump de cache.
+
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'manifest.json'
+      - 'icons/**'
+      - 'sw.js'
+
+jobs:
+  verificar-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # precisa do histórico pra comparar base vs head
+
+      - name: Verificar bump do CACHE_NAME
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # Lê o valor do CACHE_NAME (entre aspas) de uma revisão do sw.js.
+          cache_name() {
+            git show "$1:sw.js" 2>/dev/null \
+              | grep -E '^const CACHE_NAME' \
+              | grep -oE "'[^']+'" \
+              | head -1
+          }
+
+          # Assets estáticos cacheados (sincronizado com ASSETS do sw.js, menos data/).
+          CACHED_REGEX='^(index\.html|manifest\.json|icons/)'
+
+          CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"
+          ASSETS_ALTERADOS="$(echo "$CHANGED" | grep -E "$CACHED_REGEX" || true)"
+
+          if [ -z "$ASSETS_ALTERADOS" ]; then
+            echo "Nenhum asset estático cacheado mudou — guard não se aplica. ✅"
+            exit 0
+          fi
+
+          echo "Assets cacheados alterados neste PR:"
+          echo "$ASSETS_ALTERADOS" | sed 's/^/  - /'
+
+          BASE_CACHE="$(cache_name "$BASE_SHA" || true)"
+          HEAD_CACHE="$(cache_name "$HEAD_SHA" || true)"
+          echo "CACHE_NAME na base: ${BASE_CACHE:-<não encontrado>}"
+          echo "CACHE_NAME no PR:   ${HEAD_CACHE:-<não encontrado>}"
+
+          if [ -z "$HEAD_CACHE" ]; then
+            echo "::error::Não consegui ler o CACHE_NAME em sw.js (esperado: const CACHE_NAME = '...';)."
+            exit 1
+          fi
+
+          if [ "$BASE_CACHE" = "$HEAD_CACHE" ]; then
+            echo "::error::Assets estáticos mudaram, mas o CACHE_NAME continua ${HEAD_CACHE}. Bumpe o CACHE_NAME em sw.js (ex: copa2026-vN -> copa2026-v(N+1))."
+            exit 1
+          fi
+
+          echo "CACHE_NAME bumpado de ${BASE_CACHE:-<vazio>} para ${HEAD_CACHE}. ✅"
