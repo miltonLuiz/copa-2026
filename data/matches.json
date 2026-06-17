@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-17T21:55:13.384Z",
+  "atualizadoEm": "2026-06-17T22:10:19.107Z",
   "jogos": [
     {
       "id": 537327,
@@ -281,7 +281,7 @@
       "utcDate": "2026-06-17T20:00:00Z",
       "casa": "Inglaterra",
       "fora": "Croácia",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 4,
         "fora": 2

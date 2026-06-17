@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-17T19:05:23.538Z",
+  "atualizadoEm": "2026-06-17T22:10:19.285Z",
   "grupos": {
     "A": [
       {
@@ -597,16 +597,16 @@
     ],
     "L": [
       {
-        "selecao": "Croácia",
+        "selecao": "Inglaterra",
         "pos": 1,
-        "p": 0,
-        "j": 0,
-        "v": 0,
+        "p": 3,
+        "j": 1,
+        "v": 1,
         "e": 0,
         "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0,
+        "gp": 4,
+        "gc": 2,
+        "sg": 2,
         "fp": 0
       },
       {
@@ -623,7 +623,7 @@
         "fp": 0
       },
       {
-        "selecao": "Inglaterra",
+        "selecao": "Panamá",
         "pos": 3,
         "p": 0,
         "j": 0,
@@ -636,16 +636,16 @@
         "fp": 0
       },
       {
-        "selecao": "Panamá",
+        "selecao": "Croácia",
         "pos": 4,
         "p": 0,
-        "j": 0,
+        "j": 1,
         "v": 0,
         "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0,
+        "d": 1,
+        "gp": 2,
+        "gc": 4,
+        "sg": -2,
         "fp": 0
       }
     ]
