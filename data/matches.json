@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-17T07:55:12.533Z",
+  "atualizadoEm": "2026-06-17T16:45:25.165Z",
   "jogos": [
     {
       "id": 537327,
@@ -35,7 +35,10 @@
       "casa": "Canadá",
       "fora": "Bósnia",
       "status": "FINISHED",
-      "placar": null
+      "placar": {
+        "casa": 1,
+        "fora": 1
+      }
     },
     {
       "id": 537345,
