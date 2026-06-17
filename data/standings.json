@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-17T07:40:22.581Z",
+  "atualizadoEm": "2026-06-17T07:45:12.357Z",
   "grupos": {
     "A": [
       {
@@ -57,7 +57,7 @@
     ],
     "B": [
       {
-        "selecao": "Bósnia",
+        "selecao": "Catar",
         "pos": 1,
         "p": 1,
         "j": 1,
@@ -70,7 +70,7 @@
         "fp": 0
       },
       {
-        "selecao": "Canadá",
+        "selecao": "Suíça",
         "pos": 2,
         "p": 1,
         "j": 1,
@@ -83,28 +83,28 @@
         "fp": 0
       },
       {
-        "selecao": "Catar",
+        "selecao": "Bósnia",
         "pos": 3,
-        "p": 1,
-        "j": 1,
+        "p": 0,
+        "j": 0,
         "v": 0,
-        "e": 1,
+        "e": 0,
         "d": 0,
-        "gp": 1,
-        "gc": 1,
+        "gp": 0,
+        "gc": 0,
         "sg": 0,
         "fp": 0
       },
       {
-        "selecao": "Suíça",
+        "selecao": "Canadá",
         "pos": 4,
-        "p": 1,
-        "j": 1,
+        "p": 0,
+        "j": 0,
         "v": 0,
-        "e": 1,
+        "e": 0,
         "d": 0,
-        "gp": 1,
-        "gc": 1,
+        "gp": 0,
+        "gc": 0,
         "sg": 0,
         "fp": 0
       }
