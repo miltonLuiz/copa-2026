@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-17T01:05:13.683Z",
+  "atualizadoEm": "2026-06-17T01:10:11.932Z",
   "jogos": [
     {
       "id": 537327,
@@ -242,8 +242,11 @@
       "utcDate": "2026-06-17T01:00:00Z",
       "casa": "Argentina",
       "fora": "Argélia",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537398,
