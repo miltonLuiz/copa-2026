@@ -8,6 +8,18 @@
 // isso acontece, o script cai pro fallback: reutiliza a resposta de /matches já
 // buscada no início (cada jogo de grupo traz o campo group, ex: "GROUP_A") e
 // calcula a classificação a partir dos resultados.
+//
+// Mescla sticky (mesclarMatches):
+//   A API às vezes devolve um jogo FINISHED com score.fullTime null e, na
+//   chamada seguinte, o placar volta. Para evitar flip-flop de placares e
+//   commits inúteis, cada execução mescla os jogos novos com os salvos em
+//   disco usando a regra "só avança, nunca regride": status e placar já
+//   gravados não são rebaixados por valores null/anteriores.
+//
+// Só grava se mudou:
+//   matches.json e standings.json só são reescritos quando o conteúdo
+//   relevante (jogos / grupos) muda em relação ao arquivo em disco. Isso
+//   elimina commits de "atualizadoEm" sem diferença real de dados.
 
 'use strict';
 
@@ -127,6 +139,18 @@ const TRADUCAO_POR_NOME = {
 };
 
 const GRUPOS_ORDEM = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+
+// ─── Constante de ordenação de status ────────────────────────────────────────
+// Rank maior = estado mais avançado. Status fora da lista = rank -1.
+// CANCELLED/POSTPONED/SUSPENDED nunca ganham de um status salvo (rank -1 < 0).
+const ORDEM_STATUS = {
+  SCHEDULED: 0,
+  TIMED:     0,
+  IN_PLAY:   1,
+  PAUSED:    1,
+  FINISHED:  2,
+  AWARDED:   2,
+};
 
 // ─── Funções puras (exportáveis para testes) ──────────────────────────────────
 
@@ -443,6 +467,99 @@ function construirMatches(data) {
 }
 
 /**
+ * Função pura: mescla jogos novos com jogos salvos em disco usando a regra
+ * "só avança, nunca regride". Evita flip-flop de placares e status quando a
+ * API devolve score.fullTime null em uma chamada e o valor real na seguinte.
+ *
+ * @param {Array} novosJogos   - Array normalizado de construirMatches (novos).
+ * @param {Array} salvosJogos  - Array normalizado lido de data/matches.json (salvo).
+ * @returns {Array} Novo array mesclado, preservando a ordem de novosJogos.
+ *
+ * Regras de mescla por campo (para cada jogo n com mesmo id em s):
+ *   - status: usa n.status se rank(n) >= rank(s); senão mantém s.status.
+ *             CANCELLED/POSTPONED/SUSPENDED têm rank -1 → nunca sobrescrevem
+ *             um status já gravado (SCHEDULED/IN_PLAY/FINISHED/etc.).
+ *   - placar:  se n.placar não-null → usa n.placar (dado novo tem precedência).
+ *              se n.placar null e s.placar não-null → mantém s.placar (anti-flip-flop).
+ *   - casa/fora/fase/grupo/utcDate: prefere n quando não-null; cai pra s quando n traz null.
+ *
+ * Jogos presentes só no salvo (ausentes nos novos) NÃO são reintroduzidos.
+ * Função pura: sem I/O, sem efeitos colaterais.
+ */
+function mesclarMatches(novosJogos, salvosJogos) {
+  // Indexa salvos por id para busca O(1)
+  const salvosIdx = {};
+  for (const s of (salvosJogos || [])) {
+    salvosIdx[s.id] = s;
+  }
+
+  return (novosJogos || []).map(function(n) {
+    const s = salvosIdx[n.id];
+
+    // Jogo novo sem correspondente salvo: usa como veio
+    if (!s) return n;
+
+    // ── Status: só avança ────────────────────────────────────────────────────
+    // CANCELLED/POSTPONED/SUSPENDED → rank -1; nunca ganham de um status conhecido.
+    const rankN = (ORDEM_STATUS[n.status] !== undefined) ? ORDEM_STATUS[n.status] : -1;
+    const rankS = (ORDEM_STATUS[s.status] !== undefined) ? ORDEM_STATUS[s.status] : -1;
+    const status = rankN >= rankS ? n.status : s.status;
+
+    // ── Placar: anti-flip-flop ───────────────────────────────────────────────
+    // n tem placar → usa n (dado mais recente tem precedência)
+    // n sem placar + s tem placar → mantém s (protege contra null temporário)
+    const placar = (n.placar !== null) ? n.placar : s.placar;
+
+    // ── Campos de identidade: prefere n; cai pra s se n vier null ────────────
+    // Sticky conservador: evita times sumindo no mata-mata quando a API
+    // retorna homeTeam/awayTeam sem nome em algumas execuções.
+    const casa    = (n.casa    !== null && n.casa    !== undefined) ? n.casa    : s.casa;
+    const fora    = (n.fora    !== null && n.fora    !== undefined) ? n.fora    : s.fora;
+    const fase    = (n.fase    !== null && n.fase    !== undefined) ? n.fase    : s.fase;
+    const grupo   = (n.grupo   !== null && n.grupo   !== undefined) ? n.grupo   : s.grupo;
+    const utcDate = (n.utcDate !== null && n.utcDate !== undefined) ? n.utcDate : s.utcDate;
+
+    return { id: n.id, fase, grupo, utcDate, casa, fora, status, placar };
+  });
+}
+
+/**
+ * Lê data/matches.json de forma fail-open e retorna o array de jogos.
+ * Retorna [] se o arquivo não existir, tiver JSON inválido ou não tiver
+ * a propriedade jogos como array. Nunca lança.
+ *
+ * @returns {Array} Array de jogos normalizados (pode ser vazio).
+ */
+function lerJogosSalvos() {
+  try {
+    const conteudo = fs.readFileSync(CAMINHO_MATCHES, 'utf8');
+    const parsed = JSON.parse(conteudo);
+    if (parsed && Array.isArray(parsed.jogos)) return parsed.jogos;
+    return [];
+  } catch (e) {
+    return [];
+  }
+}
+
+/**
+ * Lê standings.json de forma fail-open e retorna o objeto grupos salvo.
+ * Retorna null se o arquivo não existir, tiver JSON inválido ou não tiver
+ * a propriedade grupos. Nunca lança.
+ *
+ * @returns {object|null} Objeto grupos ou null.
+ */
+function lerGruposSalvos() {
+  try {
+    const conteudo = fs.readFileSync(CAMINHO, 'utf8');
+    const parsed = JSON.parse(conteudo);
+    if (parsed && parsed.grupos && typeof parsed.grupos === 'object') return parsed.grupos;
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
  * Verifica se o momento atual está dentro de uma janela de jogo.
  *
  * Retorna true se:
@@ -478,7 +595,20 @@ function dentroDaJanela(jogos, agoraMs) {
 
 // ─── Exporta funções puras para testes externos (não executa main) ────────────
 if (require.main !== module) {
-  module.exports = { acumularFairPlay, construirSaida, construirSaidaDeJogos, construirMatches, extrairLetra, validarCobertura, dentroDaJanela, TRADUCAO, TRADUCAO_POR_NOME };
+  module.exports = {
+    acumularFairPlay,
+    construirSaida,
+    construirSaidaDeJogos,
+    construirMatches,
+    mesclarMatches,
+    extrairLetra,
+    validarCobertura,
+    dentroDaJanela,
+    lerJogosSalvos,
+    TRADUCAO,
+    TRADUCAO_POR_NOME,
+    ORDEM_STATUS,
+  };
 }
 
 // ─── Ponto de entrada ─────────────────────────────────────────────────────────
@@ -512,14 +642,46 @@ async function buscar(url, token, rotulo) {
   }
 }
 
+/**
+ * Grava obj em caminho SOMENTE se a chave relevante (chaveComparada) diferir
+ * do que está em disco. Preserva o arquivo (e o atualizadoEm antigo) quando
+ * não há mudança real — elimina commits/diffs de "timestamp só mudou".
+ *
+ * @param {string} caminho          - Caminho do arquivo JSON.
+ * @param {object} novoObj          - Objeto completo a gravar (inclui atualizadoEm).
+ * @param {string} chaveComparada   - Chave do objeto cujo valor será comparado ("jogos" ou "grupos").
+ * @returns {boolean} true se gravou; false se não havia diferença.
+ */
+function gravarSeMudou(caminho, novoObj, chaveComparada) {
+  try {
+    const conteudoAtual = fs.readFileSync(caminho, 'utf8');
+    const atual = JSON.parse(conteudoAtual);
+    if (JSON.stringify(atual[chaveComparada]) === JSON.stringify(novoObj[chaveComparada])) {
+      return false; // sem mudança — preserva arquivo
+    }
+  } catch (e) {
+    // Arquivo inexistente ou JSON inválido: segue para gravação
+  }
+  fs.writeFileSync(caminho, JSON.stringify(novoObj, null, 2) + '\n');
+  return true;
+}
+
 function escrever(saida) {
-  fs.writeFileSync(CAMINHO, JSON.stringify(saida, null, 2) + '\n');
-  console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+  const gravou = gravarSeMudou(CAMINHO, saida, 'grupos');
+  if (gravou) {
+    console.log('Classificação atualizada:', Object.keys(saida.grupos).length, 'grupos');
+  } else {
+    console.log('Classificação sem mudança — arquivo preservado.');
+  }
 }
 
 function escreverMatches(saida) {
-  fs.writeFileSync(CAMINHO_MATCHES, JSON.stringify(saida, null, 2) + '\n');
-  console.log('Jogos atualizados:', saida.jogos.length, 'jogos gravados em', CAMINHO_MATCHES);
+  const gravou = gravarSeMudou(CAMINHO_MATCHES, saida, 'jogos');
+  if (gravou) {
+    console.log('Jogos atualizados:', saida.jogos.length, 'jogos gravados em', CAMINHO_MATCHES);
+  } else {
+    console.log('Jogos sem mudança —', CAMINHO_MATCHES, 'preservado.');
+  }
 }
 
 async function main() {
@@ -535,27 +697,23 @@ async function main() {
   if (process.env.FORCAR_EXECUCAO === '1') {
     console.log('FORCAR_EXECUCAO=1 — guarda de janela ignorada.');
   } else {
-    let jogosSalvos = [];
-    let motivo = '';
+    // Reutiliza lerJogosSalvos() para fail-open; null sinaliza "leitura não foi possível"
+    // (arquivo ausente ou array vazio), o que força execução (fail-open).
+    let jogosSalvos;
+    const jogosSalvosLidos = lerJogosSalvos();
 
-    try {
-      const conteudo = fs.readFileSync(CAMINHO_MATCHES, 'utf8');
-      const parsed = JSON.parse(conteudo);
-      jogosSalvos = (parsed && Array.isArray(parsed.jogos)) ? parsed.jogos : [];
-    } catch (e) {
-      // Arquivo inexistente ou JSON inválido: fail-open — executa normalmente
-      motivo = e.code === 'ENOENT'
-        ? CAMINHO_MATCHES + ' ainda não existe'
-        : 'Falha ao ler ' + CAMINHO_MATCHES + ': ' + e.message;
-      console.log('Guarda de janela: ' + motivo + '. Execução prossegue normalmente.');
-      jogosSalvos = null; // sinaliza que não foi possível ler
-    }
-
-    // Calendário vazio (arquivo seed, pré-primeira carga): fail-open — sem ele
-    // o cron nunca faria a primeira busca e o arquivo nunca seria populado
-    if (jogosSalvos !== null && jogosSalvos.length === 0) {
-      console.log('Guarda de janela: calendário vazio em ' + CAMINHO_MATCHES + ' (primeira carga). Execução prossegue normalmente.');
-      jogosSalvos = null;
+    if (jogosSalvosLidos.length === 0) {
+      // Arquivo ausente, JSON inválido, ou calendário vazio (primeira carga):
+      // lerJogosSalvos retorna [] nos dois casos; fail-open — executa normalmente.
+      const existeArquivo = fs.existsSync(CAMINHO_MATCHES);
+      if (!existeArquivo) {
+        console.log('Guarda de janela: ' + CAMINHO_MATCHES + ' ainda não existe. Execução prossegue normalmente.');
+      } else {
+        console.log('Guarda de janela: calendário vazio em ' + CAMINHO_MATCHES + ' (primeira carga ou JSON inválido). Execução prossegue normalmente.');
+      }
+      jogosSalvos = null; // sinaliza fail-open
+    } else {
+      jogosSalvos = jogosSalvosLidos;
     }
 
     if (jogosSalvos !== null) {
@@ -589,8 +747,20 @@ async function main() {
 
     if (resMatches && resMatches.ok) {
       dataMatches = await resMatches.json();
-      const saidaMatches = construirMatches(dataMatches);
-      escreverMatches(saidaMatches);
+
+      // Normaliza os novos jogos recebidos da API
+      const saidaMatchesNovos = construirMatches(dataMatches);
+
+      // Mescla com os salvos em disco (sticky: status e placar não regridem)
+      const salvos = lerJogosSalvos();
+      const jogosMesclados = mesclarMatches(saidaMatchesNovos.jogos, salvos);
+
+      // Só grava se houver mudança real (evita commits inúteis de timestamp)
+      const saidaFinal = {
+        atualizadoEm: new Date().toISOString(),
+        jogos:        jogosMesclados,
+      };
+      escreverMatches(saidaFinal);
     } else if (resMatches) {
       console.warn('Erro HTTP em /matches (não-fatal): status', resMatches.status, '— matches.json preservado.');
     }
@@ -612,6 +782,23 @@ async function main() {
     } catch (e) {
       console.warn('Erro ao acumular fair play (não-fatal):', e.message, '— fp tratado como 0.');
       fairPlay = {};
+    }
+  }
+
+  // ── Índice id → {status, placar} dos jogos MESCLADOS ──────────────────────
+  // Usado no fallback de standings para sobrepor placares sticky nos matches
+  // crus da API antes de alimentar construirSaidaDeJogos.
+  // Só existe se dataMatches foi processado com sucesso.
+  let indiceMesclado = null;
+  if (dataMatches) {
+    // Reconstrói o índice a partir dos jogos salvos (que já passaram pela mescla)
+    // lendo matches.json — o arquivo já foi gravado (ou preservado) acima.
+    const jogosParaIndice = lerJogosSalvos();
+    if (jogosParaIndice.length > 0) {
+      indiceMesclado = {};
+      for (const j of jogosParaIndice) {
+        indiceMesclado[j.id] = { status: j.status, placar: j.placar };
+      }
     }
   }
 
@@ -652,6 +839,37 @@ async function main() {
   if (!dataMatches || !dataMatches.matches || dataMatches.matches.length === 0) {
     console.log('/matches também indisponível. JSON preservado.');
     process.exit(0);
+  }
+
+  // Sobrepõe placares/status sticky nos matches crus antes de alimentar construirSaidaDeJogos.
+  // Isso garante que a classificação do fallback não zere pontos quando a API retornar
+  // score.fullTime null temporariamente num jogo já encerrado.
+  // O índice é derivado da mescla sticky (única fonte de verdade da regra).
+  if (indiceMesclado) {
+    for (const match of dataMatches.matches) {
+      const entry = indiceMesclado[match.id];
+      if (!entry) continue;
+
+      // Sobrepõe placar somente quando o cru não tiver placar mas o mesclado tiver
+      const cruSemPlacar =
+        !match.score ||
+        !match.score.fullTime ||
+        match.score.fullTime.home == null ||
+        match.score.fullTime.away == null;
+
+      if (cruSemPlacar && entry.placar !== null) {
+        match.score = {
+          fullTime: { home: entry.placar.casa, away: entry.placar.fora },
+        };
+      }
+
+      // Sobrepõe status se o mesclado for mais avançado
+      const rankCru     = (ORDEM_STATUS[match.status]   !== undefined) ? ORDEM_STATUS[match.status]   : -1;
+      const rankMesclado = (ORDEM_STATUS[entry.status]  !== undefined) ? ORDEM_STATUS[entry.status]   : -1;
+      if (rankMesclado > rankCru) {
+        match.status = entry.status;
+      }
+    }
   }
 
   // Filtra apenas jogos de grupo para alimentar o construirSaidaDeJogos
