@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T20:40:13.086Z",
+  "atualizadoEm": "2026-06-18T21:05:11.981Z",
   "jogos": [
     {
       "id": 537327,
@@ -333,10 +333,10 @@
       "utcDate": "2026-06-18T19:00:00Z",
       "casa": "Suíça",
       "fora": "Bósnia",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
-        "casa": 1,
-        "fora": 0
+        "casa": 4,
+        "fora": 1
       }
     },
     {
