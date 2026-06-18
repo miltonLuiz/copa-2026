@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T04:10:15.925Z",
+  "atualizadoEm": "2026-06-18T16:10:20.127Z",
   "jogos": [
     {
       "id": 537327,
@@ -320,8 +320,11 @@
       "utcDate": "2026-06-18T16:00:00Z",
       "casa": "República Tcheca",
       "fora": "África do Sul",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537335,
