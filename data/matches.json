@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T01:05:12.524Z",
+  "atualizadoEm": "2026-06-18T01:10:12.783Z",
   "jogos": [
     {
       "id": 537327,
@@ -294,7 +294,7 @@
       "utcDate": "2026-06-17T23:00:00Z",
       "casa": "Gana",
       "fora": "Panamá",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 1,
         "fora": 0
