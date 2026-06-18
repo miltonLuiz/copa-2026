@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T00:15:19.931Z",
+  "atualizadoEm": "2026-06-18T01:05:12.524Z",
   "jogos": [
     {
       "id": 537327,
@@ -296,7 +296,7 @@
       "fora": "Panamá",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 0,
+        "casa": 1,
         "fora": 0
       }
     },
