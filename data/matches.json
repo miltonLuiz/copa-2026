@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T18:03:52.665Z",
+  "atualizadoEm": "2026-06-18T20:15:17.563Z",
   "jogos": [
     {
       "id": 537327,
@@ -333,7 +333,7 @@
       "utcDate": "2026-06-18T19:00:00Z",
       "casa": "Suíça",
       "fora": "Bósnia",
-      "status": "TIMED",
+      "status": "IN_PLAY",
       "placar": null
     },
     {
