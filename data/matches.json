@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T20:15:17.563Z",
+  "atualizadoEm": "2026-06-18T20:40:13.086Z",
   "jogos": [
     {
       "id": 537327,
@@ -334,7 +334,10 @@
       "casa": "Suíça",
       "fora": "Bósnia",
       "status": "IN_PLAY",
-      "placar": null
+      "placar": {
+        "casa": 1,
+        "fora": 0
+      }
     },
     {
       "id": 537336,
