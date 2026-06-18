@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-18T01:10:12.923Z",
+  "atualizadoEm": "2026-06-18T04:10:16.264Z",
   "grupos": {
     "A": [
       {
@@ -543,20 +543,20 @@
     ],
     "K": [
       {
-        "selecao": "Portugal",
+        "selecao": "Colômbia",
         "pos": 1,
-        "p": 1,
+        "p": 3,
         "j": 1,
-        "v": 0,
-        "e": 1,
+        "v": 1,
+        "e": 0,
         "d": 0,
-        "gp": 1,
+        "gp": 3,
         "gc": 1,
-        "sg": 0,
+        "sg": 2,
         "fp": 0
       },
       {
-        "selecao": "RD Congo",
+        "selecao": "Portugal",
         "pos": 2,
         "p": 1,
         "j": 1,
@@ -569,15 +569,15 @@
         "fp": 0
       },
       {
-        "selecao": "Colômbia",
+        "selecao": "RD Congo",
         "pos": 3,
-        "p": 0,
-        "j": 0,
+        "p": 1,
+        "j": 1,
         "v": 0,
-        "e": 0,
+        "e": 1,
         "d": 0,
-        "gp": 0,
-        "gc": 0,
+        "gp": 1,
+        "gc": 1,
         "sg": 0,
         "fp": 0
       },
@@ -585,13 +585,13 @@
         "selecao": "Uzbequistão",
         "pos": 4,
         "p": 0,
-        "j": 0,
+        "j": 1,
         "v": 0,
         "e": 0,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0,
+        "d": 1,
+        "gp": 1,
+        "gc": 3,
+        "sg": -2,
         "fp": 0
       }
     ],
