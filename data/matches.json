@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-19T00:10:13.121Z",
+  "atualizadoEm": "2026-06-19T01:10:13.125Z",
   "jogos": [
     {
       "id": 537327,
@@ -359,8 +359,11 @@
       "utcDate": "2026-06-19T01:00:00Z",
       "casa": "México",
       "fora": "Coreia do Sul",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537348,
