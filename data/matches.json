@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-20T01:30:18.172Z",
+  "atualizadoEm": "2026-06-20T01:50:15.463Z",
   "jogos": [
     {
       "id": 537327,
@@ -398,7 +398,7 @@
       "utcDate": "2026-06-20T00:30:00Z",
       "casa": "Brasil",
       "fora": "Haiti",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 3,
         "fora": 0
