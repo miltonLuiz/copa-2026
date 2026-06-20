@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-19T21:10:14.927Z",
+  "atualizadoEm": "2026-06-20T00:10:12.900Z",
   "grupos": {
     "A": [
       {
@@ -111,33 +111,33 @@
     ],
     "C": [
       {
-        "selecao": "Escócia",
+        "selecao": "Marrocos",
         "pos": 1,
-        "p": 3,
-        "j": 1,
+        "p": 4,
+        "j": 2,
         "v": 1,
-        "e": 0,
+        "e": 1,
         "d": 0,
-        "gp": 1,
-        "gc": 0,
+        "gp": 2,
+        "gc": 1,
         "sg": 1,
         "fp": 0
       },
       {
-        "selecao": "Brasil",
+        "selecao": "Escócia",
         "pos": 2,
-        "p": 1,
-        "j": 1,
-        "v": 0,
-        "e": 1,
-        "d": 0,
+        "p": 3,
+        "j": 2,
+        "v": 1,
+        "e": 0,
+        "d": 1,
         "gp": 1,
         "gc": 1,
         "sg": 0,
         "fp": 0
       },
       {
-        "selecao": "Marrocos",
+        "selecao": "Brasil",
         "pos": 3,
         "p": 1,
         "j": 1,
