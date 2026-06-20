@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-20T02:40:11.754Z",
+  "atualizadoEm": "2026-06-20T05:15:18.254Z",
   "grupos": {
     "A": [
       {
@@ -191,28 +191,28 @@
         "fp": 0
       },
       {
-        "selecao": "Turquia",
+        "selecao": "Paraguai",
         "pos": 3,
-        "p": 0,
-        "j": 1,
-        "v": 0,
+        "p": 3,
+        "j": 2,
+        "v": 1,
         "e": 0,
         "d": 1,
-        "gp": 0,
-        "gc": 2,
+        "gp": 2,
+        "gc": 4,
         "sg": -2,
         "fp": 0
       },
       {
-        "selecao": "Paraguai",
+        "selecao": "Turquia",
         "pos": 4,
         "p": 0,
-        "j": 1,
+        "j": 2,
         "v": 0,
         "e": 0,
-        "d": 1,
-        "gp": 1,
-        "gc": 4,
+        "d": 2,
+        "gp": 0,
+        "gc": 3,
         "sg": -3,
         "fp": 0
       }
