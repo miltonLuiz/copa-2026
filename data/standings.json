@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-21T06:05:14.341Z",
+  "atualizadoEm": "2026-06-21T18:10:16.443Z",
   "grupos": {
     "A": [
       {
@@ -381,16 +381,16 @@
     ],
     "H": [
       {
-        "selecao": "Arábia Saudita",
+        "selecao": "Espanha",
         "pos": 1,
-        "p": 1,
-        "j": 1,
-        "v": 0,
+        "p": 4,
+        "j": 2,
+        "v": 1,
         "e": 1,
         "d": 0,
-        "gp": 1,
-        "gc": 1,
-        "sg": 0,
+        "gp": 5,
+        "gc": 0,
+        "sg": 5,
         "fp": 0
       },
       {
@@ -420,16 +420,16 @@
         "fp": 0
       },
       {
-        "selecao": "Espanha",
+        "selecao": "Arábia Saudita",
         "pos": 4,
         "p": 1,
-        "j": 1,
+        "j": 2,
         "v": 0,
         "e": 1,
-        "d": 0,
-        "gp": 0,
-        "gc": 0,
-        "sg": 0,
+        "d": 1,
+        "gp": 1,
+        "gc": 6,
+        "sg": -5,
         "fp": 0
       }
     ],
