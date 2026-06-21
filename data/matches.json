@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-21T19:35:14.142Z",
+  "atualizadoEm": "2026-06-21T20:00:18.120Z",
   "jogos": [
     {
       "id": 537327,
@@ -489,10 +489,10 @@
       "utcDate": "2026-06-21T19:00:00Z",
       "casa": "Bélgica",
       "fora": "Irã",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "placar": {
         "casa": 0,
-        "fora": 1
+        "fora": 0
       }
     },
     {
