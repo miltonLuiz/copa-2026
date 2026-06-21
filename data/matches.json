@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-21T17:20:15.452Z",
+  "atualizadoEm": "2026-06-21T18:05:15.519Z",
   "jogos": [
     {
       "id": 537327,
@@ -478,7 +478,7 @@
       "fora": "Arábia Saudita",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 4,
+        "casa": 5,
         "fora": 0
       }
     },
