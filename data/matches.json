@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-21T21:10:15.962Z",
+  "atualizadoEm": "2026-06-21T22:05:13.206Z",
   "jogos": [
     {
       "id": 537327,
@@ -502,8 +502,11 @@
       "utcDate": "2026-06-21T22:00:00Z",
       "casa": "Uruguai",
       "fora": "Cabo Verde",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537366,
