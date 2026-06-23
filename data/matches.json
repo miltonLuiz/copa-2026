@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T18:15:20.444Z",
+  "atualizadoEm": "2026-06-23T18:30:25.048Z",
   "jogos": [
     {
       "id": 537327,
@@ -582,7 +582,7 @@
       "fora": "Uzbequistão",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 3,
+        "casa": 4,
         "fora": 0
       }
     },
