@@ -545,6 +545,18 @@
         }
       }
 
+      /* Dot "ao vivo" na célula de seleção da tabela de grupos */
+      .col-selecao__ao-vivo {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .col-selecao__ao-vivo .ao-vivo__ponto {
+        /* mesmo ponto do card, mas sem texto ao lado — não quebra coluna estreita */
+        flex-shrink: 0;
+      }
+
       /* Linha de transparência no topo da aba Jogos */
       .matches__meta {
         font-family: 'JetBrains Mono', monospace;
@@ -1239,6 +1251,11 @@
       // Formato: { [rotulo]: nomeDaSeleção } — null quando standings não disponível.
       let projecoesCache = null;
 
+      // Hook para re-renderizar a aba Grupos quando placares ou standings são atualizados.
+      // É atribuído dentro do IIFE da aba Grupos após o primeiro carregamento.
+      // null enquanto a aba Grupos ainda não foi aberta.
+      let atualizarAbaGrupos = null;
+
       // ===== dados para projeção dos 16-avos =====
       // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
       // Gerado da tabela 495 da FIFA. Ordem das colunas: THIRDS_COL_ORDER.
@@ -1917,14 +1934,13 @@
         const hojeISO = hojeBrasiliaISO();
 
         // Recomputa projeções dos 16-avos (barato: roda 1x por render, não 1x por card)
-        if (standingsGrupos) {
-          const grupos = standingsGrupos.grupos || {};
+        // calcularClassificacaoAoVivo é a fonte única: usa placares ao vivo + fallback do standings
+        {
+          const grupos = calcularClassificacaoAoVivo(matches, placares, standingsGrupos);
           const melhoresTerceiros = calcularMelhoresTerceiros(grupos);
           const proj = resolverMataMata(grupos, melhoresTerceiros);
           // Objeto vazio (nenhum slot projetado) vira null pra não exibir legenda órfã
           projecoesCache = Object.keys(proj).length > 0 ? proj : null;
-        } else {
-          projecoesCache = null;
         }
 
         const visible = filterMatches();
@@ -2098,6 +2114,9 @@
 
             // Re-renderiza os cards com os dados de placar
             render();
+
+            // Se a aba Grupos já foi aberta, recomputa com os novos placares
+            if (atualizarAbaGrupos) atualizarAbaGrupos();
           } catch (_) {
             // Rede offline, JSON inválido, etc. — silencioso; aba permanece como hoje
           }
@@ -2118,12 +2137,153 @@
             if (!data || typeof data.grupos !== 'object') return;
             standingsGrupos = data;
             render(); // re-renderiza 16-avos com projeções
+
+            // Se a aba Grupos já foi aberta, recomputa com os novos standings
+            if (atualizarAbaGrupos) atualizarAbaGrupos();
           } catch (_) {
             // offline ou JSON inválido — silencioso
           }
         }
         carregarStandings();
       })();
+
+      // ===== classificação ao vivo =====
+
+      /**
+       * Recalcula a tabela de grupos inteiramente a partir dos jogos estáticos + placares ao vivo.
+       * Retorna o mesmo formato de standingsGrupos.grupos, com flag extra `aoVivo` por linha.
+       * Função pura: nunca lança — qualquer erro retorna o fallback (standingsBase.grupos ou {}).
+       *
+       * @param {Array}    matchesEstaticos  array global `matches`
+       * @param {Map}      placaresMap       Map global `placares`
+       * @param {object|null} standingsBase  objeto standingsGrupos (pode ser null)
+       * @returns {{ [letra: string]: Array<{selecao,pos,p,j,v,e,d,gp,gc,sg,fp,aoVivo}> }}
+       */
+      function calcularClassificacaoAoVivo(matchesEstaticos, placaresMap, standingsBase) {
+        const fallback = (standingsBase && standingsBase.grupos) ? standingsBase.grupos : {};
+        try {
+          // Statuses que contam para a classificação ao vivo
+          const STATUS_CONTAM = new Set(['FINISHED', 'AWARDED', 'IN_PLAY', 'PAUSED']);
+          const STATUS_AO_VIVO = new Set(['IN_PLAY', 'PAUSED']);
+
+          // Monta membros de cada grupo a partir do array estático
+          const membros = {}; // { letra: Set<selecao> }
+          for (const m of matchesEstaticos) {
+            if (m.phase !== 'Fase de grupos') continue;
+            if (!m.group) continue;
+            if (!membros[m.group]) membros[m.group] = new Set();
+            membros[m.group].add(m.team1);
+            membros[m.group].add(m.team2);
+          }
+
+          // Se não há membros (sem jogos de grupo) — retorna fallback
+          if (Object.keys(membros).length === 0) return fallback;
+
+          // Verifica se há algum jogo de grupo com placar computável
+          const jogosDeGrupo = matchesEstaticos.filter(function(m) { return m.phase === 'Fase de grupos'; });
+          const temJogoComputavel = jogosDeGrupo.some(function(m) {
+            const d = placaresMap.get(chaveJogo(m.team1, m.team2, m.date));
+            return d && d.placar && STATUS_CONTAM.has(d.status);
+          });
+
+          // Nenhum jogo computável (placares vazio ou só TIMED/SCHEDULED) → fallback
+          if (!temJogoComputavel) return fallback;
+
+          // Inicializa stats zeradas para cada seleção
+          const stats = {}; // { selecao: { grupo, p, j, v, e, d, gp, gc, sg, aoVivo } }
+          for (const letra of Object.keys(membros)) {
+            for (const sel of membros[letra]) {
+              stats[sel] = { grupo: letra, p: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, aoVivo: false };
+            }
+          }
+
+          // Processa cada jogo de grupo
+          for (const m of jogosDeGrupo) {
+            const d = placaresMap.get(chaveJogo(m.team1, m.team2, m.date));
+            if (!d || !d.placar || !STATUS_CONTAM.has(d.status)) continue;
+
+            const golos1 = d.placar.casa; // team1 = casa (mesma convenção do renderCard)
+            const golos2 = d.placar.fora; // team2 = fora
+
+            const s1 = stats[m.team1];
+            const s2 = stats[m.team2];
+
+            if (!s1 || !s2) continue; // time não mapeado (não deveria acontecer)
+
+            // Jogo ao vivo: marca ambos os times
+            if (STATUS_AO_VIVO.has(d.status)) {
+              s1.aoVivo = true;
+              s2.aoVivo = true;
+            }
+
+            s1.j++; s2.j++;
+            s1.gp += golos1; s1.gc += golos2;
+            s2.gp += golos2; s2.gc += golos1;
+
+            if (golos1 > golos2) {
+              s1.v++; s1.p += 3;
+              s2.d++;
+            } else if (golos1 < golos2) {
+              s2.v++; s2.p += 3;
+              s1.d++;
+            } else {
+              s1.e++; s1.p += 1;
+              s2.e++; s2.p += 1;
+            }
+
+            s1.sg = s1.gp - s1.gc;
+            s2.sg = s2.gp - s2.gc;
+          }
+
+          // Monta o resultado por grupo
+          const resultado = {};
+          for (const letra of Object.keys(membros)) {
+            const lista = Array.from(membros[letra]).map(function(sel) {
+              const st = stats[sel];
+              // fp: busca no standingsBase se disponível; ausente → 0
+              let fp = 0;
+              if (standingsBase && standingsBase.grupos && standingsBase.grupos[letra]) {
+                const baseItem = standingsBase.grupos[letra].find(function(x) { return x.selecao === sel; });
+                if (baseItem) fp = baseItem.fp || 0;
+              }
+              return {
+                selecao: sel,
+                pos: 0, // será atribuído após ordenação
+                p:  st.p,
+                j:  st.j,
+                v:  st.v,
+                e:  st.e,
+                d:  st.d,
+                gp: st.gp,
+                gc: st.gc,
+                sg: st.sg,
+                fp: fp,
+                aoVivo: st.aoVivo,
+              };
+            });
+
+            // Ordena: p desc, sg desc, gp desc, fp desc, ranking FIFA asc
+            lista.sort(function(a, b) {
+              if (b.p  !== a.p)  return b.p  - a.p;
+              if (b.sg !== a.sg) return b.sg - a.sg;
+              if (b.gp !== a.gp) return b.gp - a.gp;
+              if (b.fp !== a.fp) return b.fp - a.fp;
+              const ra = RANKING_FIFA[a.selecao] !== undefined ? RANKING_FIFA[a.selecao] : Infinity;
+              const rb = RANKING_FIFA[b.selecao] !== undefined ? RANKING_FIFA[b.selecao] : Infinity;
+              return ra - rb;
+            });
+
+            lista.forEach(function(item, idx) { item.pos = idx + 1; });
+
+            resultado[letra] = lista;
+          }
+
+          return resultado;
+        } catch (_) {
+          // Qualquer erro inesperado → retorna fallback sem lançar
+          return (standingsBase && standingsBase.grupos) ? standingsBase.grupos : {};
+        }
+      }
 
       // ===== melhores terceiros colocados =====
 
@@ -2318,6 +2478,8 @@
           // Reutiliza dados já carregados por carregarStandings() — sem 2º fetch
           if (standingsGrupos) {
             gruposJaCarregados = true;
+            // Expõe o hook para re-render quando placares/standings atualizarem
+            atualizarAbaGrupos = function() { renderGrupos(standingsGrupos); };
             renderGrupos(standingsGrupos);
             return;
           }
@@ -2327,6 +2489,8 @@
             const data = await res.json();
             gruposJaCarregados = true;
             standingsGrupos = data;
+            // Expõe o hook para re-render quando placares/standings atualizarem
+            atualizarAbaGrupos = function() { renderGrupos(standingsGrupos); };
             render(); // re-renderiza 16-avos com projeções
             renderGrupos(data);
           } catch (err) {
@@ -2337,7 +2501,8 @@
         }
 
         function renderGrupos(data) {
-          const grupos = data.grupos || {};
+          // Fonte única: classificação ao vivo calculada dos placares + fallback no standings
+          const grupos = calcularClassificacaoAoVivo(matches, placares, data || standingsGrupos);
           const gruposClassificados = calcularMelhoresTerceiros(grupos);
 
           const html = GRUPOS_ORDEM.map(function(letra) {
@@ -2354,9 +2519,18 @@
                                         ? ' title="' + s.selecao + ' — classificado como um dos 8 melhores terceiros"' +
                                           ' aria-label="' + s.selecao + ', classificado como um dos 8 melhores terceiros"'
                                         : '';
+
+              // Indicador "ao vivo" na célula da seleção: dot pulsante sem texto (não quebra coluna)
+              const dotAoVivo = s.aoVivo
+                ? '<span class="col-selecao__ao-vivo" aria-label="Ao vivo">' +
+                    s.selecao +
+                    '<span class="ao-vivo__ponto" aria-hidden="true"></span>' +
+                  '</span>'
+                : s.selecao;
+
               return '<tr class="grupo-tabela__row' + classificadoClass + terceiroClass + brasilClass + '"' + tituloLinha + '>' +
                 '<td>' + s.pos + '</td>' +
-                '<td class="col-selecao">' + s.selecao + '</td>' +
+                '<td class="col-selecao">' + dotAoVivo + '</td>' +
                 '<td class="col-p">' + s.p + '</td>' +
                 '<td class="col-j">' + s.j + '</td>' +
                 '<td>' + s.v + '</td>' +
@@ -2390,17 +2564,20 @@
 
           document.getElementById('grupos-conteudo').innerHTML = html;
 
-          // Exibe timestamp de atualização no fuso de Brasília (UTC−3)
+          // Atualiza a nota com copy "ao vivo" e timestamp do standings (se disponível)
           const nota = document.getElementById('grupos-nota');
-          if (nota && data.atualizadoEm) {
-            const ts = new Date(data.atualizadoEm);
-            // Converte para Brasília: UTC−3 fixo (sem depender do fuso do dispositivo)
-            const brt = new Date(ts.getTime() + (-3 * 3600000));
-            const dd  = String(brt.getUTCDate()).padStart(2, '0');
-            const mm  = String(brt.getUTCMonth() + 1).padStart(2, '0');
-            const hh  = String(brt.getUTCHours()).padStart(2, '0');
-            const min = String(brt.getUTCMinutes()).padStart(2, '0');
-            nota.textContent = 'Atualizado em ' + dd + '/' + mm + ' às ' + hh + 'h' + min;
+          if (nota) {
+            const standingsRef = data || standingsGrupos;
+            if (standingsRef && standingsRef.atualizadoEm) {
+              const ts = new Date(standingsRef.atualizadoEm);
+              // Converte para Brasília: UTC−3 fixo (sem depender do fuso do dispositivo)
+              const brt = new Date(ts.getTime() + (-3 * 3600000));
+              const hh  = String(brt.getUTCHours()).padStart(2, '0');
+              const min = String(brt.getUTCMinutes()).padStart(2, '0');
+              nota.textContent = 'Classificação ao vivo · oficial atualizada às ' + hh + ':' + min;
+            } else {
+              nota.textContent = 'Classificação ao vivo';
+            }
           }
         }
 
