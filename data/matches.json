@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T01:25:11.964Z",
+  "atualizadoEm": "2026-06-23T01:30:16.391Z",
   "jogos": [
     {
       "id": 537327,
@@ -554,7 +554,7 @@
       "utcDate": "2026-06-23T00:00:00Z",
       "casa": "Noruega",
       "fora": "Senegal",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "placar": {
         "casa": 3,
         "fora": 1
@@ -875,7 +875,7 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-06-29T20:30:00Z",
-      "casa": null,
+      "casa": "Alemanha",
       "fora": null,
       "status": "TIMED",
       "placar": null
@@ -915,7 +915,7 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-01T01:00:00Z",
-      "casa": null,
+      "casa": "México",
       "fora": null,
       "status": "TIMED",
       "placar": null
@@ -945,7 +945,7 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-02T00:00:00Z",
-      "casa": null,
+      "casa": "EUA",
       "fora": null,
       "status": "TIMED",
       "placar": null
