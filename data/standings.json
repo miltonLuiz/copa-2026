@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T02:10:15.994Z",
+  "atualizadoEm": "2026-06-23T05:10:19.025Z",
   "grupos": {
     "A": [
       {
@@ -515,28 +515,28 @@
         "fp": 0
       },
       {
-        "selecao": "Jordânia",
+        "selecao": "Argélia",
         "pos": 3,
-        "p": 0,
-        "j": 1,
-        "v": 0,
+        "p": 3,
+        "j": 2,
+        "v": 1,
         "e": 0,
         "d": 1,
-        "gp": 1,
-        "gc": 3,
+        "gp": 2,
+        "gc": 4,
         "sg": -2,
         "fp": 0
       },
       {
-        "selecao": "Argélia",
+        "selecao": "Jordânia",
         "pos": 4,
         "p": 0,
-        "j": 1,
+        "j": 2,
         "v": 0,
         "e": 0,
-        "d": 1,
-        "gp": 0,
-        "gc": 3,
+        "d": 2,
+        "gp": 2,
+        "gc": 5,
         "sg": -3,
         "fp": 0
       }
