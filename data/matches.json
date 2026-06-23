@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T20:10:19.074Z",
+  "atualizadoEm": "2026-06-23T21:00:24.438Z",
   "jogos": [
     {
       "id": 537327,
@@ -593,7 +593,7 @@
       "utcDate": "2026-06-23T20:00:00Z",
       "casa": "Inglaterra",
       "fora": "Gana",
-      "status": "TIMED",
+      "status": "PAUSED",
       "placar": {
         "casa": 0,
         "fora": 0
