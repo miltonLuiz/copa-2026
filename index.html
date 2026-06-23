@@ -252,6 +252,22 @@
         font-weight: 500;
       }
 
+      /* ===== projeção 16-avos ===== */
+      /* Nome projetado: itálico, cor levemente atenuada mas com contraste WCAG AA */
+      .match-card__team--projetado {
+        font-style: italic;
+        color: var(--muted);
+      }
+
+      .projecao-nota {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        margin-block-end: 8px;
+        padding-left: 4px;
+      }
+
       /* ===== destaque Brasil ===== */
       .match-card--brasil {
         border-left: 3px solid var(--br);
@@ -527,6 +543,18 @@
         .ao-vivo__ponto {
           animation: none;
         }
+      }
+
+      /* Dot "ao vivo" na célula de seleção da tabela de grupos */
+      .col-selecao__ao-vivo {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .col-selecao__ao-vivo .ao-vivo__ponto {
+        /* mesmo ponto do card, mas sem texto ao lado — não quebra coluna estreita */
+        flex-shrink: 0;
       }
 
       /* Linha de transparência no topo da aba Jogos */
@@ -1215,6 +1243,40 @@
       // Timestamp de atualização do matches.json (string ISO ou null)
       let placaresMeta = null;
 
+      // ===== standings compartilhado (aba Jogos + aba Grupos) =====
+      // Preenchido após fetch de standings.json. null enquanto não carregado.
+      let standingsGrupos = null;
+
+      // Cache de projeções de mata-mata, recomputado a cada render() quando standingsGrupos muda.
+      // Formato: { [rotulo]: nomeDaSeleção } — null quando standings não disponível.
+      let projecoesCache = null;
+
+      // Hook para re-renderizar a aba Grupos quando placares ou standings são atualizados.
+      // É atribuído dentro do IIFE da aba Grupos após o primeiro carregamento.
+      // null enquanto a aba Grupos ainda não foi aberta.
+      let atualizarAbaGrupos = null;
+
+      // ===== dados para projeção dos 16-avos =====
+      // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
+      // Gerado da tabela 495 da FIFA. Ordem das colunas: THIRDS_COL_ORDER.
+      // eslint-disable-next-line max-len
+      const THIRDS_495 = ["EJIFHGLK","HGIDJFLK","EJIDHGLK","EJIDHFLK","EGIDJFLK","EGJDHFLK","EGIDHFLK","EGJDHFLI","EGJDHFIK","HGICJFLK","EJICHGLK","EJICHFLK","EGICJFLK","EGJCHFLK","EGICHFLK","EGJCHFLI","EGJCHFIK","HGICJDLK","CJIDHFLK","CGIDJFLK","CGJDHFLK","CGIDHFLK","CGJDHFLI","CGJDHFIK","EJICHDLK","EGICJDLK","EGJCHDLK","EGICHDLK","EGJCHDLI","EGJCHDIK","CJEDIFLK","CJEDHFLK","CEIDHFLK","CJEDHFLI","CJEDHFIK","CGEDJFLK","CGEDIFLK","CGEDJFLI","CGEDJFIK","CGEDHFLK","CGJDHFLE","CGJDHFEK","CGEDHFLI","CGEDHFIK","CGJDHFEI","HJBFIGLK","EJIBHGLK","EJBFIHLK","EJBFIGLK","EJBFHGLK","EGBFIHLK","EJBFHGLI","EJBFHGIK","HJBDIGLK","HJBDIFLK","IGBDJFLK","HGBDJFLK","HGBDIFLK","HGBDJFLI","HGBDJFIK","EJBDIHLK","EJBDIGLK","EJBDHGLK","EGBDIHLK","EJBDHGLI","EJBDHGIK","EJBDIFLK","EJBDHFLK","EIBDHFLK","EJBDHFLI","EJBDHFIK","EGBDJFLK","EGBDIFLK","EGBDJFLI","EGBDJFIK","EGBDHFLK","HGBDJFLE","HGBDJFEK","EGBDHFLI","EGBDHFIK","HGBDJFEI","HJBCIGLK","HJBCIFLK","IGBCJFLK","HGBCJFLK","HGBCIFLK","HGBCJFLI","HGBCJFIK","EJBCIHLK","EJBCIGLK","EJBCHGLK","EGBCIHLK","EJBCHGLI","EJBCHGIK","EJBCIFLK","EJBCHFLK","EIBCHFLK","EJBCHFLI","EJBCHFIK","EGBCJFLK","EGBCIFLK","EGBCJFLI","EGBCJFIK","EGBCHFLK","HGBCJFLE","HGBCJFEK","EGBCHFLI","EGBCHFIK","HGBCJFEI","HJBCIDLK","IGBCJDLK","HGBCJDLK","HGBCIDLK","HGBCJDLI","HGBCJDIK","CJBDIFLK","CJBDHFLK","CIBDHFLK","CJBDHFLI","CJBDHFIK","CGBDJFLK","CGBDIFLK","CGBDJFLI","CGBDJFIK","CGBDHFLK","CGBDHFLJ","HGBCJFDK","CGBDHFLI","CGBDHFIK","HGBCJFDI","EJBCIDLK","EJBCHDLK","EIBCHDLK","EJBCHDLI","EJBCHDIK","EGBCJDLK","EGBCIDLK","EGBCJDLI","EGBCJDIK","EGBCHDLK","HGBCJDLE","HGBCJDEK","EGBCHDLI","EGBCHDIK","HGBCJDEI","CJBDEFLK","CEBDIFLK","CJBDEFLI","CJBDEFIK","CEBDHFLK","CJBDHFLE","CJBDHFEK","CEBDHFLI","CEBDHFIK","CJBDHFEI","CGBDEFLK","CGBDJFLE","CGBDJFEK","CGBDEFLI","CGBDEFIK","CGBDJFEI","CGBDHFLE","CGBDHFEK","HGBCJFDE","CGBDHFEI","HJIFAGLK","EJIAHGLK","EJIFAHLK","EJIFAGLK","EGJFAHLK","EGIFAHLK","EGJFAHLI","EGJFAHIK","HJIDAGLK","HJIDAFLK","IGJDAFLK","HGJDAFLK","HGIDAFLK","HGJDAFLI","HGJDAFIK","EJIDAHLK","EJIDAGLK","EGJDAHLK","EGIDAHLK","EGJDAHLI","EGJDAHIK","EJIDAFLK","HJEDAFLK","HEIDAFLK","HJEDAFLI","HJEDAFIK","EGJDAFLK","EGIDAFLK","EGJDAFLI","EGJDAFIK","HGEDAFLK","HGJDAFLE","HGJDAFEK","HGEDAFLI","HGEDAFIK","HGJDAFEI","HJICAGLK","HJICAFLK","IGJCAFLK","HGJCAFLK","HGICAFLK","HGJCAFLI","HGJCAFIK","EJICAHLK","EJICAGLK","EGJCAHLK","EGICAHLK","EGJCAHLI","EGJCAHIK","EJICAFLK","HJECAFLK","HEICAFLK","HJECAFLI","HJECAFIK","EGJCAFLK","EGICAFLK","EGJCAFLI","EGJCAFIK","HGECAFLK","HGJCAFLE","HGJCAFEK","HGECAFLI","HGECAFIK","HGJCAFEI","HJICADLK","IGJCADLK","HGJCADLK","HGICADLK","HGJCADLI","HGJCADIK","CJIDAFLK","HJFCADLK","HFICADLK","HJFCADLI","HJFCADIK","CGJDAFLK","CGIDAFLK","CGJDAFLI","CGJDAFIK","HGFCADLK","CGJDAFLH","HGJCAFDK","HGFCADLI","HGFCADIK","HGJCAFDI","EJICADLK","HJECADLK","HEICADLK","HJECADLI","HJECADIK","EGJCADLK","EGICADLK","EGJCADLI","EGJCADIK","HGECADLK","HGJCADLE","HGJCADEK","HGECADLI","HGECADIK","HGJCADEI","CJEDAFLK","CEIDAFLK","CJEDAFLI","CJEDAFIK","HEFCADLK","HJFCADLE","HJECAFDK","HEFCADLI","HEFCADIK","HJECAFDI","CGEDAFLK","CGJDAFLE","CGJDAFEK","CGEDAFLI","CGEDAFIK","CGJDAFEI","HGFCADLE","HGECAFDK","HGJCAFDE","HGECAFDI","HJBAIGLK","HJBAIFLK","IJBFAGLK","HJBFAGLK","HGBAIFLK","HJBFAGLI","HJBFAGIK","EJBAIHLK","EJBAIGLK","EJBAHGLK","EGBAIHLK","EJBAHGLI","EJBAHGIK","EJBAIFLK","EJBFAHLK","EIBFAHLK","EJBFAHLI","EJBFAHIK","EJBFAGLK","EGBAIFLK","EJBFAGLI","EJBFAGIK","EGBFAHLK","HJBFAGLE","HJBFAGEK","EGBFAHLI","EGBFAHIK","HJBFAGEI","IJBDAHLK","IJBDAGLK","HJBDAGLK","IGBDAHLK","HJBDAGLI","HJBDAGIK","IJBDAFLK","HJBDAFLK","HIBDAFLK","HJBDAFLI","HJBDAFIK","FJBDAGLK","IGBDAFLK","FJBDAGLI","FJBDAGIK","HGBDAFLK","HGBDAFLJ","HGBDAFJK","HGBDAFLI","HGBDAFIK","HGBDAFIJ","EJBAIDLK","EJBDAHLK","EIBDAHLK","EJBDAHLI","EJBDAHIK","EJBDAGLK","EGBAIDLK","EJBDAGLI","EJBDAGIK","EGBDAHLK","HJBDAGLE","HJBDAGEK","EGBDAHLI","EGBDAHIK","HJBDAGEI","EJBDAFLK","EIBDAFLK","EJBDAFLI","EJBDAFIK","HEBDAFLK","HJBDAFLE","HJBDAFEK","HEBDAFLI","HEBDAFIK","HJBDAFEI","EGBDAFLK","EGBDAFLJ","EGBDAFJK","EGBDAFLI","EGBDAFIK","EGBDAFIJ","HGBDAFLE","HGBDAFEK","HGBDAFEJ","HGBDAFEI","IJBCAHLK","IJBCAGLK","HJBCAGLK","IGBCAHLK","HJBCAGLI","HJBCAGIK","IJBCAFLK","HJBCAFLK","HIBCAFLK","HJBCAFLI","HJBCAFIK","CJBFAGLK","IGBCAFLK","CJBFAGLI","CJBFAGIK","HGBCAFLK","HGBCAFLJ","HGBCAFJK","HGBCAFLI","HGBCAFIK","HGBCAFIJ","EJBAICLK","EJBCAHLK","EIBCAHLK","EJBCAHLI","EJBCAHIK","EJBCAGLK","EGBAICLK","EJBCAGLI","EJBCAGIK","EGBCAHLK","HJBCAGLE","HJBCAGEK","EGBCAHLI","EGBCAHIK","HJBCAGEI","EJBCAFLK","EIBCAFLK","EJBCAFLI","EJBCAFIK","HEBCAFLK","HJBCAFLE","HJBCAFEK","HEBCAFLI","HEBCAFIK","HJBCAFEI","EGBCAFLK","EGBCAFLJ","EGBCAFJK","EGBCAFLI","EGBCAFIK","EGBCAFIJ","HGBCAFLE","HGBCAFEK","HGBCAFEJ","HGBCAFEI","IJBCADLK","HJBCADLK","HIBCADLK","HJBCADLI","HJBCADIK","CJBDAGLK","IGBCADLK","CJBDAGLI","CJBDAGIK","HGBCADLK","HGBCADLJ","HGBCADJK","HGBCADLI","HGBCADIK","HGBCADIJ","CJBDAFLK","CIBDAFLK","CJBDAFLI","CJBDAFIK","HFBCADLK","CJBDAFLH","HJBCAFDK","HFBCADLI","HFBCADIK","HJBCAFDI","CGBDAFLK","CGBDAFLJ","CGBDAFJK","CGBDAFLI","CGBDAFIK","CGBDAFIJ","CGBDAFLH","HGBCAFDK","HGBCAFDJ","HGBCAFDI","EJBCADLK","EIBCADLK","EJBCADLI","EJBCADIK","HEBCADLK","HJBCADLE","HJBCADEK","HEBCADLI","HEBCADIK","HJBCADEI","EGBCADLK","EGBCADLJ","EGBCADJK","EGBCADLI","EGBCADIK","EGBCADIJ","HGBCADLE","HGBCADEK","HGBCADEJ","HGBCADEI","CEBDAFLK","CJBDAFLE","CJBDAFEK","CEBDAFLI","CEBDAFIK","CJBDAFEI","HFBCADLE","HEBCAFDK","HJBCAFDE","HEBCAFDI","CGBDAFLE","CGBDAFEK","CGBDAFEJ","CGBDAFEI","HGBCAFDE"];
+
+      // Ordem de colunas do array THIRDS_495: posição i da string corresponde a este jogoId.
+      const THIRDS_COL_ORDER = ['M79','M85','M81','M74','M82','M77','M87','M80'];
+
+      // Mapeamento jogoId → letras dos grupos candidatos a enviar o 3º colocado.
+      const JOGO_CANDIDATOS = {
+        M74: 'ABCDF',
+        M77: 'CDFGH',
+        M79: 'CEFHI',
+        M80: 'EHIJK',
+        M81: 'BEFIJ',
+        M82: 'AEHIJ',
+        M85: 'EFGIJ',
+        M87: 'DEIJL',
+      };
+
       const SHORTCUTS = [
         { slug: 'hoje',       label: '📅 Jogos hoje' },
         { slug: 'brasil',     label: '🇧🇷 Só jogos do Brasil' },
@@ -1784,14 +1846,40 @@
           blocoTempo = '<div class="match-card__time">' + timeLabel(match.time) + '</div>';
         }
 
+        // Projeção dos 16-avos: substitui rótulos de posição pelos nomes projetados.
+        // Só aplicado quando standingsGrupos está disponível. Times reais (fase mata-mata
+        // com casa/fora preenchidos) têm prioridade e não recebem o marcador de projeção.
+        let team1Html = match.team1;
+        let team2Html = match.team2;
+
+        if (match.phase === '16-avos' && projecoesCache) {
+          const renderSlot = function(rotulo) {
+            // Guard futuro: time real virá de outra fonte; por ora team1/2 são sempre rótulos
+            const nomeProjetado = projecoesCache[rotulo];
+            if (nomeProjetado) {
+              return '<span class="match-card__team match-card__team--projetado"' +
+                ' title="Projeção pela classificação atual"' +
+                ' aria-label="' + nomeProjetado + ', projeção pela classificação atual">' +
+                nomeProjetado + '*</span>';
+            }
+            return '<span class="match-card__team">' + rotulo + '</span>';
+          };
+
+          team1Html = renderSlot(match.team1);
+          team2Html = renderSlot(match.team2);
+        } else {
+          team1Html = '<span class="match-card__team">' + match.team1 + '</span>';
+          team2Html = '<span class="match-card__team">' + match.team2 + '</span>';
+        }
+
         return `
           <article class="match-card${brasilClass}">
             ${blocoTempo}
             <div class="match-card__main">
               <div class="match-card__teams">
-                <span class="match-card__team">${match.team1}</span>
+                ${team1Html}
                 <span class="match-card__vs">×</span>
-                <span class="match-card__team">${match.team2}</span>
+                ${team2Html}
               </div>
               <div class="match-card__phase">${phaseLabel}</div>
             </div>
@@ -1802,7 +1890,7 @@
           </article>`;
       }
 
-      function renderDayGroup(date, dayMatches, isToday) {
+      function renderDayGroup(date, dayMatches, isToday, showProjecaoNota) {
         // dentro do dia: ordem crescente de horário; TBD por último
         const sorted = dayMatches.slice().sort((a, b) => {
           const ta = a.time === 'TBD' ? '99:99' : a.time;
@@ -1823,6 +1911,11 @@
               <span class="day-header__today">HOJE</span>`
           : '';
 
+        // Legenda do * de projeção: exibida apenas no primeiro dia de 16-avos quando ativas
+        const notaProjecao = showProjecaoNota
+          ? '<p class="projecao-nota" aria-label="Asterisco indica projeção pela classificação atual">* projeção pela classificação atual</p>'
+          : '';
+
         return `
           <section class="day-group">
             <h2 class="day-header${todayClass}">
@@ -1833,12 +1926,23 @@
               <span class="day-header__sep">·</span>
               <span class="day-header__count">${countLabel}</span>
             </h2>
-            ${cards}
+            ${notaProjecao}${cards}
           </section>`;
       }
 
       function render() {
         const hojeISO = hojeBrasiliaISO();
+
+        // Recomputa projeções dos 16-avos (barato: roda 1x por render, não 1x por card)
+        // calcularClassificacaoAoVivo é a fonte única: usa placares ao vivo + fallback do standings
+        {
+          const grupos = calcularClassificacaoAoVivo(matches, placares, standingsGrupos);
+          const melhoresTerceiros = calcularMelhoresTerceiros(grupos);
+          const proj = resolverMataMata(grupos, melhoresTerceiros);
+          // Objeto vazio (nenhum slot projetado) vira null pra não exibir legenda órfã
+          projecoesCache = Object.keys(proj).length > 0 ? proj : null;
+        }
+
         const visible = filterMatches();
 
         // dataAtual: primeiro dia NÃO encerrado (calculado sobre matches completo, não filtrado)
@@ -1867,6 +1971,13 @@
         const diasVisiveis = (!temFiltro)
           ? days.filter(function(d) { return !diaEncerrado(d); })
           : days;
+
+        // Primeiro dia visível com jogos 16-avos (para mostrar legenda de projeção uma só vez)
+        const primeiroDia16avos = projecoesCache
+          ? (days.find(function(d) {
+              return (byDate[d] || []).some(function(m) { return m.phase === '16-avos'; });
+            }) || null)
+          : null;
 
         // estado vazio
         let html;
@@ -1906,7 +2017,7 @@
 
           const conteudoEncerrados = diasEncerrados.map(function(date) {
             // Dias encerrados nunca recebem badge HOJE
-            return renderDayGroup(date, byDate[date], false);
+            return renderDayGroup(date, byDate[date], false, date === primeiroDia16avos);
           }).join('');
 
           const blocoEncerrados =
@@ -1922,14 +2033,14 @@
             '</div>';
 
           const conteudoVisiveis = diasVisiveis.map(function(date) {
-            return renderDayGroup(date, byDate[date], date === dataAtual);
+            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia16avos);
           }).join('');
 
           html = blocoEncerrados + conteudoVisiveis;
         } else {
           // Sem filtro e sem dias encerrados, ou com filtro: render normal com dataAtual como badge HOJE
           html = days.map(function(date) {
-            return renderDayGroup(date, byDate[date], date === dataAtual);
+            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia16avos);
           }).join('');
         }
 
@@ -2003,6 +2114,9 @@
 
             // Re-renderiza os cards com os dados de placar
             render();
+
+            // Se a aba Grupos já foi aberta, recomputa com os novos placares
+            if (atualizarAbaGrupos) atualizarAbaGrupos();
           } catch (_) {
             // Rede offline, JSON inválido, etc. — silencioso; aba permanece como hoje
           }
@@ -2010,6 +2124,166 @@
 
         carregarPlacares();
       })();
+
+      // ===== standings para a aba Jogos (projeção 16-avos) =====
+      // Carrega standings.json após o primeiro render. Falha silenciosa: 16-avos ficam com
+      // rótulos originais. A aba Grupos reutiliza os dados já em standingsGrupos (sem 2º fetch).
+      (function() {
+        async function carregarStandings() {
+          try {
+            const res = await fetch('./data/standings.json');
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data || typeof data.grupos !== 'object') return;
+            standingsGrupos = data;
+            render(); // re-renderiza 16-avos com projeções
+
+            // Se a aba Grupos já foi aberta, recomputa com os novos standings
+            if (atualizarAbaGrupos) atualizarAbaGrupos();
+          } catch (_) {
+            // offline ou JSON inválido — silencioso
+          }
+        }
+        carregarStandings();
+      })();
+
+      // ===== classificação ao vivo =====
+
+      /**
+       * Recalcula a tabela de grupos inteiramente a partir dos jogos estáticos + placares ao vivo.
+       * Retorna o mesmo formato de standingsGrupos.grupos, com flag extra `aoVivo` por linha.
+       * Função pura: nunca lança — qualquer erro retorna o fallback (standingsBase.grupos ou {}).
+       *
+       * @param {Array}    matchesEstaticos  array global `matches`
+       * @param {Map}      placaresMap       Map global `placares`
+       * @param {object|null} standingsBase  objeto standingsGrupos (pode ser null)
+       * @returns {{ [letra: string]: Array<{selecao,pos,p,j,v,e,d,gp,gc,sg,fp,aoVivo}> }}
+       */
+      function calcularClassificacaoAoVivo(matchesEstaticos, placaresMap, standingsBase) {
+        const fallback = (standingsBase && standingsBase.grupos) ? standingsBase.grupos : {};
+        try {
+          // Statuses que contam para a classificação ao vivo
+          const STATUS_CONTAM = new Set(['FINISHED', 'AWARDED', 'IN_PLAY', 'PAUSED']);
+          const STATUS_AO_VIVO = new Set(['IN_PLAY', 'PAUSED']);
+
+          // Monta membros de cada grupo a partir do array estático
+          const membros = {}; // { letra: Set<selecao> }
+          for (const m of matchesEstaticos) {
+            if (m.phase !== 'Fase de grupos') continue;
+            if (!m.group) continue;
+            if (!membros[m.group]) membros[m.group] = new Set();
+            membros[m.group].add(m.team1);
+            membros[m.group].add(m.team2);
+          }
+
+          // Se não há membros (sem jogos de grupo) — retorna fallback
+          if (Object.keys(membros).length === 0) return fallback;
+
+          // Verifica se há algum jogo de grupo com placar computável
+          const jogosDeGrupo = matchesEstaticos.filter(function(m) { return m.phase === 'Fase de grupos'; });
+          const temJogoComputavel = jogosDeGrupo.some(function(m) {
+            const d = placaresMap.get(chaveJogo(m.team1, m.team2, m.date));
+            return d && d.placar && STATUS_CONTAM.has(d.status);
+          });
+
+          // Nenhum jogo computável (placares vazio ou só TIMED/SCHEDULED) → fallback
+          if (!temJogoComputavel) return fallback;
+
+          // Inicializa stats zeradas para cada seleção
+          const stats = {}; // { selecao: { grupo, p, j, v, e, d, gp, gc, sg, aoVivo } }
+          for (const letra of Object.keys(membros)) {
+            for (const sel of membros[letra]) {
+              stats[sel] = { grupo: letra, p: 0, j: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, aoVivo: false };
+            }
+          }
+
+          // Processa cada jogo de grupo
+          for (const m of jogosDeGrupo) {
+            const d = placaresMap.get(chaveJogo(m.team1, m.team2, m.date));
+            if (!d || !d.placar || !STATUS_CONTAM.has(d.status)) continue;
+
+            const golos1 = d.placar.casa; // team1 = casa (mesma convenção do renderCard)
+            const golos2 = d.placar.fora; // team2 = fora
+
+            const s1 = stats[m.team1];
+            const s2 = stats[m.team2];
+
+            if (!s1 || !s2) continue; // time não mapeado (não deveria acontecer)
+
+            // Jogo ao vivo: marca ambos os times
+            if (STATUS_AO_VIVO.has(d.status)) {
+              s1.aoVivo = true;
+              s2.aoVivo = true;
+            }
+
+            s1.j++; s2.j++;
+            s1.gp += golos1; s1.gc += golos2;
+            s2.gp += golos2; s2.gc += golos1;
+
+            if (golos1 > golos2) {
+              s1.v++; s1.p += 3;
+              s2.d++;
+            } else if (golos1 < golos2) {
+              s2.v++; s2.p += 3;
+              s1.d++;
+            } else {
+              s1.e++; s1.p += 1;
+              s2.e++; s2.p += 1;
+            }
+
+            s1.sg = s1.gp - s1.gc;
+            s2.sg = s2.gp - s2.gc;
+          }
+
+          // Monta o resultado por grupo
+          const resultado = {};
+          for (const letra of Object.keys(membros)) {
+            const lista = Array.from(membros[letra]).map(function(sel) {
+              const st = stats[sel];
+              // fp: busca no standingsBase se disponível; ausente → 0
+              let fp = 0;
+              if (standingsBase && standingsBase.grupos && standingsBase.grupos[letra]) {
+                const baseItem = standingsBase.grupos[letra].find(function(x) { return x.selecao === sel; });
+                if (baseItem) fp = baseItem.fp || 0;
+              }
+              return {
+                selecao: sel,
+                pos: 0, // será atribuído após ordenação
+                p:  st.p,
+                j:  st.j,
+                v:  st.v,
+                e:  st.e,
+                d:  st.d,
+                gp: st.gp,
+                gc: st.gc,
+                sg: st.sg,
+                fp: fp,
+                aoVivo: st.aoVivo,
+              };
+            });
+
+            // Ordena: p desc, sg desc, gp desc, fp desc, ranking FIFA asc
+            lista.sort(function(a, b) {
+              if (b.p  !== a.p)  return b.p  - a.p;
+              if (b.sg !== a.sg) return b.sg - a.sg;
+              if (b.gp !== a.gp) return b.gp - a.gp;
+              if (b.fp !== a.fp) return b.fp - a.fp;
+              const ra = RANKING_FIFA[a.selecao] !== undefined ? RANKING_FIFA[a.selecao] : Infinity;
+              const rb = RANKING_FIFA[b.selecao] !== undefined ? RANKING_FIFA[b.selecao] : Infinity;
+              return ra - rb;
+            });
+
+            lista.forEach(function(item, idx) { item.pos = idx + 1; });
+
+            resultado[letra] = lista;
+          }
+
+          return resultado;
+        } catch (_) {
+          // Qualquer erro inesperado → retorna fallback sem lançar
+          return (standingsBase && standingsBase.grupos) ? standingsBase.grupos : {};
+        }
+      }
 
       // ===== melhores terceiros colocados =====
 
@@ -2071,6 +2345,70 @@
           classificados.add(terceiros[i].letra);
         }
         return classificados;
+      }
+
+      /**
+       * Resolve rótulos dos 16-avos (1º X, 2º X, 3º (A/B/...)) para nomes de seleções.
+       * Retorna objeto { [rotulo]: nomeDaSeleção } só para os rótulos resolvidos.
+       * Rótulo não resolvido → ausente no retorno.
+       *
+       * @param {{ [letra: string]: Array<{pos, selecao, ...}> }} grupos
+       * @param {Set<string>} melhoresTerceirosSet conjunto das 8 letras cujos 3os classificaram
+       * @returns {{ [rotulo: string]: string }}
+       */
+      function resolverMataMata(grupos, melhoresTerceirosSet) {
+        const resultado = {};
+        try {
+          if (!grupos || typeof grupos !== 'object') return resultado;
+
+          // Resolver 3º colocados via THIRDS_495
+          if (melhoresTerceirosSet && melhoresTerceirosSet.size === 8) {
+            const chaveConjunto = Array.from(melhoresTerceirosSet).sort().join('');
+
+            // Achar a string cujos chars ordenados == conjunto dos 8 terceiros
+            let strThirds = null;
+            for (var ti = 0; ti < THIRDS_495.length; ti++) {
+              const s = THIRDS_495[ti];
+              if ([...s].sort().join('') === chaveConjunto) {
+                strThirds = s;
+                break;
+              }
+            }
+
+            if (strThirds) {
+              for (var idx = 0; idx < THIRDS_COL_ORDER.length; idx++) {
+                const jogoId = THIRDS_COL_ORDER[idx];
+                const candidatoStr = JOGO_CANDIDATOS[jogoId];
+                if (!candidatoStr) continue;
+
+                // Monta o rótulo do slot: '3º (A/B/C/D/F)' com letras ordenadas
+                const letrasOrdenadas = candidatoStr.split('').sort();
+                const rotulo3 = '3º (' + letrasOrdenadas.join('/') + ')';
+
+                // A letra do grupo cujo 3º vai para este jogo
+                const letraGrupo = strThirds[idx];
+                const listaGrupo = grupos[letraGrupo];
+                if (!listaGrupo) continue;
+                const item = listaGrupo.find(function(s) { return s.pos === 3; });
+                if (!item) continue;
+                resultado[rotulo3] = item.selecao;
+              }
+            }
+          }
+
+          // Resolver 1º e 2º de cada grupo
+          for (const letra of Object.keys(grupos)) {
+            const lista = grupos[letra];
+            if (!lista) continue;
+            const prim = lista.find(function(s) { return s.pos === 1; });
+            if (prim) resultado['1º ' + letra] = prim.selecao;
+            const seg = lista.find(function(s) { return s.pos === 2; });
+            if (seg) resultado['2º ' + letra] = seg.selecao;
+          }
+        } catch (_) {
+          // qualquer falha inesperada — retorna o que já foi resolvido, sem lançar
+        }
+        return resultado;
       }
 
       // ===== abas + grupos =====
@@ -2137,11 +2475,23 @@
         }
 
         async function fetchStandings() {
+          // Reutiliza dados já carregados por carregarStandings() — sem 2º fetch
+          if (standingsGrupos) {
+            gruposJaCarregados = true;
+            // Expõe o hook para re-render quando placares/standings atualizarem
+            atualizarAbaGrupos = function() { renderGrupos(standingsGrupos); };
+            renderGrupos(standingsGrupos);
+            return;
+          }
           try {
             const res = await fetch('./data/standings.json');
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
             gruposJaCarregados = true;
+            standingsGrupos = data;
+            // Expõe o hook para re-render quando placares/standings atualizarem
+            atualizarAbaGrupos = function() { renderGrupos(standingsGrupos); };
+            render(); // re-renderiza 16-avos com projeções
             renderGrupos(data);
           } catch (err) {
             console.warn('[Copa 2026] Erro ao carregar standings:', err);
@@ -2151,7 +2501,8 @@
         }
 
         function renderGrupos(data) {
-          const grupos = data.grupos || {};
+          // Fonte única: classificação ao vivo calculada dos placares + fallback no standings
+          const grupos = calcularClassificacaoAoVivo(matches, placares, data || standingsGrupos);
           const gruposClassificados = calcularMelhoresTerceiros(grupos);
 
           const html = GRUPOS_ORDEM.map(function(letra) {
@@ -2168,9 +2519,18 @@
                                         ? ' title="' + s.selecao + ' — classificado como um dos 8 melhores terceiros"' +
                                           ' aria-label="' + s.selecao + ', classificado como um dos 8 melhores terceiros"'
                                         : '';
+
+              // Indicador "ao vivo" na célula da seleção: dot pulsante sem texto (não quebra coluna)
+              const dotAoVivo = s.aoVivo
+                ? '<span class="col-selecao__ao-vivo" aria-label="Ao vivo">' +
+                    s.selecao +
+                    '<span class="ao-vivo__ponto" aria-hidden="true"></span>' +
+                  '</span>'
+                : s.selecao;
+
               return '<tr class="grupo-tabela__row' + classificadoClass + terceiroClass + brasilClass + '"' + tituloLinha + '>' +
                 '<td>' + s.pos + '</td>' +
-                '<td class="col-selecao">' + s.selecao + '</td>' +
+                '<td class="col-selecao">' + dotAoVivo + '</td>' +
                 '<td class="col-p">' + s.p + '</td>' +
                 '<td class="col-j">' + s.j + '</td>' +
                 '<td>' + s.v + '</td>' +
@@ -2204,17 +2564,20 @@
 
           document.getElementById('grupos-conteudo').innerHTML = html;
 
-          // Exibe timestamp de atualização no fuso de Brasília (UTC−3)
+          // Atualiza a nota com copy "ao vivo" e timestamp do standings (se disponível)
           const nota = document.getElementById('grupos-nota');
-          if (nota && data.atualizadoEm) {
-            const ts = new Date(data.atualizadoEm);
-            // Converte para Brasília: UTC−3 fixo (sem depender do fuso do dispositivo)
-            const brt = new Date(ts.getTime() + (-3 * 3600000));
-            const dd  = String(brt.getUTCDate()).padStart(2, '0');
-            const mm  = String(brt.getUTCMonth() + 1).padStart(2, '0');
-            const hh  = String(brt.getUTCHours()).padStart(2, '0');
-            const min = String(brt.getUTCMinutes()).padStart(2, '0');
-            nota.textContent = 'Atualizado em ' + dd + '/' + mm + ' às ' + hh + 'h' + min;
+          if (nota) {
+            const standingsRef = data || standingsGrupos;
+            if (standingsRef && standingsRef.atualizadoEm) {
+              const ts = new Date(standingsRef.atualizadoEm);
+              // Converte para Brasília: UTC−3 fixo (sem depender do fuso do dispositivo)
+              const brt = new Date(ts.getTime() + (-3 * 3600000));
+              const hh  = String(brt.getUTCHours()).padStart(2, '0');
+              const min = String(brt.getUTCMinutes()).padStart(2, '0');
+              nota.textContent = 'Classificação ao vivo · oficial atualizada às ' + hh + ':' + min;
+            } else {
+              nota.textContent = 'Classificação ao vivo';
+            }
           }
         }
 
