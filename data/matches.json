@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T17:45:15.820Z",
+  "atualizadoEm": "2026-06-23T18:00:29.172Z",
   "jogos": [
     {
       "id": 537327,
@@ -580,7 +580,7 @@
       "utcDate": "2026-06-23T17:00:00Z",
       "casa": "Portugal",
       "fora": "Uzbequistão",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "placar": {
         "casa": 3,
         "fora": 0
