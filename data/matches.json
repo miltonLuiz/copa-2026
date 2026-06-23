@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T00:20:12.014Z",
+  "atualizadoEm": "2026-06-23T00:30:19.034Z",
   "jogos": [
     {
       "id": 537327,
@@ -543,7 +543,7 @@
       "fora": "Iraque",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 2,
+        "casa": 3,
         "fora": 0
       }
     },
