@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T03:45:13.213Z",
+  "atualizadoEm": "2026-06-23T04:00:21.274Z",
   "jogos": [
     {
       "id": 537327,
@@ -567,7 +567,7 @@
       "utcDate": "2026-06-23T03:00:00Z",
       "casa": "Jordânia",
       "fora": "Argélia",
-      "status": "IN_PLAY",
+      "status": "PAUSED",
       "placar": {
         "casa": 1,
         "fora": 0
