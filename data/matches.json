@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T19:25:17.909Z",
+  "atualizadoEm": "2026-06-23T20:10:19.074Z",
   "jogos": [
     {
       "id": 537327,
@@ -594,7 +594,10 @@
       "casa": "Inglaterra",
       "fora": "Gana",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537412,
