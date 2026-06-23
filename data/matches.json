@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-23T00:50:15.073Z",
+  "atualizadoEm": "2026-06-23T00:55:12.416Z",
   "jogos": [
     {
       "id": 537327,
@@ -541,7 +541,7 @@
       "utcDate": "2026-06-22T21:00:00Z",
       "casa": "França",
       "fora": "Iraque",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 3,
         "fora": 0
