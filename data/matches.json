@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T02:05:13.643Z",
+  "atualizadoEm": "2026-06-24T02:10:14.967Z",
   "jogos": [
     {
       "id": 537327,
@@ -620,7 +620,10 @@
       "casa": "Colômbia",
       "fora": "RD Congo",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537337,
