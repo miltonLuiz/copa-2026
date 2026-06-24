@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T01:40:13.235Z",
+  "atualizadoEm": "2026-06-24T01:50:12.798Z",
   "jogos": [
     {
       "id": 537327,
@@ -619,7 +619,7 @@
       "utcDate": "2026-06-24T02:00:00Z",
       "casa": "Colômbia",
       "fora": "RD Congo",
-      "status": "TIMED",
+      "status": "SCHEDULED",
       "placar": null
     },
     {
