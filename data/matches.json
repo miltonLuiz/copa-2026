@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T22:50:12.638Z",
+  "atualizadoEm": "2026-06-24T22:55:11.864Z",
   "jogos": [
     {
       "id": 537327,
@@ -660,7 +660,7 @@
       "fora": "Haiti",
       "status": "TIMED",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 2
       }
     },
