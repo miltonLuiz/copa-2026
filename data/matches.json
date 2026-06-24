@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T00:20:12.942Z",
+  "atualizadoEm": "2026-06-24T01:00:16.576Z",
   "jogos": [
     {
       "id": 537327,
@@ -606,7 +606,7 @@
       "utcDate": "2026-06-23T23:00:00Z",
       "casa": "Panamá",
       "fora": "Croácia",
-      "status": "PAUSED",
+      "status": "FINISHED",
       "placar": {
         "casa": 0,
         "fora": 1
