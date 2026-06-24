@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T20:15:13.332Z",
+  "atualizadoEm": "2026-06-24T20:25:13.256Z",
   "jogos": [
     {
       "id": 537327,
@@ -634,7 +634,7 @@
       "fora": "Canadá",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 0
       }
     },
