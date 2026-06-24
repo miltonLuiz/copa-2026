@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-24T04:05:14.059Z",
+  "atualizadoEm": "2026-06-24T19:05:29.517Z",
   "jogos": [
     {
       "id": 537327,
@@ -633,7 +633,10 @@
       "casa": "Suíça",
       "fora": "Canadá",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537338,
