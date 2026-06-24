@@ -633,6 +633,14 @@
         transform: rotate(180deg);
       }
 
+      /* Aberto: o cabeçalho gruda no topo da tela (mesma posição/largura de sempre)
+         pra você fechar tudo a qualquer momento, mesmo scrollando pra baixo. */
+      .dias-encerrados__toggle[aria-expanded="true"] {
+        position: sticky;
+        top: 8px;
+        z-index: 30;
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .dias-encerrados__toggle,
         .dias-encerrados__seta {
@@ -1807,6 +1815,11 @@
             } else {
               conteudo.setAttribute('hidden', '');
             }
+          }
+          // Ao fechar (vindo de scroll lá embaixo), volta o scroll pro topo do bloco
+          if (!state.encerradosAbertos) {
+            const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            btn.scrollIntoView({ block: 'start', behavior: reduz ? 'auto' : 'smooth' });
           }
         });
       }
