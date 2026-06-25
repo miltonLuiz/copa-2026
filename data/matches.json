@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-25T20:55:12.134Z",
+  "atualizadoEm": "2026-06-25T21:00:24.044Z",
   "jogos": [
     {
       "id": 537327,
@@ -723,7 +723,7 @@
       "utcDate": "2026-06-25T20:00:00Z",
       "casa": "Curaçao",
       "fora": "Costa do Marfim",
-      "status": "TIMED",
+      "status": "PAUSED",
       "placar": {
         "casa": 0,
         "fora": 1
