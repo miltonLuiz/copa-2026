@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-25T20:10:13.307Z",
+  "atualizadoEm": "2026-06-25T20:15:14.790Z",
   "jogos": [
     {
       "id": 537327,
@@ -712,7 +712,7 @@
       "fora": "Alemanha",
       "status": "TIMED",
       "placar": {
-        "casa": 0,
+        "casa": 1,
         "fora": 1
       }
     },
@@ -726,7 +726,7 @@
       "status": "TIMED",
       "placar": {
         "casa": 0,
-        "fora": 0
+        "fora": 1
       }
     },
     {
