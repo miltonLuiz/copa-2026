@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-25T20:15:14.790Z",
+  "atualizadoEm": "2026-06-25T20:55:12.134Z",
   "jogos": [
     {
       "id": 537327,
@@ -710,7 +710,7 @@
       "utcDate": "2026-06-25T20:00:00Z",
       "casa": "Equador",
       "fora": "Alemanha",
-      "status": "TIMED",
+      "status": "PAUSED",
       "placar": {
         "casa": 1,
         "fora": 1
