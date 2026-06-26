@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T03:20:10.645Z",
+  "atualizadoEm": "2026-06-26T04:05:12.897Z",
   "jogos": [
     {
       "id": 537327,
@@ -775,7 +775,7 @@
       "utcDate": "2026-06-26T02:00:00Z",
       "casa": "Paraguai",
       "fora": "Austrália",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 0,
         "fora": 0
