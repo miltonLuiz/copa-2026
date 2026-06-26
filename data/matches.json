@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T04:10:12.296Z",
+  "atualizadoEm": "2026-06-26T18:45:25.571Z",
   "jogos": [
     {
       "id": 537327,
@@ -906,8 +906,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-06-28T19:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "África do Sul",
+      "fora": "Canadá",
       "status": "TIMED",
       "placar": null
     },
@@ -916,8 +916,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-06-29T17:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Brasil",
+      "fora": "Japão",
       "status": "TIMED",
       "placar": null
     },
@@ -936,8 +936,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-06-30T01:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Holanda",
+      "fora": "Marrocos",
       "status": "TIMED",
       "placar": null
     },
@@ -997,7 +997,7 @@
       "grupo": null,
       "utcDate": "2026-07-02T00:00:00Z",
       "casa": "EUA",
-      "fora": null,
+      "fora": "Bósnia",
       "status": "TIMED",
       "placar": null
     },
@@ -1026,7 +1026,7 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-03T03:00:00Z",
-      "casa": null,
+      "casa": "Suíça",
       "fora": null,
       "status": "TIMED",
       "placar": null
@@ -1036,7 +1036,7 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-03T18:00:00Z",
-      "casa": null,
+      "casa": "Austrália",
       "fora": null,
       "status": "TIMED",
       "placar": null
