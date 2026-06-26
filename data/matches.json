@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T20:20:12.776Z",
+  "atualizadoEm": "2026-06-26T20:25:10.563Z",
   "jogos": [
     {
       "id": 537327,
@@ -801,7 +801,7 @@
       "utcDate": "2026-06-26T19:00:00Z",
       "casa": "Senegal",
       "fora": "Iraque",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 1,
         "fora": 0
