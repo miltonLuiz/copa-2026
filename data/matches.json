@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T01:05:12.828Z",
+  "atualizadoEm": "2026-06-26T02:10:13.465Z",
   "jogos": [
     {
       "id": 537327,
@@ -762,8 +762,11 @@
       "utcDate": "2026-06-26T02:00:00Z",
       "casa": "Turquia",
       "fora": "EUA",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 1
+      }
     },
     {
       "id": 537350,
@@ -772,8 +775,11 @@
       "utcDate": "2026-06-26T02:00:00Z",
       "casa": "Paraguai",
       "fora": "Austrália",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537395,
