@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T18:45:25.571Z",
+  "atualizadoEm": "2026-06-26T19:08:16.053Z",
   "jogos": [
     {
       "id": 537327,
@@ -789,7 +789,10 @@
       "casa": "Noruega",
       "fora": "França",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537396,
@@ -799,7 +802,10 @@
       "casa": "Senegal",
       "fora": "Iraque",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537373,
