@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T23:05:10.420Z",
+  "atualizadoEm": "2026-06-27T23:40:12.423Z",
   "jogos": [
     {
       "id": 537327,
@@ -856,7 +856,7 @@
       "status": "FINISHED",
       "placar": {
         "casa": 1,
-        "fora": 1
+        "fora": 2
       }
     },
     {
@@ -893,7 +893,10 @@
       "casa": "Colômbia",
       "fora": "Portugal",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537408,
@@ -903,7 +906,10 @@
       "casa": "RD Congo",
       "fora": "Uzbequistão",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537401,
