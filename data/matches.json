@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T02:10:11.218Z",
+  "atualizadoEm": "2026-06-27T03:10:12.886Z",
   "jogos": [
     {
       "id": 537327,
@@ -841,7 +841,10 @@
       "casa": "Nova Zelândia",
       "fora": "Bélgica",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537368,
@@ -850,8 +853,11 @@
       "utcDate": "2026-06-27T03:00:00Z",
       "casa": "Egito",
       "fora": "Irã",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537413,
