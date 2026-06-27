@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T21:10:14.758Z",
+  "atualizadoEm": "2026-06-27T02:05:10.775Z",
   "grupos": {
     "A": [
       {
@@ -394,8 +394,21 @@
         "fp": 0
       },
       {
-        "selecao": "Uruguai",
+        "selecao": "Cabo Verde",
         "pos": 2,
+        "p": 3,
+        "j": 3,
+        "v": 0,
+        "e": 3,
+        "d": 0,
+        "gp": 2,
+        "gc": 2,
+        "sg": 0,
+        "fp": 0
+      },
+      {
+        "selecao": "Uruguai",
+        "pos": 3,
         "p": 2,
         "j": 2,
         "v": 0,
@@ -407,25 +420,12 @@
         "fp": 0
       },
       {
-        "selecao": "Cabo Verde",
-        "pos": 3,
-        "p": 2,
-        "j": 2,
-        "v": 0,
-        "e": 2,
-        "d": 0,
-        "gp": 2,
-        "gc": 2,
-        "sg": 0,
-        "fp": 0
-      },
-      {
         "selecao": "Arábia Saudita",
         "pos": 4,
-        "p": 1,
-        "j": 2,
+        "p": 2,
+        "j": 3,
         "v": 0,
-        "e": 1,
+        "e": 2,
         "d": 1,
         "gp": 1,
         "gc": 5,
