@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T04:55:11.600Z",
+  "atualizadoEm": "2026-06-27T05:05:12.215Z",
   "jogos": [
     {
       "id": 537327,
@@ -840,10 +840,10 @@
       "utcDate": "2026-06-27T03:00:00Z",
       "casa": "Nova Zelândia",
       "fora": "Bélgica",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 1,
-        "fora": 4
+        "fora": 5
       }
     },
     {
@@ -856,7 +856,7 @@
       "status": "IN_PLAY",
       "placar": {
         "casa": 1,
-        "fora": 1
+        "fora": 2
       }
     },
     {
