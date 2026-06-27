@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-26T21:10:14.600Z",
+  "atualizadoEm": "2026-06-27T00:10:12.203Z",
   "jogos": [
     {
       "id": 537327,
@@ -815,7 +815,10 @@
       "casa": "Uruguai",
       "fora": "Espanha",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537374,
@@ -825,7 +828,10 @@
       "casa": "Cabo Verde",
       "fora": "Arábia Saudita",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537367,
