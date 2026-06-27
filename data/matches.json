@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T23:51:49.121Z",
+  "atualizadoEm": "2026-06-27T23:55:10.519Z",
   "jogos": [
     {
       "id": 537327,
@@ -907,7 +907,7 @@
       "fora": "Uzbequistão",
       "status": "TIMED",
       "placar": {
-        "casa": 0,
+        "casa": 1,
         "fora": 1
       }
     },
