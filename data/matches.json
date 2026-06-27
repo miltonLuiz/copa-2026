@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T06:15:11.221Z",
+  "atualizadoEm": "2026-06-27T21:10:17.274Z",
   "jogos": [
     {
       "id": 537327,
@@ -866,8 +866,11 @@
       "utcDate": "2026-06-27T21:00:00Z",
       "casa": "Panamá",
       "fora": "Inglaterra",
-      "status": "TIMED",
-      "placar": null
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537414,
@@ -877,7 +880,10 @@
       "casa": "Croácia",
       "fora": "Gana",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537407,
