@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-27T23:55:10.519Z",
+  "atualizadoEm": "2026-06-28T00:00:20.560Z",
   "jogos": [
     {
       "id": 537327,
@@ -856,7 +856,7 @@
       "status": "FINISHED",
       "placar": {
         "casa": 1,
-        "fora": 2
+        "fora": 1
       }
     },
     {
