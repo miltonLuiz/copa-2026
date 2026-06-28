@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-28T04:05:12.903Z",
+  "atualizadoEm": "2026-06-28T18:45:13.113Z",
   "jogos": [
     {
       "id": 537327,
@@ -963,7 +963,7 @@
       "grupo": null,
       "utcDate": "2026-06-29T20:30:00Z",
       "casa": "Alemanha",
-      "fora": null,
+      "fora": "Paraguai",
       "status": "TIMED",
       "placar": null
     },
@@ -983,7 +983,7 @@
       "grupo": null,
       "utcDate": "2026-06-30T17:00:00Z",
       "casa": "Costa do Marfim",
-      "fora": null,
+      "fora": "Noruega",
       "status": "TIMED",
       "placar": null
     },
@@ -992,8 +992,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-06-30T21:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "França",
+      "fora": "Suécia",
       "status": "TIMED",
       "placar": null
     },
@@ -1003,7 +1003,7 @@
       "grupo": null,
       "utcDate": "2026-07-01T01:00:00Z",
       "casa": "México",
-      "fora": null,
+      "fora": "Equador",
       "status": "TIMED",
       "placar": null
     },
@@ -1012,8 +1012,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-01T16:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Inglaterra",
+      "fora": "RD Congo",
       "status": "TIMED",
       "placar": null
     },
@@ -1022,8 +1022,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-01T20:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Bélgica",
+      "fora": "Senegal",
       "status": "TIMED",
       "placar": null
     },
@@ -1042,8 +1042,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-02T19:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Espanha",
+      "fora": "Áustria",
       "status": "TIMED",
       "placar": null
     },
@@ -1052,8 +1052,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-02T23:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Portugal",
+      "fora": "Croácia",
       "status": "TIMED",
       "placar": null
     },
@@ -1063,7 +1063,7 @@
       "grupo": null,
       "utcDate": "2026-07-03T03:00:00Z",
       "casa": "Suíça",
-      "fora": null,
+      "fora": "Argélia",
       "status": "TIMED",
       "placar": null
     },
@@ -1073,7 +1073,7 @@
       "grupo": null,
       "utcDate": "2026-07-03T18:00:00Z",
       "casa": "Austrália",
-      "fora": null,
+      "fora": "Egito",
       "status": "TIMED",
       "placar": null
     },
@@ -1083,7 +1083,7 @@
       "grupo": null,
       "utcDate": "2026-07-03T22:00:00Z",
       "casa": "Argentina",
-      "fora": null,
+      "fora": "Cabo Verde",
       "status": "TIMED",
       "placar": null
     },
@@ -1092,8 +1092,8 @@
       "fase": "32-avos",
       "grupo": null,
       "utcDate": "2026-07-04T01:30:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Colômbia",
+      "fora": "Gana",
       "status": "TIMED",
       "placar": null
     },
