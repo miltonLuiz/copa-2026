@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-28T03:15:10.389Z",
+  "atualizadoEm": "2026-06-28T03:25:13.797Z",
   "jogos": [
     {
       "id": 537327,
@@ -920,7 +920,7 @@
       "fora": "Argentina",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 0,
+        "casa": 1,
         "fora": 2
       }
     },
@@ -934,7 +934,7 @@
       "status": "IN_PLAY",
       "placar": {
         "casa": 1,
-        "fora": 1
+        "fora": 2
       }
     },
     {
