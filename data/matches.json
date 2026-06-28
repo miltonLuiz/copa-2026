@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-28T00:25:09.752Z",
+  "atualizadoEm": "2026-06-28T00:30:15.217Z",
   "jogos": [
     {
       "id": 537327,
@@ -905,9 +905,9 @@
       "utcDate": "2026-06-27T23:30:00Z",
       "casa": "RD Congo",
       "fora": "Uzbequistão",
-      "status": "TIMED",
+      "status": "PAUSED",
       "placar": {
-        "casa": 1,
+        "casa": 0,
         "fora": 1
       }
     },
