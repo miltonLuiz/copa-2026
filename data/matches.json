@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-28T21:05:10.217Z",
+  "atualizadoEm": "2026-06-29T16:45:12.030Z",
   "jogos": [
     {
       "id": 537327,
@@ -1105,7 +1105,7 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-04T17:00:00Z",
-      "casa": null,
+      "casa": "Canadá",
       "fora": null,
       "status": "TIMED",
       "placar": null
