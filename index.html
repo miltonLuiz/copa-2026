@@ -1513,16 +1513,16 @@
                normalizar(jogo.team2).includes(q);
       }
 
-      // Retorna true se TODOS os jogos do dia têm status FINISHED ou AWARDED no Map placares.
+      // Retorna true se TODOS os jogos do dia têm status FINISHED ou AWARDED.
+      // Consulta o Map correto dependendo da fase: placares (grupo) ou placaresMataMata (mata-mata).
       // Qualquer jogo sem entrada ou com status diferente retorna false.
       // Só considera dias que têm ao menos 1 jogo no array estático matches.
       function diaEncerrado(date) {
         const jogos = matches.filter(function(m) { return m.date === date; });
         if (jogos.length === 0) return false;
         return jogos.every(function(m) {
-          const dados = placares.get(chaveJogo(m.team1, m.team2, m.date));
-          if (!dados) return false;
-          return dados.status === 'FINISHED' || dados.status === 'AWARDED';
+          var st = statusDoJogo(m);
+          return st === 'FINISHED' || st === 'AWARDED';
         });
       }
 
@@ -1830,7 +1830,6 @@
 
       // Helper: busca dados da API para um jogo de mata-mata (por id, com fallback por data+hora).
       // Retorna o objeto { status, placar, casa, fora } ou undefined.
-      // Usado tanto em renderCard quanto em render() para checar temTimeReal, evitando duplicação.
       function dadosVivoDeMataMataPorMatch(match) {
         if (match.id == null) return undefined;
         let dados = placaresMataMata.get(match.id);
@@ -1841,12 +1840,41 @@
         return dados;
       }
 
-      // Helper: determina se um jogo de mata-mata tem times reais definidos pela API.
-      // Retorna true quando os campos casa+fora vieram da API (não-null), qualquer fase.
-      function temTimeRealDaAPI(match) {
+      // Fonte única de status para diaEncerrado: roteia para o Map correto por fase.
+      // Retorna string de status (ex: 'FINISHED') ou undefined se não há dados ainda.
+      function statusDoJogo(match) {
+        var dados;
+        if (match.phase === 'Fase de grupos') {
+          dados = placares.get(chaveJogo(match.team1, match.team2, match.date));
+        } else {
+          dados = dadosVivoDeMataMataPorMatch(match);
+        }
+        return dados ? dados.status : undefined;
+      }
+
+      // Helper por lado: retorna true se a API já definiu aquele lado (casa ou fora) para mata-mata.
+      // Usado em renderCard e em primeiroDia32avos para projeção por slot.
+      function temLadoRealDaAPI(match, lado) { // lado = 'casa' | 'fora'
         if (match.phase === 'Fase de grupos') return false;
-        const dados = dadosVivoDeMataMataPorMatch(match);
-        return dados != null && dados.casa != null && dados.fora != null;
+        var dados = dadosVivoDeMataMataPorMatch(match);
+        return dados != null && dados[lado] != null;
+      }
+
+      // Renderiza um slot de time no mata-mata (casa ou fora), com 3 prioridades:
+      // 1. Nome real da API (nomeReal não-null) → span simples, sem itálico/*/title/aria
+      // 2. Projeção (só 32-avos) → classe --projetado, *, title e aria-label
+      // 3. Rótulo cru → span simples
+      function renderLadoMataMata(rotulo, nomeReal, phase) {
+        if (nomeReal != null) {
+          return '<span class="match-card__team">' + nomeReal + '</span>';
+        }
+        if (phase === '32-avos' && projecoesCache && projecoesCache[rotulo]) {
+          return '<span class="match-card__team match-card__team--projetado"' +
+            ' title="Projeção pela classificação atual"' +
+            ' aria-label="' + projecoesCache[rotulo] + ', projeção pela classificação atual">' +
+            projecoesCache[rotulo] + '*</span>';
+        }
+        return '<span class="match-card__team">' + rotulo + '</span>';
       }
 
       function renderCard(match) {
@@ -1892,36 +1920,19 @@
           blocoTempo = '<div class="match-card__time">' + timeLabel(match.time) + '</div>';
         }
 
-        // Nomes dos times: precedência para mata-mata
-        // 1. Time real da API (id casou E casa+fora definidos) → sem itálico, sem *, sem tooltip
-        // 2. Projeção dos 32-avos (só para phase === '32-avos' e projecoesCache disponível)
-        // 3. Rótulo cru (team1/team2 estático)
+        // Nomes dos times: ramificação por tipo de jogo
+        // Fase de grupos: nomes estáticos direto do array matches (sempre definidos)
+        // Mata-mata: resolução por lado via renderLadoMataMata (real da API > projeção 32-avos > rótulo cru)
         let team1Html, team2Html;
 
-        const temTimeReal = temTimeRealDaAPI(match);
-
-        if (temTimeReal) {
-          // Caso 1: times reais vindos da API
-          team1Html = '<span class="match-card__team">' + dadosVivo.casa + '</span>';
-          team2Html = '<span class="match-card__team">' + dadosVivo.fora + '</span>';
-        } else if (match.phase === '32-avos' && projecoesCache) {
-          // Caso 2: projeção pela classificação (só 32-avos sem time real definido)
-          const renderSlot = function(rotulo) {
-            const nomeProjetado = projecoesCache[rotulo];
-            if (nomeProjetado) {
-              return '<span class="match-card__team match-card__team--projetado"' +
-                ' title="Projeção pela classificação atual"' +
-                ' aria-label="' + nomeProjetado + ', projeção pela classificação atual">' +
-                nomeProjetado + '*</span>';
-            }
-            return '<span class="match-card__team">' + rotulo + '</span>';
-          };
-          team1Html = renderSlot(match.team1);
-          team2Html = renderSlot(match.team2);
-        } else {
-          // Caso 3: rótulo cru (Oitavas+, ou 32-avos sem projeção e sem time real)
+        if (match.phase === 'Fase de grupos') {
+          // Nomes sempre definidos estaticamente; sem projeção, sem time real de API
           team1Html = '<span class="match-card__team">' + match.team1 + '</span>';
           team2Html = '<span class="match-card__team">' + match.team2 + '</span>';
+        } else {
+          // Mata-mata: cada lado resolvido independentemente
+          team1Html = renderLadoMataMata(match.team1, (dadosVivo ? dadosVivo.casa : null), match.phase);
+          team2Html = renderLadoMataMata(match.team2, (dadosVivo ? dadosVivo.fora : null), match.phase);
         }
 
         return `
@@ -2028,12 +2039,17 @@
         // Um card exibe * apenas quando: phase === '32-avos' E sem time real da API E
         // projecoesCache resolve ao menos um dos slots. Avaliado dinamicamente a cada render()
         // porque placaresMataMata só é populado após o fetch de matches.json.
+        // Legenda * só aparece quando há ao menos um LADO projetado:
+        // phase=32-avos, lado sem nome real da API, projecoesCache resolve aquele rótulo.
+        const ladoProjetado = function(m, lado, rotulo) {
+          return m.phase === '32-avos' &&
+                 !temLadoRealDaAPI(m, lado) &&
+                 projecoesCache[rotulo];
+        };
         const primeiroDia32avos = projecoesCache
           ? (days.find(function(d) {
               return (byDate[d] || []).some(function(m) {
-                return m.phase === '32-avos' &&
-                       !temTimeRealDaAPI(m) &&
-                       (projecoesCache[m.team1] || projecoesCache[m.team2]);
+                return ladoProjetado(m, 'casa', m.team1) || ladoProjetado(m, 'fora', m.team2);
               });
             }) || null)
           : null;
