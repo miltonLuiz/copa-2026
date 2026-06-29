@@ -252,7 +252,7 @@
         font-weight: 500;
       }
 
-      /* ===== projeção 16-avos ===== */
+      /* ===== projeção mata-mata (32-avos) ===== */
       /* Nome projetado: itálico, cor levemente atenuada mas com contraste WCAG AA */
       .match-card__team--projetado {
         font-style: italic;
@@ -1248,6 +1248,10 @@
       // Chave: par de seleções ordenados alfabeticamente + data Brasília (ex: "Brasil|Marrocos|2026-06-13")
       // Valor: objeto { status, placar: {casa, fora} | null }
       const placares = new Map();
+      // Map para jogos de mata-mata: chave = id numérico, valor = { status, placar, casa, fora }
+      const placaresMataMata = new Map();
+      // Índice auxiliar por (dataBrasilia + hora) → mesmo objeto (fallback se id não casar)
+      const placaresMataMataHora = new Map();
       // Timestamp de atualização do matches.json (string ISO ou null)
       let placaresMeta = null;
 
@@ -1264,7 +1268,7 @@
       // null enquanto a aba Grupos ainda não foi aberta.
       let atualizarAbaGrupos = null;
 
-      // ===== dados para projeção dos 16-avos =====
+      // ===== dados para projeção dos 32-avos =====
       // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
       // Gerado da tabela 495 da FIFA. Ordem das colunas: THIRDS_COL_ORDER.
       // eslint-disable-next-line max-len
@@ -1379,49 +1383,49 @@
 
         // === MATA-MATA (32 jogos) ===
 
-        // 16-avos
-        { date: '2026-06-28', weekday: 'dom', time: '16:00', team1: '2º A', team2: '2º B', group: '—', phase: '16-avos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
-        { date: '2026-06-29', weekday: 'seg', time: '14:00', team1: '1º C', team2: '2º F', group: '—', phase: '16-avos', stadium: 'NRG Stadium', city: 'Houston' },
-        { date: '2026-06-29', weekday: 'seg', time: '17:30', team1: '1º E', team2: '3º (A/B/C/D/F)', group: '—', phase: '16-avos', stadium: 'Gillette Stadium', city: 'Boston' },
-        { date: '2026-06-29', weekday: 'seg', time: '22:00', team1: '1º F', team2: '2º C', group: '—', phase: '16-avos', stadium: 'Estádio BBVA', city: 'Monterrey' },
-        { date: '2026-06-30', weekday: 'ter', time: '14:00', team1: '2º E', team2: '2º I', group: '—', phase: '16-avos', stadium: 'AT&T Stadium', city: 'Dallas' },
-        { date: '2026-06-30', weekday: 'ter', time: '18:00', team1: '1º I', team2: '3º (C/D/F/G/H)', group: '—', phase: '16-avos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
-        { date: '2026-06-30', weekday: 'ter', time: '22:00', team1: '1º A', team2: '3º (C/E/F/H/I)', group: '—', phase: '16-avos', stadium: 'Estádio Azteca', city: 'Cidade do México' },
-        { date: '2026-07-01', weekday: 'qua', time: '13:00', team1: '1º L', team2: '3º (E/H/I/J/K)', group: '—', phase: '16-avos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
-        { date: '2026-07-01', weekday: 'qua', time: '17:00', team1: '1º G', team2: '3º (A/E/H/I/J)', group: '—', phase: '16-avos', stadium: 'Lumen Field', city: 'Seattle' },
-        { date: '2026-07-01', weekday: 'qua', time: '21:00', team1: '1º D', team2: '3º (B/E/F/I/J)', group: '—', phase: '16-avos', stadium: "Levi's Stadium", city: 'Santa Clara' },
-        { date: '2026-07-02', weekday: 'qui', time: '16:00', team1: '1º H', team2: '2º J', group: '—', phase: '16-avos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
-        { date: '2026-07-02', weekday: 'qui', time: '20:00', team1: '2º K', team2: '2º L', group: '—', phase: '16-avos', stadium: 'BMO Field', city: 'Toronto' },
-        { date: '2026-07-03', weekday: 'sex', time: '00:00', team1: '1º B', team2: '3º (E/F/G/I/J)', group: '—', phase: '16-avos', stadium: 'BC Place', city: 'Vancouver' },
-        { date: '2026-07-03', weekday: 'sex', time: '15:00', team1: '2º D', team2: '2º G', group: '—', phase: '16-avos', stadium: 'AT&T Stadium', city: 'Dallas' },
-        { date: '2026-07-03', weekday: 'sex', time: '19:00', team1: '1º J', team2: '2º H', group: '—', phase: '16-avos', stadium: 'Hard Rock Stadium', city: 'Miami' },
-        { date: '2026-07-03', weekday: 'sex', time: '22:30', team1: '1º K', team2: '3º (D/E/I/J/L)', group: '—', phase: '16-avos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+        // 32-avos
+        { id: 537417, date: '2026-06-28', weekday: 'dom', time: '16:00', team1: '2º A', team2: '2º B', group: '—', phase: '32-avos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { id: 537423, date: '2026-06-29', weekday: 'seg', time: '14:00', team1: '1º C', team2: '2º F', group: '—', phase: '32-avos', stadium: 'NRG Stadium', city: 'Houston' },
+        { id: 537415, date: '2026-06-29', weekday: 'seg', time: '17:30', team1: '1º E', team2: '3º (A/B/C/D/F)', group: '—', phase: '32-avos', stadium: 'Gillette Stadium', city: 'Boston' },
+        { id: 537418, date: '2026-06-29', weekday: 'seg', time: '22:00', team1: '1º F', team2: '2º C', group: '—', phase: '32-avos', stadium: 'Estádio BBVA', city: 'Monterrey' },
+        { id: 537424, date: '2026-06-30', weekday: 'ter', time: '14:00', team1: '2º E', team2: '2º I', group: '—', phase: '32-avos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { id: 537416, date: '2026-06-30', weekday: 'ter', time: '18:00', team1: '1º I', team2: '3º (C/D/F/G/H)', group: '—', phase: '32-avos', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { id: 537425, date: '2026-06-30', weekday: 'ter', time: '22:00', team1: '1º A', team2: '3º (C/E/F/H/I)', group: '—', phase: '32-avos', stadium: 'Estádio Azteca', city: 'Cidade do México' },
+        { id: 537426, date: '2026-07-01', weekday: 'qua', time: '13:00', team1: '1º L', team2: '3º (E/H/I/J/K)', group: '—', phase: '32-avos', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { id: 537422, date: '2026-07-01', weekday: 'qua', time: '17:00', team1: '1º G', team2: '3º (A/E/H/I/J)', group: '—', phase: '32-avos', stadium: 'Lumen Field', city: 'Seattle' },
+        { id: 537421, date: '2026-07-01', weekday: 'qua', time: '21:00', team1: '1º D', team2: '3º (B/E/F/I/J)', group: '—', phase: '32-avos', stadium: "Levi's Stadium", city: 'Santa Clara' },
+        { id: 537420, date: '2026-07-02', weekday: 'qui', time: '16:00', team1: '1º H', team2: '2º J', group: '—', phase: '32-avos', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { id: 537419, date: '2026-07-02', weekday: 'qui', time: '20:00', team1: '2º K', team2: '2º L', group: '—', phase: '32-avos', stadium: 'BMO Field', city: 'Toronto' },
+        { id: 537429, date: '2026-07-03', weekday: 'sex', time: '00:00', team1: '1º B', team2: '3º (E/F/G/I/J)', group: '—', phase: '32-avos', stadium: 'BC Place', city: 'Vancouver' },
+        { id: 537428, date: '2026-07-03', weekday: 'sex', time: '15:00', team1: '2º D', team2: '2º G', group: '—', phase: '32-avos', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { id: 537427, date: '2026-07-03', weekday: 'sex', time: '19:00', team1: '1º J', team2: '2º H', group: '—', phase: '32-avos', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { id: 537430, date: '2026-07-03', weekday: 'sex', time: '22:30', team1: '1º K', team2: '3º (D/E/I/J/L)', group: '—', phase: '32-avos', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
 
         // Oitavas
-        { date: '2026-07-04', weekday: 'sáb', time: '14:00', team1: 'Vencedor 73', team2: 'Vencedor 76', group: '—', phase: 'Oitavas', stadium: 'NRG Stadium', city: 'Houston' },
-        { date: '2026-07-04', weekday: 'sáb', time: '18:00', team1: 'Vencedor 75', team2: 'Vencedor 78', group: '—', phase: 'Oitavas', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
-        { date: '2026-07-05', weekday: 'dom', time: '17:00', team1: 'Vencedor 74', team2: 'Vencedor 77', group: '—', phase: 'Oitavas', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
-        { date: '2026-07-05', weekday: 'dom', time: '21:00', team1: 'Vencedor 79', team2: 'Vencedor 80', group: '—', phase: 'Oitavas', stadium: 'Estádio Azteca', city: 'Cidade do México' },
-        { date: '2026-07-06', weekday: 'seg', time: '16:00', team1: 'Vencedor 84', team2: 'Vencedor 83', group: '—', phase: 'Oitavas', stadium: 'AT&T Stadium', city: 'Dallas' },
-        { date: '2026-07-06', weekday: 'seg', time: '21:00', team1: 'Vencedor 82', team2: 'Vencedor 81', group: '—', phase: 'Oitavas', stadium: 'Lumen Field', city: 'Seattle' },
-        { date: '2026-07-07', weekday: 'ter', time: '13:00', team1: 'Vencedor 87', team2: 'Vencedor 86', group: '—', phase: 'Oitavas', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
-        { date: '2026-07-07', weekday: 'ter', time: '17:00', team1: 'Vencedor 85', team2: 'Vencedor 88', group: '—', phase: 'Oitavas', stadium: 'BC Place', city: 'Vancouver' },
+        { id: 537376, date: '2026-07-04', weekday: 'sáb', time: '14:00', team1: 'Vencedor 73', team2: 'Vencedor 76', group: '—', phase: 'Oitavas', stadium: 'NRG Stadium', city: 'Houston' },
+        { id: 537375, date: '2026-07-04', weekday: 'sáb', time: '18:00', team1: 'Vencedor 75', team2: 'Vencedor 78', group: '—', phase: 'Oitavas', stadium: 'Lincoln Financial Field', city: 'Filadélfia' },
+        { id: 537377, date: '2026-07-05', weekday: 'dom', time: '17:00', team1: 'Vencedor 74', team2: 'Vencedor 77', group: '—', phase: 'Oitavas', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { id: 537378, date: '2026-07-05', weekday: 'dom', time: '21:00', team1: 'Vencedor 79', team2: 'Vencedor 80', group: '—', phase: 'Oitavas', stadium: 'Estádio Azteca', city: 'Cidade do México' },
+        { id: 537379, date: '2026-07-06', weekday: 'seg', time: '16:00', team1: 'Vencedor 84', team2: 'Vencedor 83', group: '—', phase: 'Oitavas', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { id: 537380, date: '2026-07-06', weekday: 'seg', time: '21:00', team1: 'Vencedor 82', team2: 'Vencedor 81', group: '—', phase: 'Oitavas', stadium: 'Lumen Field', city: 'Seattle' },
+        { id: 537381, date: '2026-07-07', weekday: 'ter', time: '13:00', team1: 'Vencedor 87', team2: 'Vencedor 86', group: '—', phase: 'Oitavas', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { id: 537382, date: '2026-07-07', weekday: 'ter', time: '17:00', team1: 'Vencedor 85', team2: 'Vencedor 88', group: '—', phase: 'Oitavas', stadium: 'BC Place', city: 'Vancouver' },
 
         // Quartas
-        { date: '2026-07-09', weekday: 'qui', time: '17:00', team1: 'Vencedor 90', team2: 'Vencedor 89', group: '—', phase: 'Quartas', stadium: 'Gillette Stadium', city: 'Boston' },
-        { date: '2026-07-10', weekday: 'sex', time: '16:00', team1: 'Vencedor 93', team2: 'Vencedor 94', group: '—', phase: 'Quartas', stadium: 'SoFi Stadium', city: 'Los Angeles' },
-        { date: '2026-07-11', weekday: 'sáb', time: '18:00', team1: 'Vencedor 91', team2: 'Vencedor 92', group: '—', phase: 'Quartas', stadium: 'Hard Rock Stadium', city: 'Miami' },
-        { date: '2026-07-11', weekday: 'sáb', time: '22:00', team1: 'Vencedor 95', team2: 'Vencedor 96', group: '—', phase: 'Quartas', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
+        { id: 537383, date: '2026-07-09', weekday: 'qui', time: '17:00', team1: 'Vencedor 90', team2: 'Vencedor 89', group: '—', phase: 'Quartas', stadium: 'Gillette Stadium', city: 'Boston' },
+        { id: 537384, date: '2026-07-10', weekday: 'sex', time: '16:00', team1: 'Vencedor 93', team2: 'Vencedor 94', group: '—', phase: 'Quartas', stadium: 'SoFi Stadium', city: 'Los Angeles' },
+        { id: 537385, date: '2026-07-11', weekday: 'sáb', time: '18:00', team1: 'Vencedor 91', team2: 'Vencedor 92', group: '—', phase: 'Quartas', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { id: 537386, date: '2026-07-11', weekday: 'sáb', time: '22:00', team1: 'Vencedor 95', team2: 'Vencedor 96', group: '—', phase: 'Quartas', stadium: 'Arrowhead Stadium', city: 'Kansas City' },
 
         // Semifinal
-        { date: '2026-07-14', weekday: 'ter', time: '16:00', team1: 'Vencedor 97', team2: 'Vencedor 98', group: '—', phase: 'Semifinal', stadium: 'AT&T Stadium', city: 'Dallas' },
-        { date: '2026-07-15', weekday: 'qua', time: '16:00', team1: 'Vencedor 99', team2: 'Vencedor 100', group: '—', phase: 'Semifinal', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+        { id: 537387, date: '2026-07-14', weekday: 'ter', time: '16:00', team1: 'Vencedor 97', team2: 'Vencedor 98', group: '—', phase: 'Semifinal', stadium: 'AT&T Stadium', city: 'Dallas' },
+        { id: 537388, date: '2026-07-15', weekday: 'qua', time: '16:00', team1: 'Vencedor 99', team2: 'Vencedor 100', group: '—', phase: 'Semifinal', stadium: 'Mercedes-Benz Stadium', city: 'Atlanta' },
 
         // 3º lugar
-        { date: '2026-07-18', weekday: 'sáb', time: '18:00', team1: 'Perdedor 101', team2: 'Perdedor 102', group: '—', phase: '3º lugar', stadium: 'Hard Rock Stadium', city: 'Miami' },
+        { id: 537389, date: '2026-07-18', weekday: 'sáb', time: '18:00', team1: 'Perdedor 101', team2: 'Perdedor 102', group: '—', phase: '3º lugar', stadium: 'Hard Rock Stadium', city: 'Miami' },
 
         // Final
-        { date: '2026-07-19', weekday: 'dom', time: '16:00', team1: 'Vencedor 101', team2: 'Vencedor 102', group: '—', phase: 'Final', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
+        { id: 537390, date: '2026-07-19', weekday: 'dom', time: '16:00', team1: 'Vencedor 101', team2: 'Vencedor 102', group: '—', phase: 'Final', stadium: 'MetLife Stadium', city: 'New York/New Jersey' },
       ];
 
       // ===== helpers =====
@@ -1554,7 +1558,7 @@
       }
 
       function getUniquePhases() {
-        const ORDEM = ['Fase de grupos', '16-avos', 'Oitavas', 'Quartas', 'Semifinal', '3º lugar', 'Final'];
+        const ORDEM = ['Fase de grupos', '32-avos', 'Oitavas', 'Quartas', 'Semifinal', '3º lugar', 'Final'];
         const presentes = new Set(matches.map(function(m) { return m.phase; }));
         return ORDEM.filter(function(p) { return presentes.has(p); });
       }
@@ -1824,6 +1828,27 @@
         });
       }
 
+      // Helper: busca dados da API para um jogo de mata-mata (por id, com fallback por data+hora).
+      // Retorna o objeto { status, placar, casa, fora } ou undefined.
+      // Usado tanto em renderCard quanto em render() para checar temTimeReal, evitando duplicação.
+      function dadosVivoDeMataMataPorMatch(match) {
+        if (match.id == null) return undefined;
+        let dados = placaresMataMata.get(match.id);
+        if (dados === undefined) {
+          // Fallback por data+hora (rede de segurança: protege contra renumeração de ids)
+          dados = placaresMataMataHora.get(match.date + '|' + match.time);
+        }
+        return dados;
+      }
+
+      // Helper: determina se um jogo de mata-mata tem times reais definidos pela API.
+      // Retorna true quando os campos casa+fora vieram da API (não-null), qualquer fase.
+      function temTimeRealDaAPI(match) {
+        if (match.phase === 'Fase de grupos') return false;
+        const dados = dadosVivoDeMataMataPorMatch(match);
+        return dados != null && dados.casa != null && dados.fora != null;
+      }
+
       function renderCard(match) {
         const phaseLabel = match.phase === 'Fase de grupos'
           ? 'Grupo ' + match.group
@@ -1831,9 +1856,17 @@
 
         const brasilClass = match.brasil === true ? ' match-card--brasil' : '';
 
-        // Busca dados ao vivo do Map de placares (só jogos de grupo com times definidos)
-        const dadosVivo = placares.get(chaveJogo(match.team1, match.team2, match.date));
+        // Determina dadosVivo: fonte unificada de status/placar/times reais para ambos os tipos.
+        // Jogos de grupo: busca por nome+data no Map `placares`.
+        // Jogos de mata-mata: usa o helper (por id, com fallback por data+hora).
+        let dadosVivo;
+        if (match.phase === 'Fase de grupos') {
+          dadosVivo = placares.get(chaveJogo(match.team1, match.team2, match.date));
+        } else {
+          dadosVivo = dadosVivoDeMataMataPorMatch(match);
+        }
 
+        // Bloco de tempo: mesma lógica visual para grupo e mata-mata
         let blocoTempo;
         if (dadosVivo && dadosVivo.placar &&
             (dadosVivo.status === 'FINISHED' || dadosVivo.status === 'AWARDED')) {
@@ -1855,19 +1888,25 @@
             '</span>' +
             '</div>';
         } else {
-          // Comportamento padrão: horário
+          // Comportamento padrão: horário (inclui TIMED/SCHEDULED e mata-mata sem placar)
           blocoTempo = '<div class="match-card__time">' + timeLabel(match.time) + '</div>';
         }
 
-        // Projeção dos 16-avos: substitui rótulos de posição pelos nomes projetados.
-        // Só aplicado quando standingsGrupos está disponível. Times reais (fase mata-mata
-        // com casa/fora preenchidos) têm prioridade e não recebem o marcador de projeção.
-        let team1Html = match.team1;
-        let team2Html = match.team2;
+        // Nomes dos times: precedência para mata-mata
+        // 1. Time real da API (id casou E casa+fora definidos) → sem itálico, sem *, sem tooltip
+        // 2. Projeção dos 32-avos (só para phase === '32-avos' e projecoesCache disponível)
+        // 3. Rótulo cru (team1/team2 estático)
+        let team1Html, team2Html;
 
-        if (match.phase === '16-avos' && projecoesCache) {
+        const temTimeReal = temTimeRealDaAPI(match);
+
+        if (temTimeReal) {
+          // Caso 1: times reais vindos da API
+          team1Html = '<span class="match-card__team">' + dadosVivo.casa + '</span>';
+          team2Html = '<span class="match-card__team">' + dadosVivo.fora + '</span>';
+        } else if (match.phase === '32-avos' && projecoesCache) {
+          // Caso 2: projeção pela classificação (só 32-avos sem time real definido)
           const renderSlot = function(rotulo) {
-            // Guard futuro: time real virá de outra fonte; por ora team1/2 são sempre rótulos
             const nomeProjetado = projecoesCache[rotulo];
             if (nomeProjetado) {
               return '<span class="match-card__team match-card__team--projetado"' +
@@ -1877,10 +1916,10 @@
             }
             return '<span class="match-card__team">' + rotulo + '</span>';
           };
-
           team1Html = renderSlot(match.team1);
           team2Html = renderSlot(match.team2);
         } else {
+          // Caso 3: rótulo cru (Oitavas+, ou 32-avos sem projeção e sem time real)
           team1Html = '<span class="match-card__team">' + match.team1 + '</span>';
           team2Html = '<span class="match-card__team">' + match.team2 + '</span>';
         }
@@ -1924,7 +1963,7 @@
               <span class="day-header__today">HOJE</span>`
           : '';
 
-        // Legenda do * de projeção: exibida apenas no primeiro dia de 16-avos quando ativas
+        // Legenda do * de projeção: exibida apenas no primeiro dia de 32-avos quando ativas
         const notaProjecao = showProjecaoNota
           ? '<p class="projecao-nota" aria-label="Asterisco indica projeção pela classificação atual">* projeção pela classificação atual</p>'
           : '';
@@ -1946,7 +1985,7 @@
       function render() {
         const hojeISO = hojeBrasiliaISO();
 
-        // Recomputa projeções dos 16-avos (barato: roda 1x por render, não 1x por card)
+        // Recomputa projeções dos 32-avos (barato: roda 1x por render, não 1x por card)
         // calcularClassificacaoAoVivo é a fonte única: usa placares ao vivo + fallback do standings
         {
           const grupos = calcularClassificacaoAoVivo(matches, placares, standingsGrupos);
@@ -1985,10 +2024,17 @@
           ? days.filter(function(d) { return !diaEncerrado(d); })
           : days;
 
-        // Primeiro dia visível com jogos 16-avos (para mostrar legenda de projeção uma só vez)
-        const primeiroDia16avos = projecoesCache
+        // Primeiro dia visível com ao menos um card de 32-avos que REALMENTE exibe projeção (*).
+        // Um card exibe * apenas quando: phase === '32-avos' E sem time real da API E
+        // projecoesCache resolve ao menos um dos slots. Avaliado dinamicamente a cada render()
+        // porque placaresMataMata só é populado após o fetch de matches.json.
+        const primeiroDia32avos = projecoesCache
           ? (days.find(function(d) {
-              return (byDate[d] || []).some(function(m) { return m.phase === '16-avos'; });
+              return (byDate[d] || []).some(function(m) {
+                return m.phase === '32-avos' &&
+                       !temTimeRealDaAPI(m) &&
+                       (projecoesCache[m.team1] || projecoesCache[m.team2]);
+              });
             }) || null)
           : null;
 
@@ -2030,7 +2076,7 @@
 
           const conteudoEncerrados = diasEncerrados.map(function(date) {
             // Dias encerrados nunca recebem badge HOJE
-            return renderDayGroup(date, byDate[date], false, date === primeiroDia16avos);
+            return renderDayGroup(date, byDate[date], false, date === primeiroDia32avos);
           }).join('');
 
           const blocoEncerrados =
@@ -2046,14 +2092,14 @@
             '</div>';
 
           const conteudoVisiveis = diasVisiveis.map(function(date) {
-            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia16avos);
+            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia32avos);
           }).join('');
 
           html = blocoEncerrados + conteudoVisiveis;
         } else {
           // Sem filtro e sem dias encerrados, ou com filtro: render normal com dataAtual como badge HOJE
           html = days.map(function(date) {
-            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia16avos);
+            return renderDayGroup(date, byDate[date], date === dataAtual, date === primeiroDia32avos);
           }).join('');
         }
 
@@ -2108,18 +2154,45 @@
 
             if (!data || !Array.isArray(data.jogos)) return;
 
-            // Indexa apenas jogos de grupo com times definidos (mata-mata tem casa/fora null)
+            // Indexa jogos por tipo: grupo → placares por nome+data; mata-mata → placaresMataMata por id
             for (const jogo of data.jogos) {
-              if (jogo.grupo === null || jogo.grupo === undefined) continue;
-              if (!jogo.casa || !jogo.fora) continue;
               if (!jogo.utcDate) continue;
 
               const dataBrasilia = utcParaDataBrasilia(jogo.utcDate);
-              const chave = chaveJogo(jogo.casa, jogo.fora, dataBrasilia);
-              placares.set(chave, {
-                status: jogo.status,
-                placar: jogo.placar,  // { casa, fora } ou null
-              });
+
+              if (jogo.grupo === null || jogo.grupo === undefined) {
+                // Jogo de mata-mata: indexar por id
+                if (!jogo.id) continue;
+                const entrada = {
+                  status: jogo.status,
+                  placar: jogo.placar,  // { casa, fora } ou null
+                  casa: jogo.casa || null,
+                  fora: jogo.fora || null,
+                };
+                placaresMataMata.set(jogo.id, entrada);
+
+                // Índice auxiliar por dataBrasilia+hora (extrai HH:MM da utcDate em BRT)
+                if (jogo.casa && jogo.fora) {
+                  // Hora Brasília: calcular a partir do utcDate
+                  try {
+                    const dt = new Date(jogo.utcDate);
+                    const brtMs = dt.getTime() - 3 * 3600000;
+                    const brtDt = new Date(brtMs);
+                    const hh = String(brtDt.getUTCHours()).padStart(2, '0');
+                    const mm = String(brtDt.getUTCMinutes()).padStart(2, '0');
+                    const chaveHora = dataBrasilia + '|' + hh + ':' + mm;
+                    placaresMataMataHora.set(chaveHora, entrada);
+                  } catch (_) { /* ignora */ }
+                }
+              } else {
+                // Jogo de grupo: indexar por nome+data (comportamento original)
+                if (!jogo.casa || !jogo.fora) continue;
+                const chave = chaveJogo(jogo.casa, jogo.fora, dataBrasilia);
+                placares.set(chave, {
+                  status: jogo.status,
+                  placar: jogo.placar,  // { casa, fora } ou null
+                });
+              }
             }
 
             // Guarda o timestamp para a linha de transparência
@@ -2138,8 +2211,8 @@
         carregarPlacares();
       })();
 
-      // ===== standings para a aba Jogos (projeção 16-avos) =====
-      // Carrega standings.json após o primeiro render. Falha silenciosa: 16-avos ficam com
+      // ===== standings para a aba Jogos (projeção 32-avos) =====
+      // Carrega standings.json após o primeiro render. Falha silenciosa: 32-avos ficam com
       // rótulos originais. A aba Grupos reutiliza os dados já em standingsGrupos (sem 2º fetch).
       (function() {
         async function carregarStandings() {
@@ -2149,7 +2222,7 @@
             const data = await res.json();
             if (!data || typeof data.grupos !== 'object') return;
             standingsGrupos = data;
-            render(); // re-renderiza 16-avos com projeções
+            render(); // re-renderiza 32-avos com projeções
 
             // Se a aba Grupos já foi aberta, recomputa com os novos standings
             if (atualizarAbaGrupos) atualizarAbaGrupos();
@@ -2361,7 +2434,7 @@
       }
 
       /**
-       * Resolve rótulos dos 16-avos (1º X, 2º X, 3º (A/B/...)) para nomes de seleções.
+       * Resolve rótulos dos 32-avos (1º X, 2º X, 3º (A/B/...)) para nomes de seleções.
        * Retorna objeto { [rotulo]: nomeDaSeleção } só para os rótulos resolvidos.
        * Rótulo não resolvido → ausente no retorno.
        *
@@ -2504,7 +2577,7 @@
             standingsGrupos = data;
             // Expõe o hook para re-render quando placares/standings atualizarem
             atualizarAbaGrupos = function() { renderGrupos(standingsGrupos); };
-            render(); // re-renderiza 16-avos com projeções
+            render(); // re-renderiza 32-avos com projeções
             renderGrupos(data);
           } catch (err) {
             console.warn('[Copa 2026] Erro ao carregar standings:', err);
