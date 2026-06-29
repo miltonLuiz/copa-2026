@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-29T21:30:17.749Z",
+  "atualizadoEm": "2026-06-29T21:45:14.853Z",
   "jogos": [
     {
       "id": 537327,
@@ -970,7 +970,7 @@
       "utcDate": "2026-06-29T20:30:00Z",
       "casa": "Alemanha",
       "fora": "Paraguai",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 0,
         "fora": 1
