@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-06-30T21:55:11.423Z",
+  "atualizadoEm": "2026-06-30T22:00:19.149Z",
   "jogos": [
     {
       "id": 537327,
@@ -1011,7 +1011,7 @@
       "fora": "Suécia",
       "status": "PAUSED",
       "placar": {
-        "casa": 1,
+        "casa": 0,
         "fora": 0
       }
     },
