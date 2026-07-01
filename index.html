@@ -1244,6 +1244,21 @@
         border: 1px solid var(--muted);
       }
 
+      /* Slot ainda não decidido, mas o jogo-pai já tem os dois times definidos:
+         mostra "Bandeira Nome / Bandeira Nome" em tom discreto (provável/não
+         confirmado) — mais claro que TBD, mas sem o destaque de um time real. */
+      .mm-time--possivel {
+        color: var(--muted);
+        font-weight: 500;
+        font-size: 12px;
+      }
+
+      .mm-time--possivel .mm-time__nome {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       /* Vencedor: nome e placar em destaque */
       .mm-time--vencedor {
         color: var(--accent);
@@ -2971,6 +2986,17 @@
           return tipo === 'vencedor' ? vencedor : perdedor;
         }
 
+        // Dado o id de um jogo-pai (ainda não decidido), retorna os dois times
+        // que já são conhecidos para aquele jogo — { casa, fora } — quando AMBOS
+        // já estão definidos com nomes reais. Retorna null se o pai ainda não tem
+        // os dois times (um ou ambos nulos/indefinidos), caso em que o slot filho
+        // deve continuar como TBD (sem propagar mais um nível de profundidade).
+        function resolverPossiveisPai(idPai) {
+          const dados = placaresMataMata.get(idPai);
+          if (!dados || !dados.casa || !dados.fora) return null;
+          return { casa: dados.casa, fora: dados.fora };
+        }
+
         // Resolve o nome exibido de um lado (casa ou fora) de um jogo do bracket.
         // Prioridade: 1) nome real da própria API para este jogo; 2) resolução via
         // resultado do jogo-pai (quando o rótulo é "Vencedor/Perdedor NN"); 3) null (TBD).
@@ -2987,6 +3013,21 @@
           }
 
           return null; // TBD
+        }
+
+        // Quando um lado ainda é TBD (resolverNomeLado retornou null), tenta
+        // achar os dois times "possíveis" que disputam o jogo-pai que alimenta
+        // esse slot — só quando o pai já tem os dois times definidos (casa E
+        // fora não-nulos). Um único nível de profundidade: não resolve os
+        // possíveis do pai do pai. Retorna { casa, fora } ou null (mantém TBD).
+        function resolverPossiveisLado(rotulo, topologia) {
+          const ref = parseRotuloReferencia(rotulo);
+          if (!ref) return null;
+
+          const idPai = topologia.numeroParaId[ref.numero];
+          if (idPai == null) return null;
+
+          return resolverPossiveisPai(idPai);
         }
 
         // Formata a data/hora relativa em PT (Brasília), a partir do utcDate ISO.
@@ -3019,10 +3060,40 @@
           }
         }
 
+        // Monta o HTML de uma linha .mm-time--possivel: os dois times do jogo-pai
+        // ainda não decidido, "🏳 Casa / 🏳 Fora", numa única linha discreta.
+        // O conteúdo visível é inserido via textContent (elemento temporário) e o
+        // aria-label via setAttribute — ambos escapam os nomes, evitando injeção.
+        function renderLinhaPossivel(nomeCasa, nomeFora) {
+          const textoVisivel =
+            (bandeira(nomeCasa) ? bandeira(nomeCasa) + ' ' : '') + nomeCasa +
+            ' / ' +
+            (bandeira(nomeFora) ? bandeira(nomeFora) + ' ' : '') + nomeFora;
+
+          const nomeEl = document.createElement('span');
+          nomeEl.className = 'mm-time__nome';
+          nomeEl.textContent = textoVisivel;
+
+          const linhaEl = document.createElement('div');
+          linhaEl.className = 'mm-time mm-time--possivel';
+          linhaEl.setAttribute('aria-label', 'Provável: ' + nomeCasa + ' ou ' + nomeFora);
+          linhaEl.innerHTML =
+            '<span class="mm-time__bandeira" aria-hidden="true"></span>' +
+            nomeEl.outerHTML;
+
+          return linhaEl.outerHTML;
+        }
+
         // Monta o HTML de uma linha .mm-time (bandeira + nome + placar/pênaltis).
-        // nome === null → TBD (escudo cinza). vencedor === true → destaque.
-        function renderLinhaTime(nome, placarNum, penaltisNum, vencedor) {
+        // nome === null → TBD (escudo cinza), a menos que `possiveis` seja
+        // fornecido — { casa, fora } com os dois times do jogo-pai já definido —
+        // caso em que mostra "🏳 Casa / 🏳 Fora" em tom discreto (não confirmado).
+        // vencedor === true → destaque.
+        function renderLinhaTime(nome, placarNum, penaltisNum, vencedor, possiveis) {
           if (nome == null) {
+            if (possiveis && possiveis.casa && possiveis.fora) {
+              return renderLinhaPossivel(possiveis.casa, possiveis.fora);
+            }
             return '<div class="mm-time mm-time--tbd">' +
               '<span class="mm-time__bandeira" aria-hidden="true"></span>' +
               '<span class="mm-time__nome">TBD</span>' +
@@ -3074,6 +3145,11 @@
 
             const nomeCasa = resolverNomeLado(info.team1, nomeCasaApi, topologia);
             const nomeFora = resolverNomeLado(info.team2, nomeForaApi, topologia);
+
+            // Só relevante quando o lado ainda é TBD — usado no branch "sem placar"
+            // mais abaixo pra mostrar "Casa / Fora" em vez de "TBD" puro.
+            const possiveisCasa = nomeCasa == null ? resolverPossiveisLado(info.team1, topologia) : null;
+            const possiveisFora = nomeFora == null ? resolverPossiveisLado(info.team2, topologia) : null;
 
             const temBrasil = nomeCasa === 'Brasil' || nomeFora === 'Brasil';
             const brasilClass = temBrasil ? ' mm-jogo--brasil' : '';
@@ -3134,8 +3210,8 @@
                 '</span>' +
                 '</div>';
             } else {
-              linhaCasaHtml = renderLinhaTime(nomeCasa, null, null, false);
-              linhaForaHtml = renderLinhaTime(nomeFora, null, null, false);
+              linhaCasaHtml = renderLinhaTime(nomeCasa, null, null, false, possiveisCasa);
+              linhaForaHtml = renderLinhaTime(nomeFora, null, null, false, possiveisFora);
               infoHtml = '<div class="mm-jogo__info">' +
                 '<span class="mm-jogo__data">' + dataLabel + '</span>' +
                 '</div>';
