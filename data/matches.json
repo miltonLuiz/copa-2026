@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T15:45:42.324Z",
+  "atualizadoEm": "2026-07-01T16:10:16.682Z",
   "jogos": [
     {
       "id": 537327,
@@ -1036,7 +1036,10 @@
       "casa": "Inglaterra",
       "fora": "RD Congo",
       "status": "TIMED",
-      "placar": null
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537422,
