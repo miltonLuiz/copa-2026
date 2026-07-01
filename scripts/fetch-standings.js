@@ -448,6 +448,15 @@ function construirMatches(data) {
       }
     }
 
+    // Pênaltis — só presente quando o mata-mata é decidido nessa disputa.
+    // A API grava score.penalties.home/away; ausente/null em qualquer um dos dois
+    // lados vira null (jogo decidido no tempo normal ou ainda não finalizado).
+    let penaltis = null;
+    if (match.score && match.score.penalties &&
+        match.score.penalties.home != null && match.score.penalties.away != null) {
+      penaltis = { casa: match.score.penalties.home, fora: match.score.penalties.away };
+    }
+
     return {
       id:      match.id,
       fase:    fase,
@@ -457,6 +466,7 @@ function construirMatches(data) {
       fora:    fora,
       status:  match.status,
       placar:  placar,
+      penaltis: penaltis,
     };
   });
 
@@ -481,6 +491,8 @@ function construirMatches(data) {
  *             um status já gravado (SCHEDULED/IN_PLAY/FINISHED/etc.).
  *   - placar:  se n.placar não-null → usa n.placar (dado novo tem precedência).
  *              se n.placar null e s.placar não-null → mantém s.placar (anti-flip-flop).
+ *   - penaltis: mesma regra do placar — só avança, nunca regride. Jogos salvos antes
+ *              desta etapa não têm o campo (undefined); tratado como null (sem pênaltis).
  *   - casa/fora/fase/grupo/utcDate: prefere n quando não-null; cai pra s quando n traz null.
  *
  * Jogos presentes só no salvo (ausentes nos novos) NÃO são reintroduzidos.
@@ -510,6 +522,12 @@ function mesclarMatches(novosJogos, salvosJogos) {
     // n sem placar + s tem placar → mantém s (protege contra null temporário)
     const placar = (n.placar !== null) ? n.placar : s.placar;
 
+    // ── Pênaltis: mesma regra "só avança, nunca regride" do placar ───────────
+    // n.penaltis pode vir undefined em jogos salvos antes desta etapa — trata
+    // como null (?? converteria undefined também, mas mantemos != null explícito
+    // pra ficar simétrico com o resto do arquivo).
+    const penaltis = (n.penaltis != null) ? n.penaltis : (s.penaltis != null ? s.penaltis : null);
+
     // ── Campos de identidade: prefere n; cai pra s se n vier null ────────────
     // Sticky conservador: evita times sumindo no mata-mata quando a API
     // retorna homeTeam/awayTeam sem nome em algumas execuções.
@@ -519,7 +537,7 @@ function mesclarMatches(novosJogos, salvosJogos) {
     const grupo   = (n.grupo   !== null && n.grupo   !== undefined) ? n.grupo   : s.grupo;
     const utcDate = (n.utcDate !== null && n.utcDate !== undefined) ? n.utcDate : s.utcDate;
 
-    return { id: n.id, fase, grupo, utcDate, casa, fora, status, placar };
+    return { id: n.id, fase, grupo, utcDate, casa, fora, status, placar, penaltis };
   });
 }
 

@@ -1107,6 +1107,277 @@
           width: 34%;
         }
       }
+
+      /* ===== painel-mata-mata ===== */
+
+      #painel-mata-mata {
+        padding-top: 24px;
+        outline: none;
+      }
+
+      #painel-mata-mata:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      .mm-nota {
+        font-family: 'Manrope', sans-serif;
+        font-size: 13px;
+        color: var(--muted);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-block-end: 24px;
+      }
+
+      /* Wrapper com scroll horizontal — o bracket é bem mais largo que a tela */
+      .mm-scroll {
+        position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 8px;
+      }
+
+      .mm-scroll:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      .mm-bracket {
+        display: flex;
+        gap: 32px;
+        align-items: stretch;
+        min-width: 1180px;
+        padding: 8px 4px;
+      }
+
+      .mm-coluna {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 12px;
+        width: 220px;
+        flex-shrink: 0;
+      }
+
+      .mm-coluna h3 {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-align: center;
+        margin-block-end: 4px;
+      }
+
+      /* Card de jogo do chaveamento */
+      .mm-jogo {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-family: 'Manrope', sans-serif;
+      }
+
+      .mm-jogo--brasil {
+        border-left: 3px solid var(--br);
+      }
+
+      .mm-time {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .mm-time + .mm-time {
+        border-top: 1px dashed var(--border);
+      }
+
+      .mm-time__bandeira {
+        flex-shrink: 0;
+        font-size: 15px;
+        line-height: 1;
+      }
+
+      .mm-time__nome {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .mm-time__placar {
+        flex-shrink: 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .mm-time__penaltis {
+        font-size: 11px;
+        color: var(--muted);
+        margin-left: 2px;
+      }
+
+      /* Time ainda não definido (TBD) — escudo cinza genérico via CSS */
+      .mm-time--tbd {
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .mm-time--tbd .mm-time__bandeira {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        background: var(--border);
+        border: 1px solid var(--muted);
+      }
+
+      /* Vencedor: nome e placar em destaque */
+      .mm-time--vencedor {
+        color: var(--accent);
+      }
+
+      .mm-time--vencedor .mm-time__placar {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .mm-jogo__info {
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .mm-jogo__data {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+      }
+
+      .mm-jogo__status {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      /* Card isolado do 3º lugar, perto da Final */
+      .mm-terceiro {
+        margin-top: 24px;
+        max-width: 220px;
+      }
+
+      .mm-terceiro h3 {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-block-end: 8px;
+      }
+
+      /* Indicador de scroll horizontal (mobile) */
+      .mm-scroll-hint {
+        display: none;
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        font-size: 20px;
+        color: var(--accent-2);
+        pointer-events: none;
+        animation: mm-piscar 1.6s ease-in-out infinite;
+      }
+
+      @keyframes mm-piscar {
+        0%, 100% { opacity: 0.3; }
+        50%       { opacity: 1; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mm-scroll-hint {
+          animation: none;
+        }
+      }
+
+      /* ===== conectores do chaveamento (CSS puro, a partir das Oitavas) ===== */
+      /* Estrutura: stub horizontal saindo à esquerda do card + segmento vertical
+         unindo o par de pais. Colunas anteriores às Oitavas não recebem conector
+         (32-avos não tem "pais" no bracket). */
+
+      .mm-coluna[data-fase="oitavas"] .mm-jogo::before,
+      .mm-coluna[data-fase="quartas"] .mm-jogo::before,
+      .mm-coluna[data-fase="semifinal"] .mm-jogo::before,
+      .mm-coluna[data-fase="final"] .mm-jogo::before {
+        content: '';
+        position: absolute;
+        left: -16px;
+        top: 50%;
+        width: 16px;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .mm-coluna[data-fase="oitavas"] .mm-jogo:nth-child(odd)::after,
+      .mm-coluna[data-fase="quartas"] .mm-jogo:nth-child(odd)::after,
+      .mm-coluna[data-fase="semifinal"] .mm-jogo:nth-child(odd)::after {
+        content: '';
+        position: absolute;
+        left: -16px;
+        top: 50%;
+        width: 1px;
+        height: calc(50% + 30px);
+        background: var(--border);
+      }
+
+      .mm-coluna[data-fase="oitavas"] .mm-jogo:nth-child(even)::after,
+      .mm-coluna[data-fase="quartas"] .mm-jogo:nth-child(even)::after,
+      .mm-coluna[data-fase="semifinal"] .mm-jogo:nth-child(even)::after {
+        content: '';
+        position: absolute;
+        left: -16px;
+        bottom: 50%;
+        width: 1px;
+        height: calc(50% + 30px);
+        background: var(--border);
+      }
+
+      @media (max-width: 768px) {
+        .mm-scroll-hint {
+          display: block;
+        }
+
+        /* No mobile o scroll horizontal domina — simplifica removendo os conectores */
+        .mm-coluna[data-fase="oitavas"] .mm-jogo::before,
+        .mm-coluna[data-fase="quartas"] .mm-jogo::before,
+        .mm-coluna[data-fase="semifinal"] .mm-jogo::before,
+        .mm-coluna[data-fase="final"] .mm-jogo::before,
+        .mm-coluna[data-fase="oitavas"] .mm-jogo::after,
+        .mm-coluna[data-fase="quartas"] .mm-jogo::after,
+        .mm-coluna[data-fase="semifinal"] .mm-jogo::after {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1126,6 +1397,7 @@
         <div role="tablist" aria-label="Seções">
           <button role="tab" id="tab-jogos" aria-selected="true" aria-controls="painel-jogos" class="tabs__tab tabs__tab--active">Jogos</button>
           <button role="tab" id="tab-grupos" aria-selected="false" aria-controls="painel-grupos" tabindex="-1" class="tabs__tab">Grupos</button>
+          <button role="tab" id="tab-mata-mata" aria-selected="false" aria-controls="painel-mata-mata" tabindex="-1" class="tabs__tab">Mata-mata</button>
         </div>
       </nav>
 
@@ -1201,6 +1473,15 @@
         <div id="grupos-conteudo"><p class="grupos__loading">Carregando classificação…</p></div>
       </div>
 
+      <div id="painel-mata-mata" role="tabpanel" aria-labelledby="tab-mata-mata" tabindex="0" hidden>
+        <p class="mm-nota" id="mata-mata-nota">Chaveamento do mata-mata, das 32-avos à Final. Times a definir aparecem como TBD.</p>
+        <div class="mm-scroll" role="group" aria-label="Chaveamento" tabindex="0">
+          <div class="mm-bracket" id="mm-bracket"></div>
+          <div class="mm-terceiro" id="mm-terceiro"></div>
+        </div>
+        <div class="mm-scroll-hint" aria-hidden="true">›</div>
+      </div>
+
     </main>
 
     <!-- ===== install banners ===== -->
@@ -1267,6 +1548,10 @@
       // É atribuído dentro do IIFE da aba Grupos após o primeiro carregamento.
       // null enquanto a aba Grupos ainda não foi aberta.
       let atualizarAbaGrupos = null;
+
+      // Hook análogo para a aba Mata-mata (chaveamento). Atribuído dentro do IIFE
+      // do bracket na primeira ativação da aba. null enquanto não foi aberta.
+      let atualizarAbaMataMata = null;
 
       // ===== dados para projeção dos 32-avos =====
       // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
@@ -2184,6 +2469,7 @@
                   placar: jogo.placar,  // { casa, fora } ou null
                   casa: jogo.casa || null,
                   fora: jogo.fora || null,
+                  penaltis: jogo.penaltis || null,  // { casa, fora } ou null — usado só na aba Mata-mata
                 };
                 placaresMataMata.set(jogo.id, entrada);
 
@@ -2219,6 +2505,9 @@
 
             // Se a aba Grupos já foi aberta, recomputa com os novos placares
             if (atualizarAbaGrupos) atualizarAbaGrupos();
+
+            // Se a aba Mata-mata já foi aberta, recomputa com os novos placares
+            if (atualizarAbaMataMata) atualizarAbaMataMata();
           } catch (_) {
             // Rede offline, JSON inválido, etc. — silencioso; aba permanece como hoje
           }
@@ -2513,37 +2802,453 @@
         return resultado;
       }
 
+      // ===== aba Mata-mata (chaveamento) =====
+      // IIFE isolado: não toca em nada das abas Jogos/Grupos. Reusa placaresMataMata
+      // e placaresMeta (já carregados por carregarPlacares()); não faz fetch próprio.
+      // Definido ANTES do IIFE de abas para que window.renderMataMata já exista
+      // quando o deep-link inicial (#mata-mata) chamar ativarAba() na carga da página.
+      (function() {
+        // Ordem das fases no bracket — usada tanto pra renderizar colunas quanto
+        // pra derivar a numeração sequencial dos jogos (73..104) a partir do array `matches`.
+        const FASES_MM_ORDEM = ['32-avos', 'Oitavas', 'Quartas', 'Semifinal', '3º lugar', 'Final'];
+
+        // Mapa nome da seleção (PT, como aparece em matches.json) → emoji de bandeira.
+        // Cobre as 48 seleções da fase de grupos. Inglaterra/Escócia usam o emoji de
+        // bandeira por subdivisão (suporte varia por fonte/SO — fallback gracioso: se
+        // não renderizar, o navegador mostra um caractere substituto, nunca quebra).
+        const BANDEIRAS = {
+          'México': '🇲🇽',
+          'África do Sul': '🇿🇦',
+          'Coreia do Sul': '🇰🇷',
+          'República Tcheca': '🇨🇿',
+          'Canadá': '🇨🇦',
+          'Bósnia': '🇧🇦',
+          'Catar': '🇶🇦',
+          'Suíça': '🇨🇭',
+          'Brasil': '🇧🇷',
+          'Marrocos': '🇲🇦',
+          'Haiti': '🇭🇹',
+          'Escócia': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+          'EUA': '🇺🇸',
+          'Paraguai': '🇵🇾',
+          'Austrália': '🇦🇺',
+          'Turquia': '🇹🇷',
+          'Alemanha': '🇩🇪',
+          'Curaçao': '🇨🇼',
+          'Costa do Marfim': '🇨🇮',
+          'Equador': '🇪🇨',
+          'Holanda': '🇳🇱',
+          'Japão': '🇯🇵',
+          'Suécia': '🇸🇪',
+          'Tunísia': '🇹🇳',
+          'Bélgica': '🇧🇪',
+          'Egito': '🇪🇬',
+          'Irã': '🇮🇷',
+          'Nova Zelândia': '🇳🇿',
+          'Espanha': '🇪🇸',
+          'Cabo Verde': '🇨🇻',
+          'Arábia Saudita': '🇸🇦',
+          'Uruguai': '🇺🇾',
+          'França': '🇫🇷',
+          'Senegal': '🇸🇳',
+          'Iraque': '🇮🇶',
+          'Noruega': '🇳🇴',
+          'Argentina': '🇦🇷',
+          'Argélia': '🇩🇿',
+          'Áustria': '🇦🇹',
+          'Jordânia': '🇯🇴',
+          'Portugal': '🇵🇹',
+          'RD Congo': '🇨🇩',
+          'Uzbequistão': '🇺🇿',
+          'Colômbia': '🇨🇴',
+          'Inglaterra': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+          'Croácia': '🇭🇷',
+          'Panamá': '🇵🇦',
+          'Gana': '🇬🇭',
+        };
+
+        // Retorna o emoji de bandeira do nome, ou '' se não mapeado (fallback gracioso).
+        function bandeira(nomePais) {
+          return BANDEIRAS[nomePais] || '';
+        }
+
+        // Busca o utcDate original do jogo a partir do array estático `matches`,
+        // montando um ISO aproximado a partir de match.date + match.time (que já
+        // estão em horário de Brasília, daí o offset "-03:00" explícito no ISO).
+        // Usado como fallback de data/hora quando matches.json ainda não tem o id
+        // (jogo futuro, TBD) ou quando o Map placaresMataMata não guarda utcDate.
+        function buscarUtcDateOriginal(idJogo) {
+          const m = matches.find(function(x) { return x.id === idJogo; });
+          if (!m || m.time === 'TBD') return '';
+          try {
+            const iso = m.date + 'T' + m.time + ':00-03:00';
+            const dt = new Date(iso);
+            return isNaN(dt.getTime()) ? '' : dt.toISOString();
+          } catch (_) {
+            return '';
+          }
+        }
+
+        /**
+         * Deriva a topologia do bracket a partir do array estático `matches`.
+         * Não hardcoda pares pai→filho: a numeração 73..104 é reconstruída
+         * varrendo as fases na ordem FASES_MM_ORDEM e enumerando os ids na
+         * ordem em que aparecem no array (mesma ordem usada pelos rótulos
+         * "Vencedor NN"/"Perdedor NN" das fases seguintes).
+         *
+         * @returns {{
+         *   idsPorFase: { [fase]: number[] },
+         *   numeroParaId: { [numero]: id },
+         *   infoPorId: { [id]: { fase, team1: string, team2: string, match: object } }
+         * }}
+         */
+        function derivarTopologia(matchesEstaticos) {
+          const idsPorFase = {};
+          const numeroParaId = {};
+          const infoPorId = {};
+
+          FASES_MM_ORDEM.forEach(function(fase) { idsPorFase[fase] = []; });
+
+          FASES_MM_ORDEM.forEach(function(fase) {
+            matchesEstaticos.forEach(function(m) {
+              if (m.phase !== fase || m.id == null) return;
+              idsPorFase[fase].push(m.id);
+              infoPorId[m.id] = { fase: fase, team1: m.team1, team2: m.team2, match: m };
+            });
+          });
+
+          let contador = 73;
+          FASES_MM_ORDEM.forEach(function(fase) {
+            idsPorFase[fase].forEach(function(id) {
+              numeroParaId[contador] = id;
+              contador++;
+            });
+          });
+
+          return { idsPorFase: idsPorFase, numeroParaId: numeroParaId, infoPorId: infoPorId };
+        }
+
+        // Extrai o número de jogo de um rótulo "Vencedor NN" / "Perdedor NN".
+        // Retorna { tipo: 'vencedor'|'perdedor', numero } ou null se o rótulo não casar.
+        function parseRotuloReferencia(rotulo) {
+          if (typeof rotulo !== 'string') return null;
+          const m = rotulo.match(/^(Vencedor|Perdedor)\s+(\d+)$/);
+          if (!m) return null;
+          return { tipo: m[1] === 'Vencedor' ? 'vencedor' : 'perdedor', numero: parseInt(m[2], 10) };
+        }
+
+        // Dado o id de um jogo-pai já finalizado, retorna o nome da seleção vencedora
+        // ou perdedora. Retorna null se o pai não tiver dados suficientes (não
+        // finalizado, sem placar, etc).
+        //
+        // Atenção: quando há `penaltis`, o `placar` (score.fullTime da API) já vem
+        // com os pênaltis SOMADOS ao tempo normal — por isso nunca compara golsCasa
+        // == golsFora nesse caso; o vencedor é sempre o maior valor de `penaltis`.
+        function resolverResultadoPai(idPai, tipo) {
+          const dados = placaresMataMata.get(idPai);
+          if (!dados || !dados.placar || !dados.casa || !dados.fora) return null;
+          if (dados.status !== 'FINISHED' && dados.status !== 'AWARDED') return null;
+
+          const temPenaltis = dados.penaltis && dados.penaltis.casa != null && dados.penaltis.fora != null;
+          let vencedor, perdedor;
+
+          if (temPenaltis) {
+            if (dados.penaltis.casa > dados.penaltis.fora) {
+              vencedor = dados.casa; perdedor = dados.fora;
+            } else if (dados.penaltis.fora > dados.penaltis.casa) {
+              vencedor = dados.fora; perdedor = dados.casa;
+            } else {
+              return null; // pênaltis inconsistentes — não decide
+            }
+          } else if (dados.placar.casa > dados.placar.fora) {
+            vencedor = dados.casa; perdedor = dados.fora;
+          } else if (dados.placar.fora > dados.placar.casa) {
+            vencedor = dados.fora; perdedor = dados.casa;
+          } else {
+            return null; // empate sem pênaltis registrados — ainda não decidido
+          }
+
+          return tipo === 'vencedor' ? vencedor : perdedor;
+        }
+
+        // Resolve o nome exibido de um lado (casa ou fora) de um jogo do bracket.
+        // Prioridade: 1) nome real da própria API para este jogo; 2) resolução via
+        // resultado do jogo-pai (quando o rótulo é "Vencedor/Perdedor NN"); 3) null (TBD).
+        function resolverNomeLado(rotulo, nomeRealApi, topologia) {
+          if (nomeRealApi) return nomeRealApi;
+
+          const ref = parseRotuloReferencia(rotulo);
+          if (ref) {
+            const idPai = topologia.numeroParaId[ref.numero];
+            if (idPai != null) {
+              const nome = resolverResultadoPai(idPai, ref.tipo);
+              if (nome) return nome;
+            }
+          }
+
+          return null; // TBD
+        }
+
+        // Formata a data/hora relativa em PT (Brasília), a partir do utcDate ISO.
+        // "Hoje" / "Amanhã" / "Ontem" / "DD/MM", sempre seguido de "HH'h'MM".
+        // utcDate vazio/inválido → string vazia (card fica sem a linha de data).
+        function formatarDataRelativaMM(utcDate) {
+          if (!utcDate) return '';
+          try {
+            const dataJogo = utcParaDataBrasilia(utcDate);
+            const hojeISO = hojeBrasiliaISO();
+
+            const dt = new Date(dataJogo + 'T00:00:00Z');
+            const hj = new Date(hojeISO + 'T00:00:00Z');
+            const diffDias = Math.round((dt - hj) / (1000 * 60 * 60 * 24));
+
+            let rotuloData;
+            if (diffDias === 0) rotuloData = 'Hoje';
+            else if (diffDias === 1) rotuloData = 'Amanhã';
+            else if (diffDias === -1) rotuloData = 'Ontem';
+            else rotuloData = formatDate(dataJogo);
+
+            const ts = new Date(utcDate);
+            const brt = new Date(ts.getTime() + (-3 * 3600000));
+            const hh = String(brt.getUTCHours()).padStart(2, '0');
+            const mm = String(brt.getUTCMinutes()).padStart(2, '0');
+
+            return rotuloData + ' · ' + hh + 'h' + mm;
+          } catch (_) {
+            return '';
+          }
+        }
+
+        // Monta o HTML de uma linha .mm-time (bandeira + nome + placar/pênaltis).
+        // nome === null → TBD (escudo cinza). vencedor === true → destaque.
+        function renderLinhaTime(nome, placarNum, penaltisNum, vencedor) {
+          if (nome == null) {
+            return '<div class="mm-time mm-time--tbd">' +
+              '<span class="mm-time__bandeira" aria-hidden="true"></span>' +
+              '<span class="mm-time__nome">TBD</span>' +
+              '</div>';
+          }
+
+          const emoji = bandeira(nome);
+          const bandeiraHtml = emoji
+            ? '<span class="mm-time__bandeira" aria-hidden="true">' + emoji + '</span>'
+            : '';
+
+          let placarHtml = '';
+          if (placarNum != null) {
+            const penaltisHtml = penaltisNum != null
+              ? ' <span class="mm-time__penaltis">(' + penaltisNum + ')</span>'
+              : '';
+            placarHtml = '<span class="mm-time__placar">' + placarNum + penaltisHtml + '</span>';
+          }
+
+          const vencedorClass = vencedor ? ' mm-time--vencedor' : '';
+
+          // textContent evita injeção de HTML a partir do nome da seleção
+          const nomeEl = document.createElement('span');
+          nomeEl.className = 'mm-time__nome';
+          nomeEl.textContent = nome;
+
+          return '<div class="mm-time' + vencedorClass + '">' +
+            bandeiraHtml +
+            nomeEl.outerHTML +
+            placarHtml +
+            '</div>';
+        }
+
+        // Monta o HTML completo de um card .mm-jogo a partir do id do jogo.
+        // Nunca lança: qualquer dado ausente vira TBD / sem placar.
+        function renderJogoMM(idJogo, topologia) {
+          try {
+            const info = topologia.infoPorId[idJogo];
+            if (!info) {
+              // Id esperado mas ausente na topologia — slot TBD isolado
+              return '<div class="mm-jogo">' +
+                renderLinhaTime(null) + renderLinhaTime(null) +
+                '</div>';
+            }
+
+            const dadosVivo = placaresMataMata.get(idJogo);
+            const nomeCasaApi = dadosVivo ? dadosVivo.casa : null;
+            const nomeForaApi = dadosVivo ? dadosVivo.fora : null;
+
+            const nomeCasa = resolverNomeLado(info.team1, nomeCasaApi, topologia);
+            const nomeFora = resolverNomeLado(info.team2, nomeForaApi, topologia);
+
+            const temBrasil = nomeCasa === 'Brasil' || nomeFora === 'Brasil';
+            const brasilClass = temBrasil ? ' mm-jogo--brasil' : '';
+
+            const status = dadosVivo ? dadosVivo.status : undefined;
+            const temPlacar = dadosVivo && dadosVivo.placar &&
+              dadosVivo.placar.casa != null && dadosVivo.placar.fora != null;
+
+            // Data/hora do card: sempre a partir do array estático (utcDate não é
+            // guardado no Map placaresMataMata — só status/placar/casa/fora/penaltis).
+            const dataLabel = formatarDataRelativaMM(buscarUtcDateOriginal(idJogo));
+
+            let linhaCasaHtml, linhaForaHtml, infoHtml;
+
+            if (temPlacar && (status === 'FINISHED' || status === 'AWARDED')) {
+              const temPenaltis = dadosVivo.penaltis &&
+                dadosVivo.penaltis.casa != null && dadosVivo.penaltis.fora != null;
+
+              // A API grava score.fullTime (nosso `placar`) já COM os pênaltis somados
+              // ao tempo normal quando o jogo é decidido nos pênaltis. Por isso, quando
+              // há `penaltis`, o número principal do card é o tempo normal
+              // (placar − pênaltis), com os pênaltis entre parênteses — nunca o placar
+              // cru. Guard com Math.max(0, …) evita valor negativo por dado inconsistente.
+              const golsCasa = temPenaltis
+                ? Math.max(0, dadosVivo.placar.casa - dadosVivo.penaltis.casa)
+                : dadosVivo.placar.casa;
+              const golsFora = temPenaltis
+                ? Math.max(0, dadosVivo.placar.fora - dadosVivo.penaltis.fora)
+                : dadosVivo.placar.fora;
+
+              // Vencedor: com pênaltis, decide o maior valor de `penaltis` (não o
+              // placar somado, que empataria no tempo normal). Sem pênaltis, o maior placar.
+              let vencedorCasa = false, vencedorFora = false;
+              if (temPenaltis) {
+                if (dadosVivo.penaltis.casa > dadosVivo.penaltis.fora) vencedorCasa = true;
+                else if (dadosVivo.penaltis.fora > dadosVivo.penaltis.casa) vencedorFora = true;
+              } else if (golsCasa > golsFora) {
+                vencedorCasa = true;
+              } else if (golsFora > golsCasa) {
+                vencedorFora = true;
+              }
+
+              linhaCasaHtml = renderLinhaTime(nomeCasa, golsCasa, temPenaltis ? dadosVivo.penaltis.casa : null, vencedorCasa);
+              linhaForaHtml = renderLinhaTime(nomeFora, golsFora, temPenaltis ? dadosVivo.penaltis.fora : null, vencedorFora);
+
+              const rotuloStatus = temPenaltis ? 'Pên.' : 'ENC.';
+              infoHtml = '<div class="mm-jogo__info">' +
+                '<span class="mm-jogo__data">' + dataLabel + '</span>' +
+                '<span class="mm-jogo__status">' + rotuloStatus + '</span>' +
+                '</div>';
+            } else if (temPlacar && (status === 'IN_PLAY' || status === 'PAUSED')) {
+              linhaCasaHtml = renderLinhaTime(nomeCasa, dadosVivo.placar.casa, null, false);
+              linhaForaHtml = renderLinhaTime(nomeFora, dadosVivo.placar.fora, null, false);
+              infoHtml = '<div class="mm-jogo__info">' +
+                '<span class="ao-vivo" aria-label="Ao vivo">' +
+                  '<span class="ao-vivo__ponto" aria-hidden="true"></span>' +
+                  'AO VIVO' +
+                '</span>' +
+                '</div>';
+            } else {
+              linhaCasaHtml = renderLinhaTime(nomeCasa, null, null, false);
+              linhaForaHtml = renderLinhaTime(nomeFora, null, null, false);
+              infoHtml = '<div class="mm-jogo__info">' +
+                '<span class="mm-jogo__data">' + dataLabel + '</span>' +
+                '</div>';
+            }
+
+            return '<div class="mm-jogo' + brasilClass + '">' +
+              linhaCasaHtml + linhaForaHtml + infoHtml +
+              '</div>';
+          } catch (_) {
+            // Qualquer erro inesperado — card TBD isolado, nunca quebra a página
+            return '<div class="mm-jogo">' +
+              renderLinhaTime(null) + renderLinhaTime(null) +
+              '</div>';
+          }
+        }
+
+        // Renderiza uma coluna do bracket (fase) com seus jogos, na ordem imposta
+        // pela topologia (ordem de aparição no array `matches`).
+        function renderColuna(fase, ids, topologia) {
+          const dataFaseAttr = fase
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .replace(/[^a-z0-9]+/g, '');
+
+          const jogosHtml = ids.map(function(id) { return renderJogoMM(id, topologia); }).join('');
+
+          return '<div class="mm-coluna" data-fase="' + dataFaseAttr + '">' +
+            '<h3>' + fase + '</h3>' +
+            jogosHtml +
+            '</div>';
+        }
+
+        // Renderiza o bracket inteiro: 5 colunas (32-avos → Final) + card isolado do 3º lugar.
+        // Nunca lança: qualquer erro deixa o bracket vazio, sem erro no console.
+        function renderMataMata() {
+          try {
+            const topologia = derivarTopologia(matches);
+
+            const colunasPrincipais = ['32-avos', 'Oitavas', 'Quartas', 'Semifinal', 'Final'];
+            const bracketHtml = colunasPrincipais.map(function(fase) {
+              return renderColuna(fase, topologia.idsPorFase[fase] || [], topologia);
+            }).join('');
+
+            document.getElementById('mm-bracket').innerHTML = bracketHtml;
+
+            const idsTerceiro = topologia.idsPorFase['3º lugar'] || [];
+            const terceiroHtml = '<h3>3º lugar</h3>' +
+              idsTerceiro.map(function(id) { return renderJogoMM(id, topologia); }).join('');
+            document.getElementById('mm-terceiro').innerHTML = terceiroHtml;
+
+            // Nota com timestamp de atualização (mesma fonte que a aba Jogos)
+            const nota = document.getElementById('mata-mata-nota');
+            if (nota && placaresMeta) {
+              try {
+                const ts = new Date(placaresMeta);
+                if (!isNaN(ts.getTime())) {
+                  const brt = new Date(ts.getTime() + (-3 * 3600000));
+                  const hh = String(brt.getUTCHours()).padStart(2, '0');
+                  const mm = String(brt.getUTCMinutes()).padStart(2, '0');
+                  nota.textContent = 'Chaveamento do mata-mata, das 32-avos à Final · atualizado às ' + hh + ':' + mm;
+                }
+              } catch (_) { /* mantém texto padrão */ }
+            }
+          } catch (_) {
+            // Falha silenciosa: bracket fica vazio, sem erro no console
+          }
+        }
+
+        // Expõe globalmente para ativarAba() (lazy-init) e para o hook de re-render
+        window.renderMataMata = renderMataMata;
+        atualizarAbaMataMata = renderMataMata;
+      })();
+
       // ===== abas + grupos =====
 
       (function() {
         const GRUPOS_ORDEM = ['A','B','C','D','E','F','G','H','I','J','K','L'];
 
         let gruposJaCarregados = false;
+        let mataMataJaCarregado = false;
+
+        // Config das 3 abas: idTab → { idPainel, hash }. ativarAba() opera em loop
+        // sobre esta lista, então adicionar/remover abas não exige tocar na lógica.
+        const ABAS = [
+          { idTab: 'tab-jogos',     idPainel: 'painel-jogos',     hash: '#jogos' },
+          { idTab: 'tab-grupos',    idPainel: 'painel-grupos',    hash: '#grupos' },
+          { idTab: 'tab-mata-mata', idPainel: 'painel-mata-mata', hash: '#mata-mata' },
+        ];
 
         function ativarAba(idTab) {
-          const tabJogos   = document.getElementById('tab-jogos');
-          const tabGrupos  = document.getElementById('tab-grupos');
-          const painelJogos  = document.getElementById('painel-jogos');
-          const painelGrupos = document.getElementById('painel-grupos');
+          const alvo = ABAS.find(function(a) { return a.idTab === idTab; }) || ABAS[0];
 
-          const ativarJogos = (idTab === 'tab-jogos');
+          ABAS.forEach(function(aba) {
+            const ativa = aba.idTab === alvo.idTab;
+            const tab = document.getElementById(aba.idTab);
+            const painel = document.getElementById(aba.idPainel);
 
-          tabJogos.setAttribute('aria-selected', ativarJogos ? 'true' : 'false');
-          tabJogos.setAttribute('tabindex',       ativarJogos ? '0' : '-1');
-          tabJogos.classList.toggle('tabs__tab--active', ativarJogos);
+            tab.setAttribute('aria-selected', ativa ? 'true' : 'false');
+            tab.setAttribute('tabindex',       ativa ? '0' : '-1');
+            tab.classList.toggle('tabs__tab--active', ativa);
 
-          tabGrupos.setAttribute('aria-selected', ativarJogos ? 'false' : 'true');
-          tabGrupos.setAttribute('tabindex',       ativarJogos ? '-1' : '0');
-          tabGrupos.classList.toggle('tabs__tab--active', !ativarJogos);
+            painel.hidden = !ativa;
+          });
 
-          painelJogos.hidden  =  !ativarJogos;
-          painelGrupos.hidden =   ativarJogos;
+          history.replaceState(null, '', alvo.hash);
 
-          const hashNovo = ativarJogos ? '#jogos' : '#grupos';
-          history.replaceState(null, '', hashNovo);
-
-          if (!ativarJogos && !gruposJaCarregados) {
+          if (alvo.idTab === 'tab-grupos' && !gruposJaCarregados) {
             fetchStandings();
+          }
+          if (alvo.idTab === 'tab-mata-mata' && !mataMataJaCarregado) {
+            mataMataJaCarregado = true;
+            if (typeof window.renderMataMata === 'function') window.renderMataMata();
           }
         }
 
@@ -2686,6 +3391,8 @@
         // Deep-link: respeitar hash na carga inicial
         if (location.hash === '#grupos') {
           ativarAba('tab-grupos');
+        } else if (location.hash === '#mata-mata') {
+          ativarAba('tab-mata-mata');
         }
 
         attachTabHandlers();
