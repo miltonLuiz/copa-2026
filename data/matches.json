@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T22:30:16.968Z",
+  "atualizadoEm": "2026-07-01T22:50:14.264Z",
   "jogos": [
     {
       "id": 537327,
@@ -1136,7 +1136,7 @@
       "fora": "Senegal",
       "status": "PAUSED",
       "placar": {
-        "casa": 2,
+        "casa": 3,
         "fora": 2
       },
       "penaltis": null
