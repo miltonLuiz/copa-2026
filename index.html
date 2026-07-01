@@ -488,6 +488,13 @@
         color: var(--muted);
       }
 
+      /* Placar de pênaltis no card da aba Jogos (ex.: 1 (2) × 1 (3)) */
+      .match-card__penaltis {
+        font-size: 0.55em;
+        color: var(--muted);
+        margin-left: 1px;
+      }
+
       .match-card__time-hora {
         display: block;
         font-family: 'JetBrains Mono', monospace;
@@ -2198,11 +2205,30 @@
         let blocoTempo;
         if (dadosVivo && dadosVivo.placar &&
             (dadosVivo.status === 'FINISHED' || dadosVivo.status === 'AWARDED')) {
-          // Jogo encerrado com placar
+          // Jogo encerrado com placar. Quando houve pênaltis, o `placar`
+          // (score.fullTime da API) já vem com os pênaltis somados ao tempo
+          // normal — então mostramos o tempo normal (placar − pênaltis) e os
+          // pênaltis entre parênteses, em vez do placar somado como se fosse o
+          // resultado do jogo. Ex.: Holanda 1 (2) × 1 (3) Marrocos.
+          const temPen = dadosVivo.penaltis &&
+            dadosVivo.penaltis.casa != null && dadosVivo.penaltis.fora != null;
+          let placarHtml, statusLabel;
+          if (temPen) {
+            const regCasa = Math.max(0, dadosVivo.placar.casa - dadosVivo.penaltis.casa);
+            const regFora = Math.max(0, dadosVivo.placar.fora - dadosVivo.penaltis.fora);
+            placarHtml =
+              regCasa + ' <span class="match-card__penaltis">(' + dadosVivo.penaltis.casa + ')</span>' +
+              ' × ' +
+              regFora + ' <span class="match-card__penaltis">(' + dadosVivo.penaltis.fora + ')</span>';
+            statusLabel = 'Pênaltis';
+          } else {
+            placarHtml = dadosVivo.placar.casa + ' × ' + dadosVivo.placar.fora;
+            statusLabel = 'Encerrado';
+          }
           blocoTempo = '<div class="match-card__time match-card__time--placar encerrado">' +
-            dadosVivo.placar.casa + ' × ' + dadosVivo.placar.fora +
+            placarHtml +
             '<span class="match-card__time-hora">' + timeLabel(match.time) + '</span>' +
-            '<span class="match-card__status">Encerrado</span>' +
+            '<span class="match-card__status">' + statusLabel + '</span>' +
             '</div>';
         } else if (dadosVivo && dadosVivo.placar &&
                    (dadosVivo.status === 'IN_PLAY' || dadosVivo.status === 'PAUSED')) {
@@ -2484,7 +2510,7 @@
                   placar: jogo.placar,  // { casa, fora } ou null
                   casa: jogo.casa || null,
                   fora: jogo.fora || null,
-                  penaltis: jogo.penaltis || null,  // { casa, fora } ou null — usado só na aba Mata-mata
+                  penaltis: jogo.penaltis || null,  // { casa, fora } ou null — usado nas abas Jogos e Mata-mata
                 };
                 placaresMataMata.set(jogo.id, entrada);
 
