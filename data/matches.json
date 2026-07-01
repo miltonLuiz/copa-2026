@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T20:10:13.934Z",
+  "atualizadoEm": "2026-07-01T20:11:54.131Z",
   "jogos": [
     {
       "id": 537327,
@@ -12,7 +12,8 @@
       "placar": {
         "casa": 2,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537328,
@@ -25,7 +26,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537333,
@@ -38,7 +40,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537345,
@@ -51,7 +54,8 @@
       "placar": {
         "casa": 4,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537334,
@@ -64,7 +68,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537339,
@@ -77,7 +82,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537340,
@@ -90,7 +96,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537346,
@@ -103,7 +110,8 @@
       "placar": {
         "casa": 2,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537351,
@@ -116,7 +124,8 @@
       "placar": {
         "casa": 7,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537357,
@@ -129,7 +138,8 @@
       "placar": {
         "casa": 2,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537352,
@@ -142,7 +152,8 @@
       "placar": {
         "casa": 1,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537358,
@@ -155,7 +166,8 @@
       "placar": {
         "casa": 5,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537369,
@@ -168,7 +180,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537363,
@@ -181,7 +194,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537370,
@@ -194,7 +208,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537364,
@@ -207,7 +222,8 @@
       "placar": {
         "casa": 2,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537391,
@@ -220,7 +236,8 @@
       "placar": {
         "casa": 3,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537392,
@@ -233,7 +250,8 @@
       "placar": {
         "casa": 1,
         "fora": 4
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537397,
@@ -246,7 +264,8 @@
       "placar": {
         "casa": 3,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537398,
@@ -259,7 +278,8 @@
       "placar": {
         "casa": 3,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537403,
@@ -272,7 +292,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537409,
@@ -285,7 +306,8 @@
       "placar": {
         "casa": 4,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537410,
@@ -298,7 +320,8 @@
       "placar": {
         "casa": 1,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537404,
@@ -311,7 +334,8 @@
       "placar": {
         "casa": 1,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537329,
@@ -324,7 +348,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537335,
@@ -337,7 +362,8 @@
       "placar": {
         "casa": 4,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537336,
@@ -350,7 +376,8 @@
       "placar": {
         "casa": 6,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537330,
@@ -363,7 +390,8 @@
       "placar": {
         "casa": 1,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537348,
@@ -376,7 +404,8 @@
       "placar": {
         "casa": 2,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537342,
@@ -389,7 +418,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537341,
@@ -402,7 +432,8 @@
       "placar": {
         "casa": 3,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537347,
@@ -415,7 +446,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537359,
@@ -428,7 +460,8 @@
       "placar": {
         "casa": 5,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537353,
@@ -441,7 +474,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537354,
@@ -454,7 +488,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537360,
@@ -467,7 +502,8 @@
       "placar": {
         "casa": 0,
         "fora": 4
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537371,
@@ -480,7 +516,8 @@
       "placar": {
         "casa": 4,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537365,
@@ -493,7 +530,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537372,
@@ -506,7 +544,8 @@
       "placar": {
         "casa": 2,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537366,
@@ -519,7 +558,8 @@
       "placar": {
         "casa": 1,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537399,
@@ -532,7 +572,8 @@
       "placar": {
         "casa": 2,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537393,
@@ -545,7 +586,8 @@
       "placar": {
         "casa": 3,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537394,
@@ -558,7 +600,8 @@
       "placar": {
         "casa": 3,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537400,
@@ -571,7 +614,8 @@
       "placar": {
         "casa": 1,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537405,
@@ -584,7 +628,8 @@
       "placar": {
         "casa": 5,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537411,
@@ -597,7 +642,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537412,
@@ -610,7 +656,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537406,
@@ -623,7 +670,8 @@
       "placar": {
         "casa": 1,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537337,
@@ -636,7 +684,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537338,
@@ -649,7 +698,8 @@
       "placar": {
         "casa": 3,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537344,
@@ -662,7 +712,8 @@
       "placar": {
         "casa": 4,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537343,
@@ -675,7 +726,8 @@
       "placar": {
         "casa": 0,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537331,
@@ -688,7 +740,8 @@
       "placar": {
         "casa": 0,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537332,
@@ -701,7 +754,8 @@
       "placar": {
         "casa": 1,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537355,
@@ -714,7 +768,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537356,
@@ -727,7 +782,8 @@
       "placar": {
         "casa": 0,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537361,
@@ -740,7 +796,8 @@
       "placar": {
         "casa": 1,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537362,
@@ -753,7 +810,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537349,
@@ -766,7 +824,8 @@
       "placar": {
         "casa": 3,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537350,
@@ -779,7 +838,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537395,
@@ -792,7 +852,8 @@
       "placar": {
         "casa": 1,
         "fora": 4
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537396,
@@ -805,7 +866,8 @@
       "placar": {
         "casa": 5,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537373,
@@ -818,7 +880,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537374,
@@ -831,7 +894,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537367,
@@ -844,7 +908,8 @@
       "placar": {
         "casa": 1,
         "fora": 5
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537368,
@@ -857,7 +922,8 @@
       "placar": {
         "casa": 1,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537413,
@@ -870,7 +936,8 @@
       "placar": {
         "casa": 0,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537414,
@@ -883,7 +950,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537407,
@@ -896,7 +964,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537408,
@@ -909,7 +978,8 @@
       "placar": {
         "casa": 3,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537401,
@@ -922,7 +992,8 @@
       "placar": {
         "casa": 1,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537402,
@@ -935,7 +1006,8 @@
       "placar": {
         "casa": 3,
         "fora": 3
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537417,
@@ -948,7 +1020,8 @@
       "placar": {
         "casa": 0,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537423,
@@ -961,7 +1034,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537415,
@@ -1008,7 +1082,8 @@
       "placar": {
         "casa": 1,
         "fora": 2
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537416,
@@ -1021,7 +1096,8 @@
       "placar": {
         "casa": 3,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537425,
@@ -1034,7 +1110,8 @@
       "placar": {
         "casa": 2,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537426,
@@ -1047,7 +1124,8 @@
       "placar": {
         "casa": 2,
         "fora": 1
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537422,
@@ -1060,7 +1138,8 @@
       "placar": {
         "casa": 0,
         "fora": 0
-      }
+      },
+      "penaltis": null
     },
     {
       "id": 537421,
@@ -1070,7 +1149,8 @@
       "casa": "EUA",
       "fora": "Bósnia",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537420,
@@ -1080,7 +1160,8 @@
       "casa": "Espanha",
       "fora": "Áustria",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537419,
@@ -1090,7 +1171,8 @@
       "casa": "Portugal",
       "fora": "Croácia",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537429,
@@ -1100,7 +1182,8 @@
       "casa": "Suíça",
       "fora": "Argélia",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537428,
@@ -1110,7 +1193,8 @@
       "casa": "Austrália",
       "fora": "Egito",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537427,
@@ -1120,7 +1204,8 @@
       "casa": "Argentina",
       "fora": "Cabo Verde",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537430,
@@ -1130,7 +1215,8 @@
       "casa": "Colômbia",
       "fora": "Gana",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537376,
@@ -1140,7 +1226,8 @@
       "casa": "Canadá",
       "fora": "Marrocos",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537375,
@@ -1150,7 +1237,8 @@
       "casa": "Paraguai",
       "fora": "França",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537377,
@@ -1160,7 +1248,8 @@
       "casa": "Brasil",
       "fora": "Noruega",
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537378,
@@ -1170,7 +1259,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537379,
@@ -1180,7 +1270,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537380,
@@ -1190,7 +1281,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537381,
@@ -1200,7 +1292,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537382,
@@ -1210,7 +1303,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537383,
@@ -1220,7 +1314,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537384,
@@ -1230,7 +1325,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537385,
@@ -1240,7 +1336,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537386,
@@ -1250,7 +1347,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537387,
@@ -1260,7 +1358,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537388,
@@ -1270,7 +1369,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537389,
@@ -1280,7 +1380,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     },
     {
       "id": 537390,
@@ -1290,7 +1391,8 @@
       "casa": null,
       "fora": null,
       "status": "TIMED",
-      "placar": null
+      "placar": null,
+      "penaltis": null
     }
   ]
 }
