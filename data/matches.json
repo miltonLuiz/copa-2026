@@ -974,6 +974,10 @@
       "placar": {
         "casa": 4,
         "fora": 5
+      },
+      "penaltis": {
+        "casa": 3,
+        "fora": 4
       }
     },
     {
@@ -987,6 +991,10 @@
       "placar": {
         "casa": 3,
         "fora": 4
+      },
+      "penaltis": {
+        "casa": 2,
+        "fora": 3
       }
     },
     {
