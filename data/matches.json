@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T02:30:16.849Z",
+  "atualizadoEm": "2026-07-01T02:40:16.046Z",
   "jogos": [
     {
       "id": 537327,
@@ -1024,7 +1024,7 @@
       "fora": "Equador",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 0
       }
     },
