@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T21:00:25.849Z",
+  "atualizadoEm": "2026-07-01T21:15:15.117Z",
   "jogos": [
     {
       "id": 537327,
@@ -1134,7 +1134,7 @@
       "utcDate": "2026-07-01T20:00:00Z",
       "casa": "Bélgica",
       "fora": "Senegal",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 0,
         "fora": 1
