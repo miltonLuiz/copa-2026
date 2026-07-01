@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-01T04:10:15.912Z",
+  "atualizadoEm": "2026-07-01T15:45:42.324Z",
   "jogos": [
     {
       "id": 537327,
@@ -1134,7 +1134,7 @@
       "grupo": null,
       "utcDate": "2026-07-04T21:00:00Z",
       "casa": "Paraguai",
-      "fora": null,
+      "fora": "França",
       "status": "TIMED",
       "placar": null
     },
@@ -1144,7 +1144,7 @@
       "grupo": null,
       "utcDate": "2026-07-05T20:00:00Z",
       "casa": "Brasil",
-      "fora": null,
+      "fora": "Noruega",
       "status": "TIMED",
       "placar": null
     },
