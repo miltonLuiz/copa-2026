@@ -1164,10 +1164,25 @@
       .mm-coluna {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        gap: 12px;
+        justify-content: flex-start;
+        gap: 0;
         width: 220px;
         flex-shrink: 0;
+      }
+
+      /* Cada card ocupa um "slot" de altura igual (flex:1). Como cada coluna
+         seguinte tem metade dos cards, o slot dobra de altura e o card-pai fica
+         centralizado entre seus dois filhos — é o que alinha o bracket certo. */
+      .mm-slot {
+        flex: 1 1 auto;
+        padding: 4px 0;
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      .mm-slot > .mm-jogo {
+        width: 100%;
       }
 
       .mm-coluna h3 {
@@ -1347,10 +1362,40 @@
          unindo o par de pais. Colunas anteriores às Oitavas não recebem conector
          (32-avos não tem "pais" no bracket). */
 
-      .mm-coluna[data-fase="oitavas"] .mm-jogo::before,
-      .mm-coluna[data-fase="quartas"] .mm-jogo::before,
-      .mm-coluna[data-fase="semifinal"] .mm-jogo::before,
-      .mm-coluna[data-fase="final"] .mm-jogo::before {
+      /* Stub horizontal saindo à DIREITA de cada card que tem um "próximo jogo". */
+      .mm-coluna[data-fase="32avos"] .mm-jogo::after,
+      .mm-coluna[data-fase="oitavas"] .mm-jogo::after,
+      .mm-coluna[data-fase="quartas"] .mm-jogo::after,
+      .mm-coluna[data-fase="semifinal"] .mm-jogo::after {
+        content: '';
+        position: absolute;
+        right: -16px;
+        top: 50%;
+        width: 16px;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* No slot do card-pai: barra vertical unindo os centros dos dois filhos
+         (25%→75% do slot, que tem o dobro da altura de um slot-filho). */
+      .mm-coluna[data-fase="oitavas"] .mm-slot::before,
+      .mm-coluna[data-fase="quartas"] .mm-slot::before,
+      .mm-coluna[data-fase="semifinal"] .mm-slot::before,
+      .mm-coluna[data-fase="final"] .mm-slot::before {
+        content: '';
+        position: absolute;
+        left: -16px;
+        top: 25%;
+        height: 50%;
+        width: 1px;
+        background: var(--border);
+      }
+
+      /* Stub horizontal da barra vertical até o card-pai. */
+      .mm-coluna[data-fase="oitavas"] .mm-slot::after,
+      .mm-coluna[data-fase="quartas"] .mm-slot::after,
+      .mm-coluna[data-fase="semifinal"] .mm-slot::after,
+      .mm-coluna[data-fase="final"] .mm-slot::after {
         content: '';
         position: absolute;
         left: -16px;
@@ -1360,43 +1405,16 @@
         background: var(--border);
       }
 
-      .mm-coluna[data-fase="oitavas"] .mm-jogo:nth-child(odd)::after,
-      .mm-coluna[data-fase="quartas"] .mm-jogo:nth-child(odd)::after,
-      .mm-coluna[data-fase="semifinal"] .mm-jogo:nth-child(odd)::after {
-        content: '';
-        position: absolute;
-        left: -16px;
-        top: 50%;
-        width: 1px;
-        height: calc(50% + 30px);
-        background: var(--border);
-      }
-
-      .mm-coluna[data-fase="oitavas"] .mm-jogo:nth-child(even)::after,
-      .mm-coluna[data-fase="quartas"] .mm-jogo:nth-child(even)::after,
-      .mm-coluna[data-fase="semifinal"] .mm-jogo:nth-child(even)::after {
-        content: '';
-        position: absolute;
-        left: -16px;
-        bottom: 50%;
-        width: 1px;
-        height: calc(50% + 30px);
-        background: var(--border);
-      }
-
       @media (max-width: 768px) {
         .mm-scroll-hint {
           display: block;
         }
 
-        /* No mobile o scroll horizontal domina — simplifica removendo os conectores */
-        .mm-coluna[data-fase="oitavas"] .mm-jogo::before,
-        .mm-coluna[data-fase="quartas"] .mm-jogo::before,
-        .mm-coluna[data-fase="semifinal"] .mm-jogo::before,
-        .mm-coluna[data-fase="final"] .mm-jogo::before,
-        .mm-coluna[data-fase="oitavas"] .mm-jogo::after,
-        .mm-coluna[data-fase="quartas"] .mm-jogo::after,
-        .mm-coluna[data-fase="semifinal"] .mm-jogo::after {
+        /* No mobile o scroll horizontal domina — simplifica removendo os conectores.
+           O alinhamento por slots continua valendo (independe dos conectores). */
+        .mm-coluna .mm-jogo::after,
+        .mm-coluna .mm-slot::before,
+        .mm-coluna .mm-slot::after {
           display: none;
         }
       }
@@ -2969,6 +2987,58 @@
           return { idsPorFase: idsPorFase, numeroParaId: numeroParaId, infoPorId: infoPorId };
         }
 
+        /**
+         * Ordena os ids de cada fase pela POSIÇÃO na árvore do chaveamento, não pela
+         * ordem cronológica. DFS a partir da Final: cada folha (32-avos) ganha uma
+         * posição sequencial (0..15) e cada nó interno fica no ponto médio dos dois
+         * filhos. Ordenar cada coluna por essa posição faz os dois jogos que alimentam
+         * o mesmo confronto ficarem VIZINHOS, com o próximo jogo no meio deles — o que
+         * torna o bracket legível. Estável: depende só da topologia, não dos resultados.
+         */
+        function ordenarPorArvore(topologia) {
+          const infoPorId = topologia.infoPorId;
+          const numeroParaId = topologia.numeroParaId;
+
+          // Retorna [idFilhoCima, idFilhoBaixo] ou null se for folha (32-avos).
+          function filhosDe(id) {
+            const info = infoPorId[id];
+            if (!info) return null;
+            const rCima = parseRotuloReferencia(info.team1);
+            const rBaixo = parseRotuloReferencia(info.team2);
+            if (!rCima || !rBaixo) return null;
+            const a = numeroParaId[rCima.numero];
+            const b = numeroParaId[rBaixo.numero];
+            if (a == null || b == null) return null;
+            return [a, b];
+          }
+
+          const pos = {};
+          let contadorFolha = 0;
+          function dfs(id) {
+            if (pos[id] != null) return pos[id];
+            const ch = filhosDe(id);
+            if (!ch) { pos[id] = contadorFolha++; return pos[id]; }
+            const a = dfs(ch[0]);
+            const b = dfs(ch[1]);
+            pos[id] = (a + b) / 2;
+            return pos[id];
+          }
+
+          (topologia.idsPorFase['Final'] || []).forEach(dfs);
+
+          const ordenado = {};
+          FASES_MM_ORDEM.forEach(function(fase) {
+            const ids = (topologia.idsPorFase[fase] || []).slice();
+            ids.sort(function(x, y) {
+              const px = pos[x] != null ? pos[x] : 0;
+              const py = pos[y] != null ? pos[y] : 0;
+              return px - py;
+            });
+            ordenado[fase] = ids;
+          });
+          return ordenado;
+        }
+
         // Extrai o número de jogo de um rótulo "Vencedor NN" / "Perdedor NN".
         // Retorna { tipo: 'vencedor'|'perdedor', numero } ou null se o rótulo não casar.
         function parseRotuloReferencia(rotulo) {
@@ -3017,10 +3087,20 @@
         // já estão definidos com nomes reais. Retorna null se o pai ainda não tem
         // os dois times (um ou ambos nulos/indefinidos), caso em que o slot filho
         // deve continuar como TBD (sem propagar mais um nível de profundidade).
-        function resolverPossiveisPai(idPai) {
+        function resolverPossiveisPai(idPai, topologia) {
+          const info = topologia.infoPorId[idPai];
           const dados = placaresMataMata.get(idPai);
-          if (!dados || !dados.casa || !dados.fora) return null;
-          return { casa: dados.casa, fora: dados.fora };
+          const apiCasa = dados && dados.casa ? dados.casa : null;
+          const apiFora = dados && dados.fora ? dados.fora : null;
+          // Resolve cada lado do jogo-pai do MESMO jeito que o card faz: nome real
+          // da API OU vencedor do jogo-avô (quando a fase anterior já foi decidida).
+          // Assim os "possíveis" ficam consistentes com o que o card do pai mostra,
+          // mesmo que a API ainda não tenha preenchido os times do jogo-pai. Continua
+          // um nível só: se um lado do pai ainda não foi decidido, retorna null (TBD).
+          const casa = resolverNomeLado(info ? info.team1 : null, apiCasa, topologia);
+          const fora = resolverNomeLado(info ? info.team2 : null, apiFora, topologia);
+          if (casa && fora) return { casa: casa, fora: fora };
+          return null;
         }
 
         // Resolve o nome exibido de um lado (casa ou fora) de um jogo do bracket.
@@ -3053,7 +3133,7 @@
           const idPai = topologia.numeroParaId[ref.numero];
           if (idPai == null) return null;
 
-          return resolverPossiveisPai(idPai);
+          return resolverPossiveisPai(idPai, topologia);
         }
 
         // Formata a data/hora relativa em PT (Brasília), a partir do utcDate ISO.
@@ -3263,7 +3343,9 @@
             .replace(/[̀-ͯ]/g, '')
             .replace(/[^a-z0-9]+/g, '');
 
-          const jogosHtml = ids.map(function(id) { return renderJogoMM(id, topologia); }).join('');
+          const jogosHtml = ids.map(function(id) {
+            return '<div class="mm-slot">' + renderJogoMM(id, topologia) + '</div>';
+          }).join('');
 
           return '<div class="mm-coluna" data-fase="' + dataFaseAttr + '">' +
             '<h3>' + fase + '</h3>' +
@@ -3276,10 +3358,11 @@
         function renderMataMata() {
           try {
             const topologia = derivarTopologia(matches);
+            const idsOrdenados = ordenarPorArvore(topologia);
 
             const colunasPrincipais = ['32-avos', 'Oitavas', 'Quartas', 'Semifinal', 'Final'];
             const bracketHtml = colunasPrincipais.map(function(fase) {
-              return renderColuna(fase, topologia.idsPorFase[fase] || [], topologia);
+              return renderColuna(fase, idsOrdenados[fase] || [], topologia);
             }).join('');
 
             document.getElementById('mm-bracket').innerHTML = bracketHtml;
