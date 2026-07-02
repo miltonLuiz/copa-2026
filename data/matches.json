@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-02T03:25:09.530Z",
+  "atualizadoEm": "2026-07-02T18:45:14.152Z",
   "jogos": [
     {
       "id": 537327,
@@ -1259,8 +1259,8 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-06T00:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "México",
+      "fora": "Inglaterra",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
@@ -1281,8 +1281,8 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-07T00:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "EUA",
+      "fora": "Bélgica",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
