@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-02T01:05:10.989Z",
+  "atualizadoEm": "2026-07-02T01:20:15.963Z",
   "jogos": [
     {
       "id": 537327,
@@ -1148,7 +1148,7 @@
       "utcDate": "2026-07-02T00:00:00Z",
       "casa": "EUA",
       "fora": "Bósnia",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 1,
         "fora": 0
