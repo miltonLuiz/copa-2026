@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-02T01:20:15.963Z",
+  "atualizadoEm": "2026-07-02T01:55:10.948Z",
   "jogos": [
     {
       "id": 537327,
@@ -1150,7 +1150,7 @@
       "fora": "Bósnia",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 0
       },
       "penaltis": null
