@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-02T18:45:14.152Z",
+  "atualizadoEm": "2026-07-02T19:45:11.609Z",
   "jogos": [
     {
       "id": 537327,
@@ -1163,7 +1163,10 @@
       "casa": "Espanha",
       "fora": "Áustria",
       "status": "TIMED",
-      "placar": null,
+      "placar": {
+        "casa": 1,
+        "fora": 0
+      },
       "penaltis": null
     },
     {
