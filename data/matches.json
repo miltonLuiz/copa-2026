@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-03T20:45:14.207Z",
+  "atualizadoEm": "2026-07-03T20:50:19.013Z",
   "jogos": [
     {
       "id": 537327,
@@ -1204,14 +1204,14 @@
       "utcDate": "2026-07-03T18:00:00Z",
       "casa": "Austrália",
       "fora": "Egito",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
-        "fora": 1
+        "casa": 2,
+        "fora": 2
       },
       "penaltis": {
-        "casa": 0,
-        "fora": 0
+        "casa": 1,
+        "fora": 1
       }
     },
     {
