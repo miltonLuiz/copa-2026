@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-03T22:55:15.838Z",
+  "atualizadoEm": "2026-07-03T23:15:12.166Z",
   "jogos": [
     {
       "id": 537327,
@@ -1221,7 +1221,7 @@
       "utcDate": "2026-07-03T22:00:00Z",
       "casa": "Argentina",
       "fora": "Cabo Verde",
-      "status": "PAUSED",
+      "status": "IN_PLAY",
       "placar": {
         "casa": 1,
         "fora": 0
