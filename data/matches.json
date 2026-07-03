@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-03T20:25:11.351Z",
+  "atualizadoEm": "2026-07-03T20:45:14.207Z",
   "jogos": [
     {
       "id": 537327,
@@ -1209,7 +1209,10 @@
         "casa": 1,
         "fora": 1
       },
-      "penaltis": null
+      "penaltis": {
+        "casa": 0,
+        "fora": 0
+      }
     },
     {
       "id": 537427,
