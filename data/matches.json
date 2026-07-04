@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-04T03:50:17.245Z",
+  "atualizadoEm": "2026-07-04T16:45:16.737Z",
   "jogos": [
     {
       "id": 537327,
@@ -1210,7 +1210,7 @@
         "fora": 5
       },
       "penaltis": {
-        "casa": 4,
+        "casa": 2,
         "fora": 4
       }
     },
@@ -1291,8 +1291,8 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-06T19:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Portugal",
+      "fora": "Espanha",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
@@ -1313,8 +1313,8 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-07T16:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Argentina",
+      "fora": "Egito",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
@@ -1324,8 +1324,8 @@
       "fase": "Oitavas",
       "grupo": null,
       "utcDate": "2026-07-07T20:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Suíça",
+      "fora": "Colômbia",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
