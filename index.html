@@ -1934,7 +1934,7 @@
       function matchAtalho(match, shortcut) {
         switch (shortcut) {
           case 'hoje':       return match.date === hojeBrasiliaISO();
-          case 'brasil':     return match.brasil === true;
+          case 'brasil':     return match.brasil === true || jogoMatchSelecao(match, 'Brasil');
           case 'fimsemana':  return isWeekend(match);
           case 'tarde':      return isAfternoon(match);
           case 'noite':      return isEvening(match);
@@ -2586,6 +2586,9 @@
 
             // Re-renderiza os cards com os dados de placar
             render();
+            // Recontabiliza os atalhos (ex.: "Brasil") agora que os times do
+            // mata-mata foram resolvidos com os placares.
+            renderShortcutChips();
 
             // Se a aba Grupos já foi aberta, recomputa com os novos placares
             if (atualizarAbaGrupos) atualizarAbaGrupos();
@@ -2612,6 +2615,7 @@
             if (!data || typeof data.grupos !== 'object') return;
             standingsGrupos = data;
             render(); // re-renderiza 32-avos com projeções
+            renderShortcutChips(); // recontabiliza atalhos (ex.: "Brasil") com as projeções
 
             // Se a aba Grupos já foi aberta, recomputa com os novos standings
             if (atualizarAbaGrupos) atualizarAbaGrupos();
