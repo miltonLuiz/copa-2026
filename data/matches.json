@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-04T00:30:21.578Z",
+  "atualizadoEm": "2026-07-04T00:40:17.268Z",
   "jogos": [
     {
       "id": 537327,
@@ -1223,7 +1223,7 @@
       "fora": "Cabo Verde",
       "status": "PAUSED",
       "placar": {
-        "casa": 2,
+        "casa": 3,
         "fora": 2
       },
       "penaltis": null
