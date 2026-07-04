@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-04T00:50:16.041Z",
+  "atualizadoEm": "2026-07-04T01:40:15.209Z",
   "jogos": [
     {
       "id": 537327,
@@ -1235,8 +1235,11 @@
       "utcDate": "2026-07-04T01:30:00Z",
       "casa": "Colômbia",
       "fora": "Gana",
-      "status": "TIMED",
-      "placar": null,
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      },
       "penaltis": null
     },
     {
