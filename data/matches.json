@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-04T19:10:23.746Z",
+  "atualizadoEm": "2026-07-04T21:10:24.952Z",
   "jogos": [
     {
       "id": 537327,
@@ -1264,7 +1264,10 @@
       "casa": "Paraguai",
       "fora": "França",
       "status": "TIMED",
-      "placar": null,
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      },
       "penaltis": null
     },
     {
