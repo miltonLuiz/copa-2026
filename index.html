@@ -1593,6 +1593,11 @@
       // do bracket na primeira ativação da aba. null enquanto não foi aberta.
       let atualizarAbaMataMata = null;
 
+      // Resolve [time1, time2] de um jogo de mata-mata (nome real da API ou vencedor
+      // do jogo-pai já decidido). Atribuído pelo IIFE do bracket. Usado pelo filtro
+      // de seleção da aba Jogos para casar seleções também no mata-mata.
+      let resolverTimesJogoMM = null;
+
       // ===== dados para projeção dos 32-avos =====
       // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
       // Gerado da tabela 495 da FIFA. Ordem das colunas: THIRDS_COL_ORDER.
@@ -1834,8 +1839,24 @@
       function jogoMatchSelecao(jogo, query) {
         if (!query) return true;
         const q = normalizar(query);
-        return normalizar(jogo.team1).includes(q) ||
-               normalizar(jogo.team2).includes(q);
+        // Nomes buscáveis: os estáticos (team1/team2) + nomes resolvidos do mata-mata
+        // (nome real da API ou vencedor do jogo-pai já decidido) + projeção dos 32-avos.
+        // Assim a busca por seleção pega TODOS os jogos, não só os da fase de grupos.
+        const nomes = [jogo.team1, jogo.team2];
+        if (jogo.phase !== 'Fase de grupos') {
+          if (resolverTimesJogoMM) {
+            const resolvidos = resolverTimesJogoMM(jogo);
+            if (resolvidos) {
+              if (resolvidos[0]) nomes.push(resolvidos[0]);
+              if (resolvidos[1]) nomes.push(resolvidos[1]);
+            }
+          }
+          if (jogo.phase === '32-avos' && projecoesCache) {
+            if (projecoesCache[jogo.team1]) nomes.push(projecoesCache[jogo.team1]);
+            if (projecoesCache[jogo.team2]) nomes.push(projecoesCache[jogo.team2]);
+          }
+        }
+        return nomes.some(function(n) { return normalizar(n).includes(q); });
       }
 
       // Retorna true se TODOS os jogos do dia têm status FINISHED ou AWARDED.
@@ -2274,9 +2295,13 @@
           team1Html = '<span class="match-card__team">' + match.team1 + '</span>';
           team2Html = '<span class="match-card__team">' + match.team2 + '</span>';
         } else {
-          // Mata-mata: cada lado resolvido independentemente
-          team1Html = renderLadoMataMata(match.team1, (dadosVivo ? dadosVivo.casa : null), match.phase);
-          team2Html = renderLadoMataMata(match.team2, (dadosVivo ? dadosVivo.fora : null), match.phase);
+          // Mata-mata: cada lado resolvido — nome real da API OU vencedor do jogo-pai
+          // já decidido (mesma resolução do bracket), com fallback para projeção/rótulo.
+          const timesMM = (resolverTimesJogoMM ? resolverTimesJogoMM(match) : null) || [];
+          const nome1 = (dadosVivo ? dadosVivo.casa : null) || timesMM[0] || null;
+          const nome2 = (dadosVivo ? dadosVivo.fora : null) || timesMM[1] || null;
+          team1Html = renderLadoMataMata(match.team1, nome1, match.phase);
+          team2Html = renderLadoMataMata(match.team2, nome2, match.phase);
         }
 
         return `
@@ -3389,6 +3414,24 @@
             // Falha silenciosa: bracket fica vazio, sem erro no console
           }
         }
+
+        // Resolve os dois times de um jogo de mata-mata (nome real da API OU vencedor
+        // do jogo-pai já decidido), pro filtro de seleção da aba Jogos casar seleções
+        // também no mata-mata. Retorna [nome1|null, nome2|null] ou null (grupo/erro).
+        let _topoBuscaCache = null;
+        resolverTimesJogoMM = function(jogo) {
+          try {
+            if (!jogo || jogo.phase === 'Fase de grupos' || jogo.id == null) return null;
+            if (!_topoBuscaCache) _topoBuscaCache = derivarTopologia(matches);
+            const dados = placaresMataMata.get(jogo.id);
+            return [
+              resolverNomeLado(jogo.team1, dados ? dados.casa : null, _topoBuscaCache),
+              resolverNomeLado(jogo.team2, dados ? dados.fora : null, _topoBuscaCache),
+            ];
+          } catch (_) {
+            return null;
+          }
+        };
 
         // Expõe globalmente para ativarAba() (lazy-init) e para o hook de re-render
         window.renderMataMata = renderMataMata;
