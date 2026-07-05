@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-04T23:10:22.807Z",
+  "atualizadoEm": "2026-07-05T19:45:13.522Z",
   "jogos": [
     {
       "id": 537327,
@@ -1341,8 +1341,8 @@
       "fase": "Quartas",
       "grupo": null,
       "utcDate": "2026-07-09T20:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "França",
+      "fora": "Marrocos",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
