@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-06T03:10:24.774Z",
+  "atualizadoEm": "2026-07-06T18:45:15.730Z",
   "jogos": [
     {
       "id": 537327,
@@ -1369,8 +1369,8 @@
       "fase": "Quartas",
       "grupo": null,
       "utcDate": "2026-07-11T21:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Noruega",
+      "fora": "Inglaterra",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
