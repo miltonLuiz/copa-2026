@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-06T02:30:31.328Z",
+  "atualizadoEm": "2026-07-06T02:40:22.578Z",
   "jogos": [
     {
       "id": 537327,
@@ -1293,7 +1293,7 @@
       "fora": "Inglaterra",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 3
       },
       "penaltis": null
