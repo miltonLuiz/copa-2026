@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-05T23:30:32.656Z",
+  "atualizadoEm": "2026-07-06T01:05:13.152Z",
   "jogos": [
     {
       "id": 537327,
@@ -1291,7 +1291,7 @@
       "utcDate": "2026-07-06T01:00:00Z",
       "casa": "México",
       "fora": "Inglaterra",
-      "status": "SCHEDULED",
+      "status": "TIMED",
       "placar": null,
       "penaltis": null
     },
