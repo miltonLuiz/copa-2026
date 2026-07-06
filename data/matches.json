@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-06T02:40:22.578Z",
+  "atualizadoEm": "2026-07-06T03:10:24.774Z",
   "jogos": [
     {
       "id": 537327,
@@ -1291,7 +1291,7 @@
       "utcDate": "2026-07-06T01:00:00Z",
       "casa": "México",
       "fora": "Inglaterra",
-      "status": "IN_PLAY",
+      "status": "FINISHED",
       "placar": {
         "casa": 2,
         "fora": 3
