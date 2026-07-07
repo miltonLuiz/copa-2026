@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-07T16:25:11.747Z",
+  "atualizadoEm": "2026-07-07T17:00:41.300Z",
   "jogos": [
     {
       "id": 537327,
@@ -1333,7 +1333,7 @@
       "utcDate": "2026-07-07T16:00:00Z",
       "casa": "Argentina",
       "fora": "Egito",
-      "status": "TIMED",
+      "status": "PAUSED",
       "placar": {
         "casa": 0,
         "fora": 1
