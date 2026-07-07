@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-07T22:55:12.347Z",
+  "atualizadoEm": "2026-07-07T23:00:35.962Z",
   "jogos": [
     {
       "id": 537327,
@@ -1349,12 +1349,12 @@
       "fora": "Colômbia",
       "status": "FINISHED",
       "placar": {
-        "casa": 3,
-        "fora": 2
+        "casa": 4,
+        "fora": 3
       },
       "penaltis": {
-        "casa": 2,
-        "fora": 2
+        "casa": 3,
+        "fora": 3
       }
     },
     {
