@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-07T15:45:14.351Z",
+  "atualizadoEm": "2026-07-07T16:10:49.060Z",
   "jogos": [
     {
       "id": 537327,
@@ -1334,7 +1334,10 @@
       "casa": "Argentina",
       "fora": "Egito",
       "status": "TIMED",
-      "placar": null,
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      },
       "penaltis": null
     },
     {
