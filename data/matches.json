@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-07T17:50:29.329Z",
+  "atualizadoEm": "2026-07-07T17:55:10.562Z",
   "jogos": [
     {
       "id": 537327,
@@ -1335,7 +1335,7 @@
       "fora": "Egito",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 1,
+        "casa": 2,
         "fora": 2
       },
       "penaltis": null
