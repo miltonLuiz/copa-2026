@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-07T23:00:35.962Z",
+  "atualizadoEm": "2026-07-09T19:45:12.907Z",
   "jogos": [
     {
       "id": 537327,
@@ -1353,7 +1353,7 @@
         "fora": 3
       },
       "penaltis": {
-        "casa": 3,
+        "casa": 4,
         "fora": 3
       }
     },
@@ -1395,8 +1395,8 @@
       "fase": "Quartas",
       "grupo": null,
       "utcDate": "2026-07-12T01:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Argentina",
+      "fora": "Suíça",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
