@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-10T19:10:19.349Z",
+  "atualizadoEm": "2026-07-10T19:40:20.387Z",
   "jogos": [
     {
       "id": 537327,
@@ -1380,7 +1380,7 @@
       "fora": "Bélgica",
       "status": "IN_PLAY",
       "placar": {
-        "casa": 0,
+        "casa": 1,
         "fora": 0
       },
       "penaltis": null
