@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-09T22:10:17.726Z",
+  "atualizadoEm": "2026-07-10T18:45:17.225Z",
   "jogos": [
     {
       "id": 537327,
@@ -1409,7 +1409,7 @@
       "fase": "Semifinal",
       "grupo": null,
       "utcDate": "2026-07-14T19:00:00Z",
-      "casa": null,
+      "casa": "França",
       "fora": null,
       "status": "TIMED",
       "placar": null,
