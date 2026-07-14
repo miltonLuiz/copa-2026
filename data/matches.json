@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-12T03:55:10.761Z",
+  "atualizadoEm": "2026-07-14T18:45:13.566Z",
   "jogos": [
     {
       "id": 537327,
@@ -1429,8 +1429,8 @@
       "fase": "Semifinal",
       "grupo": null,
       "utcDate": "2026-07-15T19:00:00Z",
-      "casa": null,
-      "fora": null,
+      "casa": "Inglaterra",
+      "fora": "Argentina",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
