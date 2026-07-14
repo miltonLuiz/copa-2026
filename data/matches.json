@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-14T18:45:13.566Z",
+  "atualizadoEm": "2026-07-14T19:10:23.166Z",
   "jogos": [
     {
       "id": 537327,
@@ -1420,8 +1420,11 @@
       "utcDate": "2026-07-14T19:00:00Z",
       "casa": "França",
       "fora": "Espanha",
-      "status": "TIMED",
-      "placar": null,
+      "status": "IN_PLAY",
+      "placar": {
+        "casa": 0,
+        "fora": 0
+      },
       "penaltis": null
     },
     {
