@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-14T21:05:10.605Z",
+  "atualizadoEm": "2026-07-15T18:45:15.994Z",
   "jogos": [
     {
       "id": 537327,
@@ -1443,7 +1443,7 @@
       "fase": "Terceiro lugar",
       "grupo": null,
       "utcDate": "2026-07-18T21:00:00Z",
-      "casa": null,
+      "casa": "França",
       "fora": null,
       "status": "TIMED",
       "placar": null,
@@ -1454,7 +1454,7 @@
       "fase": "Final",
       "grupo": null,
       "utcDate": "2026-07-19T19:00:00Z",
-      "casa": null,
+      "casa": "Espanha",
       "fora": null,
       "status": "TIMED",
       "placar": null,
