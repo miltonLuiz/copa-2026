@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-15T21:10:22.921Z",
+  "atualizadoEm": "2026-07-18T20:45:12.454Z",
   "jogos": [
     {
       "id": 537327,
@@ -1447,7 +1447,7 @@
       "grupo": null,
       "utcDate": "2026-07-18T21:00:00Z",
       "casa": "França",
-      "fora": null,
+      "fora": "Inglaterra",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
@@ -1458,7 +1458,7 @@
       "grupo": null,
       "utcDate": "2026-07-19T19:00:00Z",
       "casa": "Espanha",
-      "fora": null,
+      "fora": "Argentina",
       "status": "TIMED",
       "placar": null,
       "penaltis": null
