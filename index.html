@@ -1598,6 +1598,11 @@
       // de seleção da aba Jogos para casar seleções também no mata-mata.
       let resolverTimesJogoMM = null;
 
+      // Resolve o nome do campeão (vencedor da Final) como "🇪🇸 Espanha", ou null se a
+      // Final ainda não foi decidida. Atribuído pelo IIFE do bracket. Usado no banner
+      // "Copa encerrada".
+      let resolverCampeao = null;
+
       // ===== dados para projeção dos 32-avos =====
       // Array de 495 strings — cada string tem 8 letras (uma por jogo que recebe 3º colocado).
       // Gerado da tabela 495 da FIFA. Ordem das colunas: THIRDS_COL_ORDER.
@@ -2034,9 +2039,11 @@
           html = '<p class="countdown__main">Dia ' + dia + ' de 39</p>' +
                  '<p class="countdown__secondary">' + secundario + '</p>';
         } else {
-          // Estado 3: depois da Copa
+          // Estado 3: depois da Copa — mostra o campeão (vencedor da Final) quando já
+          // decidido; senão "a definir" (fallback gracioso, ex.: dados ainda não chegaram).
+          const campeao = resolverCampeao ? resolverCampeao() : null;
           html = '<p class="countdown__main">Copa encerrada</p>' +
-                 '<p class="countdown__secondary">Campeão: a definir</p>';
+                 '<p class="countdown__secondary">Campeão: ' + (campeao || 'a definir') + '</p>';
         }
 
         el.innerHTML = html;
@@ -2589,6 +2596,9 @@
             // Recontabiliza os atalhos (ex.: "Brasil") agora que os times do
             // mata-mata foram resolvidos com os placares.
             renderShortcutChips();
+            // Atualiza o banner "Copa encerrada" com o campeão, agora que a Final
+            // pode ter sido resolvida com os placares.
+            renderCountdown();
 
             // Se a aba Grupos já foi aberta, recomputa com os novos placares
             if (atualizarAbaGrupos) atualizarAbaGrupos();
@@ -3432,6 +3442,21 @@
               resolverNomeLado(jogo.team1, dados ? dados.casa : null, _topoBuscaCache),
               resolverNomeLado(jogo.team2, dados ? dados.fora : null, _topoBuscaCache),
             ];
+          } catch (_) {
+            return null;
+          }
+        };
+
+        // Resolve o campeão (vencedor da Final) como "🇪🇸 Espanha", ou null se a Final
+        // ainda não foi decidida. Usado no banner "Copa encerrada".
+        resolverCampeao = function() {
+          try {
+            const finalMatch = matches.find(function(m) { return m.phase === 'Final'; });
+            if (!finalMatch) return null;
+            const nome = resolverResultadoPai(finalMatch.id, 'vencedor');
+            if (!nome) return null;
+            const flag = bandeira(nome);
+            return (flag ? flag + ' ' : '') + nome;
           } catch (_) {
             return null;
           }
