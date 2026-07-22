@@ -14,7 +14,6 @@ A especificação completa fica em `.claude/doc/projetocopa2026.md` (não versio
 - Service Worker pra suporte offline
 - `manifest.json` pro PWA
 - Hospedagem: GitHub Pages (HTTPS automático)
-- Fase 2: GitHub Actions atualizando `data/matches.json` periodicamente
 
 ## Estrutura
 
@@ -24,9 +23,7 @@ copa-2026/
 ├── manifest.json        # PWA manifest
 ├── sw.js                # service worker
 ├── icons/               # ícones do PWA
-├── data/                # (Fase 2) matches.json
-├── scripts/             # (Fase 2) fetcher pro GH Actions
-├── .github/workflows/   # (Fase 2) workflow de update
+├── data/                # matches.json / standings.json (dados finais da Copa)
 ├── .claude/             # configuração local de agents/skills (versionada)
 │   ├── agents/          # subagents (planner, developer, reviewer)
 │   ├── skills/          # orquestrador (desenvolver-etapa)
