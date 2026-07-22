@@ -50,15 +50,15 @@ Pra mim e pros amigos com quem compartilho o link no WhatsApp. Não é produto, 
 - Arquivo único (`index.html`), sem build step, sem dependências externas
 - Service Worker pra suporte offline (estratégia cache-first)
 - `manifest.json` pro PWA
-- Dados ao vivo em `data/matches.json` e `data/standings.json`, atualizados automaticamente por GitHub Actions (a cada 30 min) via `scripts/fetch-standings.js`, que consome a API da [football-data.org](https://www.football-data.org/)
+- Dados em `data/matches.json` e `data/standings.json` (resultados finais da Copa)
 - Hospedado no GitHub Pages com HTTPS automático
 
 Convenções técnicas no [`CLAUDE.md`](./CLAUDE.md).
 
 ## Status
 
-Em produção, com a Copa em andamento (abertura em 11 de junho de 2026). Placares e classificação se atualizam sozinhos durante o torneio.
+Copa encerrada (11 de junho — 19 de julho de 2026). O dataset reflete os resultados finais; a atualização automática foi desligada ao fim do torneio.
 
 ## Roadmap
 
-**Fase 2 — concluída**: atualização automática do dataset via GitHub Actions, com placares ao vivo de jogos em andamento/encerrados e classificação dos grupos. Conforme a FIFA confirmar os confrontos do mata-mata, o pipeline passa a preencher também esses horários e resultados.
+**Fase 2 — concluída e encerrada**: durante o torneio, o dataset era atualizado automaticamente via GitHub Actions (placares ao vivo, classificação dos grupos e mata-mata). Com a Copa encerrada, a automação foi removida e os dados ficaram congelados no estado final.
